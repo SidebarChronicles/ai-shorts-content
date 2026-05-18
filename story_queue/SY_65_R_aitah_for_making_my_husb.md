@@ -1,0 +1,32 @@
+# SY_65_R_aitah_for_making_my_husb — [WRITER: choose a 4-6 word working title]
+
+**Status:** QUEUED
+**Subgenre:** reddit
+**Voice:** Brian
+**Model:** eleven_multilingual_v2
+
+## Premise
+AITA-style dramatization. Narrator describes a violation involving a close-relation (paraphrase the source — do NOT quote). Hook leads with the violation; the AITA question lands last. Anonymize all names + locations. Title pattern: "AITAH for making my husband cancel his family's…"
+
+## Hook angle
+Pick ONE of the proposed hooks below (or write a better one matching the formula):
+- `Making my husband cancel his family's last-minute sleepover after. AITA?`
+
+## Protagonist
+[N/A for this sub-genre — Reddit + horror don't carry cross-video protagonist continuity.]
+
+## Visual style notes
+Defaults inherit from `story_script_writer.TEMPLATES`. Override here if needed:
+- Palette: [optional override]
+- Avoid: [optional]
+
+## Alternative settings (dodge cliché)
+- swap 'house' → condo, duplex, rental
+
+## Notes
+**Source** (tone reference only — never quote verbatim): https://www.reddit.com/r/AmItheAsshole/comments/1te1q1e/aitah_for_making_my_husband_cancel_his_familys/
+**Reddit post id**: `1te1q1e`
+**Subreddit**: r/AmItheAsshole
+**Mined score**: 72.54/100 (Reddit cluster)
+
+⚠️ The source post is COPYRIGHTED by its author. The writer must apply the playbook's anti-plagiarism rule: different word choices, restructured narrative, anonymized names + locations, paraphrased dialogue. Verbatim risks a YouTube strike.

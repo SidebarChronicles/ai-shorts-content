@@ -5,192 +5,39 @@
         "cluster": "horror",
         "cluster_letter": "H",
         "hook_variants": [
-          "A Wife Shouldn\u2019t Argue With Her Husband."
+          "There are only two of us in the universe."
         ],
-        "id": "1tgpxpr",
+        "id": "1tgvogd",
         "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
         "score": {
           "_meta": {
-            "age_days": 0.2,
-            "age_hours": 4.2,
-            "awards": 0,
-            "crossposts": 1,
-            "flair": "New Age SSS - 1000 Words Or Less",
-            "gilded": 0,
-            "num_comments": 31,
-            "selftext_chars": 5344,
-            "ups": 267
-          },
-          "awards_score": 0.0,
-          "crosspost_score": 0.5,
-          "engagement_score": 8.71,
-          "freshness_score": 4.97,
-          "gilded_score": 0.0,
-          "length_score": 8.0,
-          "total": 38.51,
-          "ups_score": 1.33,
-          "velocity_score": 15.0,
-          "verdict_score": 0.0
-        },
-        "setting_variants": [
-          "swap 'mirror' \u2192 window reflection, phone screen, darkened TV"
-        ],
-        "subreddit": "shortscarystories",
-        "title": "A Wife Shouldn\u2019t Argue With Her Husband",
-        "url": "https://www.reddit.com/r/shortscarystories/comments/1tgpxpr/a_wife_shouldnt_argue_with_her_husband/"
-      },
-      {
-        "cluster": "horror",
-        "cluster_letter": "H",
-        "hook_variants": [
-          "Until he turned around and smile.",
-          "I cheated on my boyfriend."
-        ],
-        "id": "1tgxc7r",
-        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
-        "score": {
-          "_meta": {
-            "age_days": 0.0,
-            "age_hours": 0.6,
+            "age_days": 0.1,
+            "age_hours": 1.5,
             "awards": 0,
             "crossposts": 0,
             "flair": "SSS Original Recipe - 500 Words or Less",
             "gilded": 0,
-            "num_comments": 2,
-            "selftext_chars": 2839,
-            "ups": 2
+            "num_comments": 1,
+            "selftext_chars": 1972,
+            "ups": 5
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
           "engagement_score": 15.0,
-          "freshness_score": 5.0,
+          "freshness_score": 4.99,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 36.05,
-          "ups_score": 0.01,
-          "velocity_score": 1.04,
+          "total": 36.03,
+          "ups_score": 0.03,
+          "velocity_score": 1.02,
           "verdict_score": 0.0
         },
         "setting_variants": [
           "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
         ],
         "subreddit": "shortscarystories",
-        "title": "I cheated on my boyfriend",
-        "url": "https://www.reddit.com/r/shortscarystories/comments/1tgxc7r/i_cheated_on_my_boyfriend/"
-      },
-      {
-        "cluster": "horror",
-        "cluster_letter": "H",
-        "hook_variants": [
-          "I found home videos of my family that shouldn't exist."
-        ],
-        "id": "1mdlyss",
-        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
-        "score": {
-          "_meta": {
-            "age_days": 291.8,
-            "age_hours": 7004.1,
-            "awards": 0,
-            "crossposts": 0,
-            "flair": "",
-            "gilded": 0,
-            "num_comments": 191,
-            "selftext_chars": 4974,
-            "ups": 5862
-          },
-          "awards_score": 0.0,
-          "crosspost_score": 0.0,
-          "engagement_score": 2.44,
-          "freshness_score": 0.0,
-          "gilded_score": 0.0,
-          "length_score": 8.0,
-          "total": 35.69,
-          "ups_score": 25.0,
-          "velocity_score": 0.25,
-          "verdict_score": 0.0
-        },
-        "setting_variants": [
-          "swap 'house' \u2192 cottage, trailer, rented airbnb"
-        ],
-        "subreddit": "nosleep",
-        "title": "I found home videos of my family that shouldn't exist.",
-        "url": "https://www.reddit.com/r/nosleep/comments/1mdlyss/i_found_home_videos_of_my_family_that_shouldnt/"
-      },
-      {
-        "cluster": "horror",
-        "cluster_letter": "H",
-        "hook_variants": [
-          "I Should Probably Run Faster."
-        ],
-        "id": "1tfipto",
-        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
-        "score": {
-          "_meta": {
-            "age_days": 1.5,
-            "age_hours": 36.0,
-            "awards": 0,
-            "crossposts": 0,
-            "flair": "SSS Original Recipe - 500 Words or Less",
-            "gilded": 0,
-            "num_comments": 8,
-            "selftext_chars": 2044,
-            "ups": 39
-          },
-          "awards_score": 0.0,
-          "crosspost_score": 0.0,
-          "engagement_score": 15.0,
-          "freshness_score": 4.75,
-          "gilded_score": 0.0,
-          "length_score": 15.0,
-          "total": 35.27,
-          "ups_score": 0.19,
-          "velocity_score": 0.33,
-          "verdict_score": 0.0
-        },
-        "setting_variants": [
-          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
-        ],
-        "subreddit": "shortscarystories",
-        "title": "I Should Probably Run Faster",
-        "url": "https://www.reddit.com/r/shortscarystories/comments/1tfipto/i_should_probably_run_faster/"
-      },
-      {
-        "cluster": "horror",
-        "cluster_letter": "H",
-        "hook_variants": [
-          "The Improbable Spawn."
-        ],
-        "id": "1tc42yp",
-        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
-        "score": {
-          "_meta": {
-            "age_days": 5.1,
-            "age_hours": 123.5,
-            "awards": 0,
-            "crossposts": 0,
-            "flair": "SSS Original Recipe - 500 Words or Less",
-            "gilded": 0,
-            "num_comments": 7,
-            "selftext_chars": 1861,
-            "ups": 27
-          },
-          "awards_score": 0.0,
-          "crosspost_score": 0.0,
-          "engagement_score": 15.0,
-          "freshness_score": 4.14,
-          "gilded_score": 0.0,
-          "length_score": 15.0,
-          "total": 34.34,
-          "ups_score": 0.14,
-          "velocity_score": 0.07,
-          "verdict_score": 0.0
-        },
-        "setting_variants": [
-          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
-        ],
-        "subreddit": "shortscarystories",
-        "title": "The Improbable Spawn",
-        "url": "https://www.reddit.com/r/shortscarystories/comments/1tc42yp/the_improbable_spawn/"
+        "title": "There are only two of us in the universe.",
+        "url": "https://www.reddit.com/r/shortscarystories/comments/1tgvogd/there_are_only_two_of_us_in_the_universe/"
       },
       {
         "cluster": "horror",
@@ -203,14 +50,14 @@
         "score": {
           "_meta": {
             "age_days": 5.3,
-            "age_hours": 127.8,
+            "age_hours": 127.9,
             "awards": 0,
             "crossposts": 0,
             "flair": "New Age SSS - 1000 Words Or Less",
             "gilded": 0,
             "num_comments": 2,
             "selftext_chars": 2757,
-            "ups": 5
+            "ups": 4
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -218,8 +65,8 @@
           "freshness_score": 4.11,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 34.15,
-          "ups_score": 0.03,
+          "total": 34.14,
+          "ups_score": 0.02,
           "velocity_score": 0.01,
           "verdict_score": 0.0
         },
@@ -241,24 +88,24 @@
         "score": {
           "_meta": {
             "age_days": 5.3,
-            "age_hours": 127.7,
+            "age_hours": 127.8,
             "awards": 0,
             "crossposts": 0,
             "flair": "SSS Old School - 250 Words or Less",
             "gilded": 0,
             "num_comments": 10,
             "selftext_chars": 1436,
-            "ups": 52
+            "ups": 55
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
-          "engagement_score": 14.42,
+          "engagement_score": 13.64,
           "freshness_score": 4.11,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 33.92,
-          "ups_score": 0.26,
-          "velocity_score": 0.12,
+          "total": 33.15,
+          "ups_score": 0.27,
+          "velocity_score": 0.13,
           "verdict_score": 0.0
         },
         "setting_variants": [
@@ -272,44 +119,6 @@
         "cluster": "horror",
         "cluster_letter": "H",
         "hook_variants": [
-          "There are only two of us in the universe."
-        ],
-        "id": "1tgvogd",
-        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
-        "score": {
-          "_meta": {
-            "age_days": 0.1,
-            "age_hours": 1.3,
-            "awards": 0,
-            "crossposts": 0,
-            "flair": "SSS Original Recipe - 500 Words or Less",
-            "gilded": 0,
-            "num_comments": 1,
-            "selftext_chars": 1972,
-            "ups": 6
-          },
-          "awards_score": 0.0,
-          "crosspost_score": 0.0,
-          "engagement_score": 12.5,
-          "freshness_score": 4.99,
-          "gilded_score": 0.0,
-          "length_score": 15.0,
-          "total": 33.86,
-          "ups_score": 0.03,
-          "velocity_score": 1.34,
-          "verdict_score": 0.0
-        },
-        "setting_variants": [
-          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
-        ],
-        "subreddit": "shortscarystories",
-        "title": "There are only two of us in the universe.",
-        "url": "https://www.reddit.com/r/shortscarystories/comments/1tgvogd/there_are_only_two_of_us_in_the_universe/"
-      },
-      {
-        "cluster": "horror",
-        "cluster_letter": "H",
-        "hook_variants": [
           "Homecoming."
         ],
         "id": "1tbic2q",
@@ -317,22 +126,22 @@
         "score": {
           "_meta": {
             "age_days": 5.8,
-            "age_hours": 140.2,
+            "age_hours": 140.3,
             "awards": 0,
             "crossposts": 1,
             "flair": "SSS Original Recipe - 500 Words or Less",
             "gilded": 0,
             "num_comments": 4,
             "selftext_chars": 2886,
-            "ups": 22
+            "ups": 23
           },
           "awards_score": 0.0,
           "crosspost_score": 0.5,
-          "engagement_score": 13.64,
+          "engagement_score": 13.04,
           "freshness_score": 4.03,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 33.32,
+          "total": 32.73,
           "ups_score": 0.11,
           "velocity_score": 0.05,
           "verdict_score": 0.0
@@ -348,45 +157,6 @@
         "cluster": "horror",
         "cluster_letter": "H",
         "hook_variants": [
-          "Then i tried the hand.",
-          "There is a locked room in my house that was."
-        ],
-        "id": "1tat5k7",
-        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
-        "score": {
-          "_meta": {
-            "age_days": 6.5,
-            "age_hours": 157.2,
-            "awards": 0,
-            "crossposts": 0,
-            "flair": "",
-            "gilded": 0,
-            "num_comments": 6,
-            "selftext_chars": 2764,
-            "ups": 34
-          },
-          "awards_score": 0.0,
-          "crosspost_score": 0.0,
-          "engagement_score": 13.24,
-          "freshness_score": 3.91,
-          "gilded_score": 0.0,
-          "length_score": 15.0,
-          "total": 32.38,
-          "ups_score": 0.17,
-          "velocity_score": 0.06,
-          "verdict_score": 0.0
-        },
-        "setting_variants": [
-          "swap 'house' \u2192 cottage, trailer, rented airbnb"
-        ],
-        "subreddit": "nosleep",
-        "title": "There is a locked room in my house that was not there yesterday. Inside the room was a photograph of me sleeping taken last night",
-        "url": "https://www.reddit.com/r/nosleep/comments/1tat5k7/there_is_a_locked_room_in_my_house_that_was_not/"
-      },
-      {
-        "cluster": "horror",
-        "cluster_letter": "H",
-        "hook_variants": [
           "A conversa que n\u00e3o deveria ter acontecido."
         ],
         "id": "1tetlhe",
@@ -394,7 +164,7 @@
         "score": {
           "_meta": {
             "age_days": 2.3,
-            "age_hours": 54.2,
+            "age_hours": 54.4,
             "awards": 0,
             "crossposts": 0,
             "flair": "SSS Old School - 250 Words or Less",
@@ -432,7 +202,7 @@
         "score": {
           "_meta": {
             "age_days": 3.0,
-            "age_hours": 72.2,
+            "age_hours": 72.4,
             "awards": 0,
             "crossposts": 0,
             "flair": "SSS Original Recipe - 500 Words or Less",
@@ -463,6 +233,45 @@
         "cluster": "horror",
         "cluster_letter": "H",
         "hook_variants": [
+          "Then i tried the hand.",
+          "There is a locked room in my house that was."
+        ],
+        "id": "1tat5k7",
+        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
+        "score": {
+          "_meta": {
+            "age_days": 6.6,
+            "age_hours": 157.3,
+            "awards": 0,
+            "crossposts": 0,
+            "flair": "",
+            "gilded": 0,
+            "num_comments": 6,
+            "selftext_chars": 2764,
+            "ups": 35
+          },
+          "awards_score": 0.0,
+          "crosspost_score": 0.0,
+          "engagement_score": 12.86,
+          "freshness_score": 3.91,
+          "gilded_score": 0.0,
+          "length_score": 15.0,
+          "total": 32.01,
+          "ups_score": 0.18,
+          "velocity_score": 0.07,
+          "verdict_score": 0.0
+        },
+        "setting_variants": [
+          "swap 'house' \u2192 cottage, trailer, rented airbnb"
+        ],
+        "subreddit": "nosleep",
+        "title": "There is a locked room in my house that was not there yesterday. Inside the room was a photograph of me sleeping taken last night",
+        "url": "https://www.reddit.com/r/nosleep/comments/1tat5k7/there_is_a_locked_room_in_my_house_that_was_not/"
+      },
+      {
+        "cluster": "horror",
+        "cluster_letter": "H",
+        "hook_variants": [
           "But ten minutes later, the melodic chime of the door.",
           "Take a photo of your kid."
         ],
@@ -471,14 +280,14 @@
         "score": {
           "_meta": {
             "age_days": 345.2,
-            "age_hours": 8283.8,
+            "age_hours": 8283.9,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 47,
             "selftext_chars": 2589,
-            "ups": 3032
+            "ups": 3026
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -486,8 +295,8 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 31.43,
-          "ups_score": 15.16,
+          "total": 31.4,
+          "ups_score": 15.13,
           "velocity_score": 0.11,
           "verdict_score": 0.0
         },
@@ -509,23 +318,23 @@
         "score": {
           "_meta": {
             "age_days": 245.1,
-            "age_hours": 5882.4,
+            "age_hours": 5882.5,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 80,
             "selftext_chars": 2841,
-            "ups": 2758
+            "ups": 2761
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
-          "engagement_score": 2.18,
+          "engagement_score": 2.17,
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 31.11,
-          "ups_score": 13.79,
+          "total": 31.12,
+          "ups_score": 13.8,
           "velocity_score": 0.14,
           "verdict_score": 0.0
         },
@@ -540,6 +349,45 @@
         "cluster": "horror",
         "cluster_letter": "H",
         "hook_variants": [
+          "Except the creature\u2019s whisper.",
+          "Eromore."
+        ],
+        "id": "1td21gt",
+        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
+        "score": {
+          "_meta": {
+            "age_days": 4.2,
+            "age_hours": 100.0,
+            "awards": 0,
+            "crossposts": 2,
+            "flair": "SSS Original Recipe - 500 Words or Less",
+            "gilded": 0,
+            "num_comments": 1,
+            "selftext_chars": 2596,
+            "ups": 7
+          },
+          "awards_score": 0.0,
+          "crosspost_score": 1.0,
+          "engagement_score": 10.71,
+          "freshness_score": 4.31,
+          "gilded_score": 0.0,
+          "length_score": 15.0,
+          "total": 31.08,
+          "ups_score": 0.03,
+          "velocity_score": 0.02,
+          "verdict_score": 0.0
+        },
+        "setting_variants": [
+          "swap 'forest' \u2192 national park trail, logging road, marsh"
+        ],
+        "subreddit": "shortscarystories",
+        "title": "Eromore",
+        "url": "https://www.reddit.com/r/shortscarystories/comments/1td21gt/eromore/"
+      },
+      {
+        "cluster": "horror",
+        "cluster_letter": "H",
+        "hook_variants": [
           "I was a Virginia Tobacco Bride."
         ],
         "id": "1lfg51f",
@@ -547,14 +395,14 @@
         "score": {
           "_meta": {
             "age_days": 333.1,
-            "age_hours": 7994.5,
+            "age_hours": 7994.6,
             "awards": 0,
             "crossposts": 1,
             "flair": "",
             "gilded": 0,
             "num_comments": 64,
             "selftext_chars": 2694,
-            "ups": 2587
+            "ups": 2586
           },
           "awards_score": 0.0,
           "crosspost_score": 0.5,
@@ -562,7 +410,7 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 30.39,
+          "total": 30.38,
           "ups_score": 12.93,
           "velocity_score": 0.1,
           "verdict_score": 0.0
@@ -585,14 +433,14 @@
         "score": {
           "_meta": {
             "age_days": 285.8,
-            "age_hours": 6859.7,
+            "age_hours": 6859.8,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 89,
             "selftext_chars": 2737,
-            "ups": 2529
+            "ups": 2526
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -600,8 +448,8 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 30.39,
-          "ups_score": 12.65,
+          "total": 30.38,
+          "ups_score": 12.63,
           "velocity_score": 0.11,
           "verdict_score": 0.0
         },
@@ -616,83 +464,6 @@
         "cluster": "horror",
         "cluster_letter": "H",
         "hook_variants": [
-          "Hell is Bad Customer Service."
-        ],
-        "id": "1teaf5d",
-        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
-        "score": {
-          "_meta": {
-            "age_days": 2.9,
-            "age_hours": 69.7,
-            "awards": 0,
-            "crossposts": 0,
-            "flair": "SSS Original Recipe - 500 Words or Less",
-            "gilded": 0,
-            "num_comments": 22,
-            "selftext_chars": 2964,
-            "ups": 192
-          },
-          "awards_score": 0.0,
-          "crosspost_score": 0.0,
-          "engagement_score": 8.59,
-          "freshness_score": 4.52,
-          "gilded_score": 0.0,
-          "length_score": 15.0,
-          "total": 29.9,
-          "ups_score": 0.96,
-          "velocity_score": 0.83,
-          "verdict_score": 0.0
-        },
-        "setting_variants": [
-          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
-        ],
-        "subreddit": "shortscarystories",
-        "title": "Hell is Bad Customer Service",
-        "url": "https://www.reddit.com/r/shortscarystories/comments/1teaf5d/hell_is_bad_customer_service/"
-      },
-      {
-        "cluster": "horror",
-        "cluster_letter": "H",
-        "hook_variants": [
-          "Except the creature\u2019s whisper.",
-          "Eromore."
-        ],
-        "id": "1td21gt",
-        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
-        "score": {
-          "_meta": {
-            "age_days": 4.2,
-            "age_hours": 99.9,
-            "awards": 0,
-            "crossposts": 2,
-            "flair": "SSS Original Recipe - 500 Words or Less",
-            "gilded": 0,
-            "num_comments": 1,
-            "selftext_chars": 2596,
-            "ups": 8
-          },
-          "awards_score": 0.0,
-          "crosspost_score": 1.0,
-          "engagement_score": 9.38,
-          "freshness_score": 4.31,
-          "gilded_score": 0.0,
-          "length_score": 15.0,
-          "total": 29.75,
-          "ups_score": 0.04,
-          "velocity_score": 0.02,
-          "verdict_score": 0.0
-        },
-        "setting_variants": [
-          "swap 'forest' \u2192 national park trail, logging road, marsh"
-        ],
-        "subreddit": "shortscarystories",
-        "title": "Eromore",
-        "url": "https://www.reddit.com/r/shortscarystories/comments/1td21gt/eromore/"
-      },
-      {
-        "cluster": "horror",
-        "cluster_letter": "H",
-        "hook_variants": [
           "I thought about it."
         ],
         "id": "1tb54eq",
@@ -700,23 +471,23 @@
         "score": {
           "_meta": {
             "age_days": 6.2,
-            "age_hours": 148.1,
+            "age_hours": 148.2,
             "awards": 0,
             "crossposts": 0,
             "flair": "SSS Old School - 250 Words or Less",
             "gilded": 0,
             "num_comments": 6,
             "selftext_chars": 648,
-            "ups": 44
+            "ups": 42
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
-          "engagement_score": 10.23,
+          "engagement_score": 10.71,
           "freshness_score": 3.97,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 29.51,
-          "ups_score": 0.22,
+          "total": 29.98,
+          "ups_score": 0.21,
           "velocity_score": 0.09,
           "verdict_score": 0.0
         },
@@ -731,6 +502,44 @@
         "cluster": "horror",
         "cluster_letter": "H",
         "hook_variants": [
+          "Hell is Bad Customer Service."
+        ],
+        "id": "1teaf5d",
+        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
+        "score": {
+          "_meta": {
+            "age_days": 2.9,
+            "age_hours": 69.9,
+            "awards": 0,
+            "crossposts": 0,
+            "flair": "SSS Original Recipe - 500 Words or Less",
+            "gilded": 0,
+            "num_comments": 22,
+            "selftext_chars": 2964,
+            "ups": 193
+          },
+          "awards_score": 0.0,
+          "crosspost_score": 0.0,
+          "engagement_score": 8.55,
+          "freshness_score": 4.51,
+          "gilded_score": 0.0,
+          "length_score": 15.0,
+          "total": 29.86,
+          "ups_score": 0.97,
+          "velocity_score": 0.83,
+          "verdict_score": 0.0
+        },
+        "setting_variants": [
+          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
+        ],
+        "subreddit": "shortscarystories",
+        "title": "Hell is Bad Customer Service",
+        "url": "https://www.reddit.com/r/shortscarystories/comments/1teaf5d/hell_is_bad_customer_service/"
+      },
+      {
+        "cluster": "horror",
+        "cluster_letter": "H",
+        "hook_variants": [
           "I think my daughters imaginary friend is real."
         ],
         "id": "1tgu6p4",
@@ -738,14 +547,14 @@
         "score": {
           "_meta": {
             "age_days": 0.1,
-            "age_hours": 2.0,
+            "age_hours": 2.1,
             "awards": 0,
             "crossposts": 0,
             "flair": "New Age SSS - 1000 Words Or Less",
             "gilded": 0,
             "num_comments": 2,
             "selftext_chars": 4722,
-            "ups": 9
+            "ups": 8
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -753,9 +562,9 @@
           "freshness_score": 4.99,
           "gilded_score": 0.0,
           "length_score": 8.0,
-          "total": 29.41,
+          "total": 29.18,
           "ups_score": 0.04,
-          "velocity_score": 1.38,
+          "velocity_score": 1.15,
           "verdict_score": 0.0
         },
         "setting_variants": [
@@ -776,23 +585,23 @@
         "score": {
           "_meta": {
             "age_days": 320.1,
-            "age_hours": 7682.0,
+            "age_hours": 7682.2,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 41,
             "selftext_chars": 2672,
-            "ups": 2576
+            "ups": 2569
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
-          "engagement_score": 1.19,
+          "engagement_score": 1.2,
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 29.17,
-          "ups_score": 12.88,
+          "total": 29.14,
+          "ups_score": 12.85,
           "velocity_score": 0.1,
           "verdict_score": 0.0
         },
@@ -814,14 +623,14 @@
         "score": {
           "_meta": {
             "age_days": 230.0,
-            "age_hours": 5520.9,
+            "age_hours": 5521.1,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 53,
             "selftext_chars": 2963,
-            "ups": 2376
+            "ups": 2374
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -829,8 +638,8 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 28.68,
-          "ups_score": 11.88,
+          "total": 28.67,
+          "ups_score": 11.87,
           "velocity_score": 0.13,
           "verdict_score": 0.0
         },
@@ -851,15 +660,15 @@
         "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
         "score": {
           "_meta": {
-            "age_days": 327.1,
-            "age_hours": 7851.6,
+            "age_days": 327.2,
+            "age_hours": 7851.7,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 68,
             "selftext_chars": 2643,
-            "ups": 2232
+            "ups": 2239
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -867,8 +676,8 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 28.53,
-          "ups_score": 11.16,
+          "total": 28.56,
+          "ups_score": 11.2,
           "velocity_score": 0.09,
           "verdict_score": 0.0
         },
@@ -890,18 +699,18 @@
         "score": {
           "_meta": {
             "age_days": 9.3,
-            "age_hours": 223.9,
+            "age_hours": 224.1,
             "awards": 0,
             "crossposts": 1,
             "flair": "SSS Original Recipe - 500 Words or Less",
             "gilded": 0,
             "num_comments": 48,
             "selftext_chars": 1818,
-            "ups": 720
+            "ups": 719
           },
           "awards_score": 0.0,
           "crosspost_score": 0.5,
-          "engagement_score": 5.0,
+          "engagement_score": 5.01,
           "freshness_score": 3.44,
           "gilded_score": 0.0,
           "length_score": 15.0,
@@ -928,23 +737,23 @@
         "score": {
           "_meta": {
             "age_days": 77.0,
-            "age_hours": 1847.5,
+            "age_hours": 1847.6,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 191,
             "selftext_chars": 4457,
-            "ups": 3051
+            "ups": 3058
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
-          "engagement_score": 4.7,
+          "engagement_score": 4.68,
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 8.0,
-          "total": 28.45,
-          "ups_score": 15.25,
+          "total": 28.47,
+          "ups_score": 15.29,
           "velocity_score": 0.5,
           "verdict_score": 0.0
         },
@@ -965,24 +774,24 @@
         "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
         "score": {
           "_meta": {
-            "age_days": 191.8,
-            "age_hours": 4604.3,
+            "age_days": 191.9,
+            "age_hours": 4604.4,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 114,
             "selftext_chars": 2795,
-            "ups": 1558
+            "ups": 1561
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
-          "engagement_score": 5.49,
+          "engagement_score": 5.48,
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
           "total": 28.38,
-          "ups_score": 7.79,
+          "ups_score": 7.8,
           "velocity_score": 0.1,
           "verdict_score": 0.0
         },
@@ -1004,23 +813,23 @@
         "score": {
           "_meta": {
             "age_days": 301.9,
-            "age_hours": 7245.3,
+            "age_hours": 7245.4,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 43,
             "selftext_chars": 2763,
-            "ups": 2382
+            "ups": 2379
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
-          "engagement_score": 1.35,
+          "engagement_score": 1.36,
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 28.36,
-          "ups_score": 11.91,
+          "total": 28.35,
+          "ups_score": 11.89,
           "velocity_score": 0.1,
           "verdict_score": 0.0
         },
@@ -1042,7 +851,7 @@
         "score": {
           "_meta": {
             "age_days": 4.7,
-            "age_hours": 112.6,
+            "age_hours": 112.7,
             "awards": 0,
             "crossposts": 2,
             "flair": "",
@@ -1074,40 +883,40 @@
         "cluster": "horror",
         "cluster_letter": "H",
         "hook_variants": [
-          "I\u2019ve seen this shadow man my whole life, have you."
+          "But then we all held hand.",
+          "First one to fall asleep dies."
         ],
-        "id": "1tf0g19",
+        "id": "1ks7dxz",
         "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
         "score": {
           "_meta": {
-            "age_days": 2.1,
-            "age_hours": 49.8,
+            "age_days": 362.0,
+            "age_hours": 8687.8,
             "awards": 0,
-            "crossposts": 1,
+            "crossposts": 0,
             "flair": "",
             "gilded": 0,
-            "num_comments": 2,
-            "selftext_chars": 4538,
-            "ups": 9
+            "num_comments": 28,
+            "selftext_chars": 2868,
+            "ups": 2453
           },
           "awards_score": 0.0,
-          "crosspost_score": 0.5,
-          "engagement_score": 15.0,
-          "freshness_score": 4.65,
+          "crosspost_score": 0.0,
+          "engagement_score": 0.86,
+          "freshness_score": 0.0,
           "gilded_score": 0.0,
-          "length_score": 8.0,
-          "total": 28.25,
-          "ups_score": 0.04,
-          "velocity_score": 0.05,
+          "length_score": 15.0,
+          "total": 28.21,
+          "ups_score": 12.26,
+          "velocity_score": 0.08,
           "verdict_score": 0.0
         },
         "setting_variants": [
-          "swap 'attic' \u2192 basement, crawlspace, hayloft",
-          "swap 'house' \u2192 cottage, trailer, rented airbnb"
+          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
         ],
-        "subreddit": "nosleep",
-        "title": "I\u2019ve seen this shadow man my whole life, have you too?",
-        "url": "https://www.reddit.com/r/nosleep/comments/1tf0g19/ive_seen_this_shadow_man_my_whole_life_have_you/"
+        "subreddit": "shortscarystories",
+        "title": "First one to fall asleep dies.",
+        "url": "https://www.reddit.com/r/shortscarystories/comments/1ks7dxz/first_one_to_fall_asleep_dies/"
       },
       {
         "cluster": "horror",
@@ -1120,14 +929,14 @@
         "score": {
           "_meta": {
             "age_days": 244.5,
-            "age_hours": 5867.9,
+            "age_hours": 5868.0,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 21,
             "selftext_chars": 5031,
-            "ups": 3918
+            "ups": 3916
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -1135,8 +944,8 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 8.0,
-          "total": 28.19,
-          "ups_score": 19.59,
+          "total": 28.18,
+          "ups_score": 19.58,
           "velocity_score": 0.2,
           "verdict_score": 0.0
         },
@@ -1146,200 +955,201 @@
         "subreddit": "nosleep",
         "title": "I went to a wedding. The groom wouldn\u2019t stop smiling.",
         "url": "https://www.reddit.com/r/nosleep/comments/1nib525/i_went_to_a_wedding_the_groom_wouldnt_stop_smiling/"
-      }
-    ],
-    "reddit": [
-      {
-        "cluster": "reddit",
-        "cluster_letter": "R",
-        "hook_variants": [
-          "Not wanting to take in my sisters 4 kids. AITA?"
-        ],
-        "id": "1tbbo50",
-        "premise_paraphrase": "AITA-style dramatization. Narrator describes a violation involving a close-relation (paraphrase the source \u2014 do NOT quote). Hook leads with the violation; the AITA question lands last. Anonymize all names + locations. Title pattern: \"AITA for not wanting to take in my\u2026\"",
-        "score": {
-          "_meta": {
-            "age_days": 6.0,
-            "age_hours": 144.3,
-            "awards": 0,
-            "crossposts": 2,
-            "flair": "Not the A-hole",
-            "gilded": 0,
-            "num_comments": 3212,
-            "selftext_chars": 1360,
-            "ups": 7802
-          },
-          "awards_score": 0.0,
-          "crosspost_score": 1.0,
-          "engagement_score": 15.0,
-          "freshness_score": 4.0,
-          "gilded_score": 0.0,
-          "length_score": 15.0,
-          "total": 85.0,
-          "ups_score": 25.0,
-          "velocity_score": 15.0,
-          "verdict_score": 10.0
-        },
-        "setting_variants": [
-          "swap 'child' \u2192 stepchild, niece, godchild"
-        ],
-        "subreddit": "AmItheAsshole",
-        "title": "AITA for not wanting to take in my sisters 4 kids while she\u2019s in the hospital?",
-        "url": "https://www.reddit.com/r/AmItheAsshole/comments/1tbbo50/aita_for_not_wanting_to_take_in_my_sisters_4_kids/"
       },
       {
-        "cluster": "reddit",
-        "cluster_letter": "R",
+        "cluster": "horror",
+        "cluster_letter": "H",
         "hook_variants": [
-          "Aita if i refuse to give my mom money. AITA?"
+          "But underneath them was this faint texture, like the sound.",
+          "My Ringtone Started Answering Back."
         ],
-        "id": "1tdtczk",
-        "premise_paraphrase": "AITA-style dramatization. Narrator describes a violation involving a close-relation (paraphrase the source \u2014 do NOT quote). Hook leads with the violation; the AITA question lands last. Anonymize all names + locations. Title pattern: \"AITA If I refuse to give my Mom\u2026\"",
+        "id": "1tfbgem",
+        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
         "score": {
           "_meta": {
-            "age_days": 3.3,
-            "age_hours": 80.2,
+            "age_days": 1.8,
+            "age_hours": 42.3,
             "awards": 0,
             "crossposts": 0,
-            "flair": "Not the A-hole",
+            "flair": "",
             "gilded": 0,
-            "num_comments": 1480,
-            "selftext_chars": 1387,
-            "ups": 7103
+            "num_comments": 10,
+            "selftext_chars": 3427,
+            "ups": 28
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
           "engagement_score": 15.0,
-          "freshness_score": 4.44,
+          "freshness_score": 4.71,
           "gilded_score": 0.0,
-          "length_score": 15.0,
-          "total": 84.44,
-          "ups_score": 25.0,
-          "velocity_score": 15.0,
-          "verdict_score": 10.0
+          "length_score": 8.0,
+          "total": 28.05,
+          "ups_score": 0.14,
+          "velocity_score": 0.2,
+          "verdict_score": 0.0
         },
         "setting_variants": [
-          "swap 'money' \u2192 inheritance, rent share, vacation cost",
-          "swap 'child' \u2192 stepchild, niece, godchild"
+          "swap 'bedroom' \u2192 guest room, childhood bedroom, dorm room"
         ],
-        "subreddit": "AmItheAsshole",
-        "title": "AITA If I refuse to give my Mom money every month?",
-        "url": "https://www.reddit.com/r/AmItheAsshole/comments/1tdtczk/aita_if_i_refuse_to_give_my_mom_money_every_month/"
+        "subreddit": "nosleep",
+        "title": "My Ringtone Started Answering Back",
+        "url": "https://www.reddit.com/r/nosleep/comments/1tfbgem/my_ringtone_started_answering_back/"
       },
       {
-        "cluster": "reddit",
-        "cluster_letter": "R",
+        "cluster": "horror",
+        "cluster_letter": "H",
         "hook_variants": [
-          "Aita not putting up my dils painting in our. AITA?"
+          "The forest looked back at me."
         ],
-        "id": "1t5r9rp",
-        "premise_paraphrase": "AITA-style dramatization. Narrator describes a violation involving a close-relation (paraphrase the source \u2014 do NOT quote). Hook leads with the violation; the AITA question lands last. Anonymize all names + locations. Title pattern: \"AITA not putting up my DILs painting in\u2026\"",
+        "id": "1tel8o1",
+        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
         "score": {
           "_meta": {
-            "age_days": 11.9,
-            "age_hours": 285.7,
+            "age_days": 2.6,
+            "age_hours": 61.5,
             "awards": 0,
-            "crossposts": 3,
-            "flair": "Not the A-hole",
+            "crossposts": 0,
+            "flair": "SSS Old School - 250 Words or Less",
             "gilded": 0,
-            "num_comments": 2615,
-            "selftext_chars": 2564,
-            "ups": 9196
+            "num_comments": 1,
+            "selftext_chars": 1476,
+            "ups": 9
           },
           "awards_score": 0.0,
-          "crosspost_score": 1.5,
-          "engagement_score": 15.0,
-          "freshness_score": 3.02,
+          "crosspost_score": 0.0,
+          "engagement_score": 8.33,
+          "freshness_score": 4.57,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 79.17,
-          "ups_score": 25.0,
-          "velocity_score": 9.66,
-          "verdict_score": 10.0
+          "total": 27.99,
+          "ups_score": 0.04,
+          "velocity_score": 0.04,
+          "verdict_score": 0.0
         },
         "setting_variants": [
-          "swap 'house' \u2192 condo, duplex, rental"
+          "swap 'forest' \u2192 national park trail, logging road, marsh"
         ],
-        "subreddit": "AmItheAsshole",
-        "title": "AITA not putting up my DILs painting in our new home and telling her that I am not a fan of her art",
-        "url": "https://www.reddit.com/r/AmItheAsshole/comments/1t5r9rp/aita_not_putting_up_my_dils_painting_in_our_new/"
+        "subreddit": "shortscarystories",
+        "title": "The forest looked back at me",
+        "url": "https://www.reddit.com/r/shortscarystories/comments/1tel8o1/the_forest_looked_back_at_me/"
       },
       {
-        "cluster": "reddit",
-        "cluster_letter": "R",
+        "cluster": "horror",
+        "cluster_letter": "H",
         "hook_variants": [
-          "Not removing my doormat because it scares my neighbor\u2019s. AITA?"
+          "Two fingers."
         ],
-        "id": "1t3xxb3",
-        "premise_paraphrase": "AITA-style dramatization. Narrator describes a violation involving a close-relation (paraphrase the source \u2014 do NOT quote). Hook leads with the violation; the AITA question lands last. Anonymize all names + locations. Title pattern: \"AITA for not removing my doormat because it\u2026\"",
+        "id": "1tfpjb9",
+        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
         "score": {
           "_meta": {
-            "age_days": 13.9,
-            "age_hours": 332.5,
+            "age_days": 1.3,
+            "age_hours": 30.3,
             "awards": 0,
-            "crossposts": 1,
-            "flair": "Not the A-hole",
+            "crossposts": 0,
+            "flair": "",
             "gilded": 0,
-            "num_comments": 2439,
-            "selftext_chars": 1805,
-            "ups": 12023
+            "num_comments": 8,
+            "selftext_chars": 4765,
+            "ups": 10
           },
           "awards_score": 0.0,
-          "crosspost_score": 0.5,
+          "crosspost_score": 0.0,
           "engagement_score": 15.0,
-          "freshness_score": 2.69,
+          "freshness_score": 4.79,
           "gilded_score": 0.0,
-          "length_score": 15.0,
-          "total": 79.04,
-          "ups_score": 25.0,
-          "velocity_score": 10.85,
-          "verdict_score": 10.0
+          "length_score": 8.0,
+          "total": 27.94,
+          "ups_score": 0.05,
+          "velocity_score": 0.1,
+          "verdict_score": 0.0
         },
         "setting_variants": [
           "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
         ],
-        "subreddit": "AmItheAsshole",
-        "title": "AITA for not removing my doormat because it scares my neighbor\u2019s kid?",
-        "url": "https://www.reddit.com/r/AmItheAsshole/comments/1t3xxb3/aita_for_not_removing_my_doormat_because_it/"
+        "subreddit": "nosleep",
+        "title": "Two fingers",
+        "url": "https://www.reddit.com/r/nosleep/comments/1tfpjb9/two_fingers/"
       },
       {
-        "cluster": "reddit",
-        "cluster_letter": "R",
+        "cluster": "horror",
+        "cluster_letter": "H",
         "hook_variants": [
-          "Choosing to drive 45+ minutes at 3am instead of. AITA?"
+          "I took a job watching security cameras on a remote."
         ],
-        "id": "1t7low5",
-        "premise_paraphrase": "AITA-style dramatization. Narrator describes a violation involving a close-relation (paraphrase the source \u2014 do NOT quote). Hook leads with the violation; the AITA question lands last. Anonymize all names + locations. Title pattern: \"AITA for choosing to drive 45+ minutes at\u2026\"",
+        "id": "1lez0gb",
+        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
         "score": {
           "_meta": {
-            "age_days": 9.9,
-            "age_hours": 237.9,
+            "age_days": 333.7,
+            "age_hours": 8009.7,
             "awards": 0,
             "crossposts": 0,
-            "flair": "No A-holes here",
+            "flair": "",
             "gilded": 0,
-            "num_comments": 1656,
-            "selftext_chars": 1899,
-            "ups": 10087
+            "num_comments": 30,
+            "selftext_chars": 3616,
+            "ups": 3836
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
-          "engagement_score": 12.31,
-          "freshness_score": 3.35,
+          "engagement_score": 0.59,
+          "freshness_score": 0.0,
           "gilded_score": 0.0,
-          "length_score": 15.0,
-          "total": 78.38,
-          "ups_score": 25.0,
-          "velocity_score": 12.72,
-          "verdict_score": 10.0
+          "length_score": 8.0,
+          "total": 27.91,
+          "ups_score": 19.18,
+          "velocity_score": 0.14,
+          "verdict_score": 0.0
         },
         "setting_variants": [
-          "swap 'house' \u2192 condo, duplex, rental"
+          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
         ],
-        "subreddit": "AmItheAsshole",
-        "title": "AITA for choosing to drive 45+ minutes at 3AM instead of following my dad\u2019s separate rooms rule?",
-        "url": "https://www.reddit.com/r/AmItheAsshole/comments/1t7low5/aita_for_choosing_to_drive_45_minutes_at_3am/"
+        "subreddit": "nosleep",
+        "title": "I took a job watching security cameras on a remote island. There\u2019s no one left to call.",
+        "url": "https://www.reddit.com/r/nosleep/comments/1lez0gb/i_took_a_job_watching_security_cameras_on_a/"
       },
+      {
+        "cluster": "horror",
+        "cluster_letter": "H",
+        "hook_variants": [
+          "Then, with his dorm building looming in sight, she reached.",
+          "Madonna."
+        ],
+        "id": "1tb7q2h",
+        "premise_paraphrase": "Original horror micro-fiction inspired by the structural shape of this post (NOT the prose). The writer must invent the entity, setting details, and dialogue at production time. Source provided in Notes for tone reference only.",
+        "score": {
+          "_meta": {
+            "age_days": 6.1,
+            "age_hours": 146.7,
+            "awards": 0,
+            "crossposts": 1,
+            "flair": "SSS Original Recipe - 500 Words or Less",
+            "gilded": 0,
+            "num_comments": 7,
+            "selftext_chars": 2798,
+            "ups": 66
+          },
+          "awards_score": 0.0,
+          "crosspost_score": 0.5,
+          "engagement_score": 7.95,
+          "freshness_score": 3.98,
+          "gilded_score": 0.0,
+          "length_score": 15.0,
+          "total": 27.9,
+          "ups_score": 0.33,
+          "velocity_score": 0.13,
+          "verdict_score": 0.0
+        },
+        "setting_variants": [
+          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
+        ],
+        "subreddit": "shortscarystories",
+        "title": "Madonna",
+        "url": "https://www.reddit.com/r/shortscarystories/comments/1tb7q2h/madonna/"
+      }
+    ],
+    "reddit": [
       {
         "cluster": "reddit",
         "cluster_letter": "R",
@@ -1351,14 +1161,14 @@
         "score": {
           "_meta": {
             "age_days": 3.6,
-            "age_hours": 86.0,
+            "age_hours": 86.1,
             "awards": 0,
             "crossposts": 2,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 607,
             "selftext_chars": 2501,
-            "ups": 6766
+            "ups": 6767
           },
           "awards_score": 0.0,
           "crosspost_score": 1.0,
@@ -1389,14 +1199,14 @@
         "score": {
           "_meta": {
             "age_days": 7.2,
-            "age_hours": 171.9,
+            "age_hours": 172.0,
             "awards": 0,
             "crossposts": 2,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 922,
             "selftext_chars": 1313,
-            "ups": 7523
+            "ups": 7528
           },
           "awards_score": 0.0,
           "crosspost_score": 1.0,
@@ -1404,7 +1214,7 @@
           "freshness_score": 3.81,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 77.13,
+          "total": 77.12,
           "ups_score": 25.0,
           "velocity_score": 13.13,
           "verdict_score": 10.0
@@ -1427,14 +1237,14 @@
         "score": {
           "_meta": {
             "age_days": 17.1,
-            "age_hours": 409.2,
+            "age_hours": 409.3,
             "awards": 0,
             "crossposts": 4,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 2285,
             "selftext_chars": 2060,
-            "ups": 16617
+            "ups": 16618
           },
           "awards_score": 0.0,
           "crosspost_score": 2.0,
@@ -1465,14 +1275,14 @@
         "score": {
           "_meta": {
             "age_days": 19.2,
-            "age_hours": 461.1,
+            "age_hours": 461.3,
             "awards": 0,
             "crossposts": 2,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 2799,
             "selftext_chars": 1849,
-            "ups": 15058
+            "ups": 15054
           },
           "awards_score": 0.0,
           "crosspost_score": 1.0,
@@ -1482,7 +1292,7 @@
           "length_score": 15.0,
           "total": 76.53,
           "ups_score": 25.0,
-          "velocity_score": 9.8,
+          "velocity_score": 9.79,
           "verdict_score": 10.0
         },
         "setting_variants": [
@@ -1504,14 +1314,14 @@
         "score": {
           "_meta": {
             "age_days": 7.1,
-            "age_hours": 170.2,
+            "age_hours": 170.3,
             "awards": 0,
             "crossposts": 1,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 1067,
             "selftext_chars": 2283,
-            "ups": 13555
+            "ups": 13568
           },
           "awards_score": 0.0,
           "crosspost_score": 0.5,
@@ -1542,18 +1352,18 @@
         "score": {
           "_meta": {
             "age_days": 4.0,
-            "age_hours": 96.7,
+            "age_hours": 96.8,
             "awards": 0,
             "crossposts": 0,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 731,
             "selftext_chars": 2732,
-            "ups": 9446
+            "ups": 9442
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
-          "engagement_score": 5.8,
+          "engagement_score": 5.81,
           "freshness_score": 4.33,
           "gilded_score": 0.0,
           "length_score": 15.0,
@@ -1580,14 +1390,14 @@
         "score": {
           "_meta": {
             "age_days": 7.6,
-            "age_hours": 183.3,
+            "age_hours": 183.4,
             "awards": 0,
             "crossposts": 2,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 705,
             "selftext_chars": 2009,
-            "ups": 8490
+            "ups": 8487
           },
           "awards_score": 0.0,
           "crosspost_score": 1.0,
@@ -1595,9 +1405,9 @@
           "freshness_score": 3.73,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 74.85,
+          "total": 74.84,
           "ups_score": 25.0,
-          "velocity_score": 13.9,
+          "velocity_score": 13.88,
           "verdict_score": 10.0
         },
         "setting_variants": [
@@ -1618,24 +1428,24 @@
         "score": {
           "_meta": {
             "age_days": 4.9,
-            "age_hours": 117.4,
+            "age_hours": 117.5,
             "awards": 0,
             "crossposts": 0,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 450,
             "selftext_chars": 2086,
-            "ups": 5788
+            "ups": 5790
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
           "engagement_score": 5.83,
-          "freshness_score": 4.19,
+          "freshness_score": 4.18,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 74.81,
+          "total": 74.8,
           "ups_score": 25.0,
-          "velocity_score": 14.8,
+          "velocity_score": 14.79,
           "verdict_score": 10.0
         },
         "setting_variants": [
@@ -1656,14 +1466,14 @@
         "score": {
           "_meta": {
             "age_days": 19.9,
-            "age_hours": 477.4,
+            "age_hours": 477.5,
             "awards": 0,
             "crossposts": 1,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 2437,
             "selftext_chars": 1325,
-            "ups": 12038
+            "ups": 12040
           },
           "awards_score": 0.0,
           "crosspost_score": 0.5,
@@ -1696,18 +1506,18 @@
         "score": {
           "_meta": {
             "age_days": 8.8,
-            "age_hours": 211.2,
+            "age_hours": 211.3,
             "awards": 0,
             "crossposts": 1,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 1032,
             "selftext_chars": 1787,
-            "ups": 16240
+            "ups": 16247
           },
           "awards_score": 0.0,
           "crosspost_score": 0.5,
-          "engagement_score": 4.77,
+          "engagement_score": 4.76,
           "freshness_score": 3.53,
           "gilded_score": 0.0,
           "length_score": 15.0,
@@ -1734,22 +1544,22 @@
         "score": {
           "_meta": {
             "age_days": 1.7,
-            "age_hours": 41.4,
+            "age_hours": 41.5,
             "awards": 0,
             "crossposts": 0,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 343,
             "selftext_chars": 1950,
-            "ups": 6328
+            "ups": 6343
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
-          "engagement_score": 4.07,
+          "engagement_score": 4.06,
           "freshness_score": 4.71,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 73.78,
+          "total": 73.77,
           "ups_score": 25.0,
           "velocity_score": 15.0,
           "verdict_score": 10.0
@@ -1774,14 +1584,14 @@
         "score": {
           "_meta": {
             "age_days": 24.1,
-            "age_hours": 579.2,
+            "age_hours": 579.3,
             "awards": 0,
             "crossposts": 10,
             "flair": "Not the A-hole POO Mode",
             "gilded": 0,
             "num_comments": 5202,
             "selftext_chars": 2017,
-            "ups": 30623
+            "ups": 30631
           },
           "awards_score": 0.0,
           "crosspost_score": 5.0,
@@ -1789,7 +1599,7 @@
           "freshness_score": 0.98,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 73.72,
+          "total": 73.71,
           "ups_score": 25.0,
           "velocity_score": 15.0,
           "verdict_score": 0.0
@@ -1812,14 +1622,14 @@
         "score": {
           "_meta": {
             "age_days": 2.2,
-            "age_hours": 53.5,
+            "age_hours": 53.6,
             "awards": 0,
             "crossposts": 0,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 490,
             "selftext_chars": 1149,
-            "ups": 10083
+            "ups": 10088
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -1850,14 +1660,14 @@
         "score": {
           "_meta": {
             "age_days": 26.9,
-            "age_hours": 645.5,
+            "age_hours": 645.6,
             "awards": 0,
             "crossposts": 10,
             "flair": "Asshole",
             "gilded": 0,
             "num_comments": 2730,
             "selftext_chars": 2149,
-            "ups": 5292
+            "ups": 5295
           },
           "awards_score": 0.0,
           "crosspost_score": 5.0,
@@ -1888,23 +1698,23 @@
         "score": {
           "_meta": {
             "age_days": 3.1,
-            "age_hours": 75.0,
+            "age_hours": 75.1,
             "awards": 0,
             "crossposts": 1,
             "flair": "Asshole",
             "gilded": 0,
             "num_comments": 274,
             "selftext_chars": 1367,
-            "ups": 4617
+            "ups": 4624
           },
           "awards_score": 0.0,
           "crosspost_score": 0.5,
-          "engagement_score": 4.45,
+          "engagement_score": 4.44,
           "freshness_score": 4.48,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 72.52,
-          "ups_score": 23.09,
+          "total": 72.54,
+          "ups_score": 23.12,
           "velocity_score": 15.0,
           "verdict_score": 10.0
         },
@@ -1925,25 +1735,25 @@
         "premise_paraphrase": "AITA-style dramatization. Narrator describes a violation involving a close-relation (paraphrase the source \u2014 do NOT quote). Hook leads with the violation; the AITA question lands last. Anonymize all names + locations. Title pattern: \"AITA for telling my mom I am not\u2026\"",
         "score": {
           "_meta": {
-            "age_days": 4.0,
-            "age_hours": 97.2,
+            "age_days": 4.1,
+            "age_hours": 97.3,
             "awards": 0,
             "crossposts": 0,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 561,
             "selftext_chars": 1864,
-            "ups": 4030
+            "ups": 4028
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
-          "engagement_score": 10.44,
-          "freshness_score": 4.33,
+          "engagement_score": 10.45,
+          "freshness_score": 4.32,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 72.36,
-          "ups_score": 20.15,
-          "velocity_score": 12.44,
+          "total": 72.33,
+          "ups_score": 20.14,
+          "velocity_score": 12.42,
           "verdict_score": 10.0
         },
         "setting_variants": [
@@ -1964,14 +1774,14 @@
         "score": {
           "_meta": {
             "age_days": 45.0,
-            "age_hours": 1080.7,
+            "age_hours": 1080.8,
             "awards": 0,
             "crossposts": 5,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 2902,
             "selftext_chars": 2121,
-            "ups": 14665
+            "ups": 14663
           },
           "awards_score": 0.0,
           "crosspost_score": 2.5,
@@ -2003,14 +1813,14 @@
         "score": {
           "_meta": {
             "age_days": 18.2,
-            "age_hours": 437.5,
+            "age_hours": 437.6,
             "awards": 0,
             "crossposts": 1,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 1820,
             "selftext_chars": 2327,
-            "ups": 5638
+            "ups": 5642
           },
           "awards_score": 0.0,
           "crosspost_score": 0.5,
@@ -2042,14 +1852,14 @@
         "score": {
           "_meta": {
             "age_days": 328.1,
-            "age_hours": 7873.8,
+            "age_hours": 7873.9,
             "awards": 0,
             "crossposts": 16,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 7957,
             "selftext_chars": 752,
-            "ups": 17635
+            "ups": 17632
           },
           "awards_score": 0.0,
           "crosspost_score": 5.0,
@@ -2080,14 +1890,14 @@
         "score": {
           "_meta": {
             "age_days": 13.2,
-            "age_hours": 317.2,
+            "age_hours": 317.3,
             "awards": 0,
             "crossposts": 1,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 902,
             "selftext_chars": 1319,
-            "ups": 12690
+            "ups": 12688
           },
           "awards_score": 0.0,
           "crosspost_score": 0.5,
@@ -2118,14 +1928,14 @@
         "score": {
           "_meta": {
             "age_days": 20.1,
-            "age_hours": 483.4,
+            "age_hours": 483.5,
             "awards": 0,
             "crossposts": 1,
             "flair": "Everyone Sucks",
             "gilded": 0,
             "num_comments": 1539,
             "selftext_chars": 1592,
-            "ups": 5278
+            "ups": 5276
           },
           "awards_score": 0.0,
           "crosspost_score": 0.5,
@@ -2135,7 +1945,7 @@
           "length_score": 15.0,
           "total": 70.42,
           "ups_score": 25.0,
-          "velocity_score": 3.28,
+          "velocity_score": 3.27,
           "verdict_score": 10.0
         },
         "setting_variants": [
@@ -2156,14 +1966,14 @@
         "score": {
           "_meta": {
             "age_days": 49.9,
-            "age_hours": 1196.7,
+            "age_hours": 1196.8,
             "awards": 0,
             "crossposts": 4,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 3007,
             "selftext_chars": 1218,
-            "ups": 13621
+            "ups": 13610
           },
           "awards_score": 0.0,
           "crosspost_score": 2.0,
@@ -2194,18 +2004,18 @@
         "score": {
           "_meta": {
             "age_days": 7.7,
-            "age_hours": 184.4,
+            "age_hours": 184.6,
             "awards": 0,
             "crossposts": 0,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 519,
             "selftext_chars": 1971,
-            "ups": 6601
+            "ups": 6605
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
-          "engagement_score": 5.9,
+          "engagement_score": 5.89,
           "freshness_score": 3.72,
           "gilded_score": 0.0,
           "length_score": 15.0,
@@ -2232,14 +2042,14 @@
         "score": {
           "_meta": {
             "age_days": 70.3,
-            "age_hours": 1686.9,
+            "age_hours": 1687.1,
             "awards": 0,
             "crossposts": 11,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 3026,
             "selftext_chars": 2432,
-            "ups": 19378
+            "ups": 19385
           },
           "awards_score": 0.0,
           "crosspost_score": 5.0,
@@ -2247,7 +2057,7 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 70.16,
+          "total": 70.15,
           "ups_score": 25.0,
           "velocity_score": 3.45,
           "verdict_score": 10.0
@@ -2270,14 +2080,14 @@
         "score": {
           "_meta": {
             "age_days": 84.0,
-            "age_hours": 2016.6,
+            "age_hours": 2016.7,
             "awards": 0,
             "crossposts": 5,
             "flair": "Not the A-hole",
             "gilded": 0,
             "num_comments": 3184,
             "selftext_chars": 1678,
-            "ups": 15199
+            "ups": 15200
           },
           "awards_score": 0.0,
           "crosspost_score": 2.5,
@@ -2296,199 +2106,199 @@
         "subreddit": "AmItheAsshole",
         "title": "AITA my friend ruined my yixing teapot and I want her to replace it or give me 500 dollars.",
         "url": "https://www.reddit.com/r/AmItheAsshole/comments/1rcqf4x/aita_my_friend_ruined_my_yixing_teapot_and_i_want/"
-      }
-    ],
-    "survival": [
+      },
       {
-        "cluster": "survival",
-        "cluster_letter": "S",
+        "cluster": "reddit",
+        "cluster_letter": "R",
         "hook_variants": [
-          "He followed me to my car, so I barked until."
+          "Aita for giving my niece a much better life. AITA?"
         ],
-        "id": "1qeteoy",
-        "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
+        "id": "1t2beig",
+        "premise_paraphrase": "AITA-style dramatization. Narrator describes a violation involving a close-relation (paraphrase the source \u2014 do NOT quote). Hook leads with the violation; the AITA question lands last. Anonymize all names + locations. Title pattern: \"AITA For giving my niece a much better\u2026\"",
         "score": {
           "_meta": {
-            "age_days": 121.9,
-            "age_hours": 2925.7,
+            "age_days": 15.6,
+            "age_hours": 375.3,
             "awards": 0,
-            "crossposts": 2,
-            "flair": "",
+            "crossposts": 1,
+            "flair": "Not the A-hole",
             "gilded": 0,
-            "num_comments": 212,
-            "selftext_chars": 855,
-            "ups": 3258
+            "num_comments": 1159,
+            "selftext_chars": 2470,
+            "ups": 10454
           },
           "awards_score": 0.0,
-          "crosspost_score": 1.0,
-          "engagement_score": 4.88,
+          "crosspost_score": 0.5,
+          "engagement_score": 8.31,
+          "freshness_score": 2.39,
+          "gilded_score": 0.0,
+          "length_score": 15.0,
+          "total": 69.57,
+          "ups_score": 25.0,
+          "velocity_score": 8.36,
+          "verdict_score": 10.0
+        },
+        "setting_variants": [
+          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
+        ],
+        "subreddit": "AmItheAsshole",
+        "title": "AITA For giving my niece a much better life than her step siblings?",
+        "url": "https://www.reddit.com/r/AmItheAsshole/comments/1t2beig/aita_for_giving_my_niece_a_much_better_life_than/"
+      },
+      {
+        "cluster": "reddit",
+        "cluster_letter": "R",
+        "hook_variants": [
+          "Sneaking out and causing my sister to lose her. AITA?"
+        ],
+        "id": "1l1jg1z",
+        "premise_paraphrase": "AITA-style dramatization. Narrator describes a violation involving a close-relation (paraphrase the source \u2014 do NOT quote). Hook leads with the violation; the AITA question lands last. Anonymize all names + locations. Title pattern: \"AITA for sneaking out and causing my sister\u2026\"",
+        "score": {
+          "_meta": {
+            "age_days": 350.2,
+            "age_hours": 8405.3,
+            "awards": 0,
+            "crossposts": 7,
+            "flair": "Not the A-hole",
+            "gilded": 0,
+            "num_comments": 2459,
+            "selftext_chars": 2430,
+            "ups": 12121
+          },
+          "awards_score": 0.0,
+          "crosspost_score": 3.5,
+          "engagement_score": 15.0,
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 37.5,
-          "ups_score": 16.29,
-          "velocity_score": 0.33,
-          "verdict_score": 0.0
+          "total": 68.93,
+          "ups_score": 25.0,
+          "velocity_score": 0.43,
+          "verdict_score": 10.0
         },
         "setting_variants": [
           "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
         ],
-        "subreddit": "creepyencounters",
-        "title": "He followed me to my car, so I barked until he ran away.",
-        "url": "https://www.reddit.com/r/creepyencounters/comments/1qeteoy/he_followed_me_to_my_car_so_i_barked_until_he_ran/"
+        "subreddit": "AmItheAsshole",
+        "title": "AITA for sneaking out and causing my sister to lose her job?",
+        "url": "https://www.reddit.com/r/AmItheAsshole/comments/1l1jg1z/aita_for_sneaking_out_and_causing_my_sister_to/"
       },
       {
-        "cluster": "survival",
-        "cluster_letter": "S",
+        "cluster": "reddit",
+        "cluster_letter": "R",
         "hook_variants": [
-          "I think I'm being stalked at work."
+          "Not driving a friend to a city to ensure. AITA?"
         ],
-        "id": "1tbcl1w",
-        "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
+        "id": "1t8ody5",
+        "premise_paraphrase": "AITA-style dramatization. Narrator describes a violation involving a close-relation (paraphrase the source \u2014 do NOT quote). Hook leads with the violation; the AITA question lands last. Anonymize all names + locations. Title pattern: \"AITA for not driving a friend to a\u2026\"",
         "score": {
           "_meta": {
-            "age_days": 6.0,
-            "age_hours": 143.8,
+            "age_days": 8.9,
+            "age_hours": 213.7,
             "awards": 0,
-            "crossposts": 0,
-            "flair": "",
+            "crossposts": 2,
+            "flair": "Not the A-hole",
             "gilded": 0,
-            "num_comments": 32,
-            "selftext_chars": 1571,
-            "ups": 104
+            "num_comments": 1270,
+            "selftext_chars": 2988,
+            "ups": 3700
           },
           "awards_score": 0.0,
-          "crosspost_score": 0.0,
+          "crosspost_score": 1.0,
           "engagement_score": 15.0,
-          "freshness_score": 4.0,
+          "freshness_score": 3.52,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 34.74,
-          "ups_score": 0.52,
-          "velocity_score": 0.22,
-          "verdict_score": 0.0
+          "total": 68.21,
+          "ups_score": 18.5,
+          "velocity_score": 5.19,
+          "verdict_score": 10.0
         },
         "setting_variants": [
-          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
+          "swap 'wedding' \u2192 bridal shower, engagement party, rehearsal dinner"
         ],
-        "subreddit": "creepyencounters",
-        "title": "I think I'm being stalked at work",
-        "url": "https://www.reddit.com/r/creepyencounters/comments/1tbcl1w/i_think_im_being_stalked_at_work/"
+        "subreddit": "AmItheAsshole",
+        "title": "AITA for not driving a friend to a city to ensure bride\u2019s wedding cake isn\u2019t ruined?",
+        "url": "https://www.reddit.com/r/AmItheAsshole/comments/1t8ody5/aita_for_not_driving_a_friend_to_a_city_to_ensure/"
       },
       {
-        "cluster": "survival",
-        "cluster_letter": "S",
+        "cluster": "reddit",
+        "cluster_letter": "R",
         "hook_variants": [
-          "Charged by barefoot college aged girl."
+          "Refusing to let my mom wear white to my. AITA?"
         ],
-        "id": "1tcs431",
-        "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
+        "id": "1mj5ykr",
+        "premise_paraphrase": "AITA-style dramatization. Narrator describes a violation involving a close-relation (paraphrase the source \u2014 do NOT quote). Hook leads with the violation; the AITA question lands last. Anonymize all names + locations. Title pattern: \"AITA for refusing to let my mom wear\u2026\"",
         "score": {
           "_meta": {
-            "age_days": 4.5,
-            "age_hours": 106.9,
+            "age_days": 285.2,
+            "age_hours": 6845.4,
             "awards": 0,
-            "crossposts": 0,
-            "flair": "",
+            "crossposts": 5,
+            "flair": "Not the A-hole",
             "gilded": 0,
-            "num_comments": 8,
-            "selftext_chars": 2533,
-            "ups": 35
+            "num_comments": 3578,
+            "selftext_chars": 1276,
+            "ups": 15857
           },
           "awards_score": 0.0,
-          "crosspost_score": 0.0,
+          "crosspost_score": 2.5,
           "engagement_score": 15.0,
-          "freshness_score": 4.26,
+          "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 34.53,
-          "ups_score": 0.18,
-          "velocity_score": 0.1,
-          "verdict_score": 0.0
+          "total": 68.19,
+          "ups_score": 25.0,
+          "velocity_score": 0.69,
+          "verdict_score": 10.0
         },
         "setting_variants": [
-          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
+          "swap 'wedding' \u2192 bridal shower, engagement party, rehearsal dinner"
         ],
-        "subreddit": "creepyencounters",
-        "title": "Charged by barefoot college aged girl",
-        "url": "https://www.reddit.com/r/creepyencounters/comments/1tcs431/charged_by_barefoot_college_aged_girl/"
+        "subreddit": "AmItheAsshole",
+        "title": "AITA for refusing to let my mom wear white to my wedding, even though she claims it\u2019s her \u201clast chance\u201d to feel beautiful?",
+        "url": "https://www.reddit.com/r/AmItheAsshole/comments/1mj5ykr/aita_for_refusing_to_let_my_mom_wear_white_to_my/"
       },
       {
-        "cluster": "survival",
-        "cluster_letter": "S",
+        "cluster": "reddit",
+        "cluster_letter": "R",
         "hook_variants": [
-          "I met the White Knight."
+          "Asking a family with a small child to keep. AITA?"
         ],
-        "id": "1t56jeo",
-        "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
+        "id": "1spwsjh",
+        "premise_paraphrase": "AITA-style dramatization. Narrator describes a violation involving a close-relation (paraphrase the source \u2014 do NOT quote). Hook leads with the violation; the AITA question lands last. Anonymize all names + locations. Title pattern: \"AITA for asking a family with a small\u2026\"",
         "score": {
           "_meta": {
-            "age_days": 12.5,
-            "age_hours": 299.4,
+            "age_days": 29.2,
+            "age_hours": 699.8,
             "awards": 0,
             "crossposts": 1,
-            "flair": "",
+            "flair": "Not the A-hole",
             "gilded": 0,
-            "num_comments": 13,
-            "selftext_chars": 2418,
-            "ups": 54
+            "num_comments": 2197,
+            "selftext_chars": 1292,
+            "ups": 5069
           },
           "awards_score": 0.0,
           "crosspost_score": 0.5,
           "engagement_score": 15.0,
-          "freshness_score": 2.92,
+          "freshness_score": 0.14,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 33.74,
-          "ups_score": 0.27,
-          "velocity_score": 0.05,
-          "verdict_score": 0.0
+          "total": 67.81,
+          "ups_score": 25.0,
+          "velocity_score": 2.17,
+          "verdict_score": 10.0
         },
         "setting_variants": [
-          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
+          "swap 'child' \u2192 stepchild, niece, godchild"
         ],
-        "subreddit": "creepyencounters",
-        "title": "I met the White Knight",
-        "url": "https://www.reddit.com/r/creepyencounters/comments/1t56jeo/i_met_the_white_knight/"
-      },
-      {
-        "cluster": "survival",
-        "cluster_letter": "S",
-        "hook_variants": [
-          "A random man banged on my door calling out my."
-        ],
-        "id": "1t40byn",
-        "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
-        "score": {
-          "_meta": {
-            "age_days": 13.8,
-            "age_hours": 330.8,
-            "awards": 0,
-            "crossposts": 0,
-            "flair": "",
-            "gilded": 0,
-            "num_comments": 17,
-            "selftext_chars": 533,
-            "ups": 72
-          },
-          "awards_score": 0.0,
-          "crosspost_score": 0.0,
-          "engagement_score": 15.0,
-          "freshness_score": 2.7,
-          "gilded_score": 0.0,
-          "length_score": 15.0,
-          "total": 33.13,
-          "ups_score": 0.36,
-          "velocity_score": 0.07,
-          "verdict_score": 0.0
-        },
-        "setting_variants": [
-          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
-        ],
-        "subreddit": "creepyencounters",
-        "title": "A random man banged on my door calling out my name.",
-        "url": "https://www.reddit.com/r/creepyencounters/comments/1t40byn/a_random_man_banged_on_my_door_calling_out_my_name/"
-      },
+        "subreddit": "AmItheAsshole",
+        "title": "AITA for asking a family with a small child to keep it down on a red eye flight?",
+        "url": "https://www.reddit.com/r/AmItheAsshole/comments/1spwsjh/aita_for_asking_a_family_with_a_small_child_to/"
+      }
+    ],
+    "survival": [
       {
         "cluster": "survival",
         "cluster_letter": "S",
@@ -2500,14 +2310,14 @@
         "score": {
           "_meta": {
             "age_days": 16.2,
-            "age_hours": 388.6,
+            "age_hours": 388.7,
             "awards": 0,
             "crossposts": 1,
             "flair": "",
             "gilded": 0,
             "num_comments": 12,
             "selftext_chars": 2713,
-            "ups": 48
+            "ups": 49
           },
           "awards_score": 0.0,
           "crosspost_score": 0.5,
@@ -2538,14 +2348,14 @@
         "score": {
           "_meta": {
             "age_days": 13.1,
-            "age_hours": 315.2,
+            "age_hours": 315.3,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 10,
             "selftext_chars": 1577,
-            "ups": 44
+            "ups": 46
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -2553,8 +2363,8 @@
           "freshness_score": 2.81,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 33.07,
-          "ups_score": 0.22,
+          "total": 33.08,
+          "ups_score": 0.23,
           "velocity_score": 0.04,
           "verdict_score": 0.0
         },
@@ -2576,14 +2386,14 @@
         "score": {
           "_meta": {
             "age_days": 15.7,
-            "age_hours": 376.4,
+            "age_hours": 376.5,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 19,
             "selftext_chars": 2290,
-            "ups": 85
+            "ups": 88
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -2591,8 +2401,8 @@
           "freshness_score": 2.39,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 32.88,
-          "ups_score": 0.43,
+          "total": 32.9,
+          "ups_score": 0.44,
           "velocity_score": 0.07,
           "verdict_score": 0.0
         },
@@ -2614,24 +2424,24 @@
         "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
         "score": {
           "_meta": {
-            "age_days": 352.4,
-            "age_hours": 8458.8,
+            "age_days": 352.5,
+            "age_hours": 8458.9,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 204,
             "selftext_chars": 2239,
-            "ups": 1630
+            "ups": 1634
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
-          "engagement_score": 9.39,
+          "engagement_score": 9.36,
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
           "total": 32.59,
-          "ups_score": 8.15,
+          "ups_score": 8.17,
           "velocity_score": 0.06,
           "verdict_score": 0.0
         },
@@ -2653,24 +2463,24 @@
         "score": {
           "_meta": {
             "age_days": 12.2,
-            "age_hours": 292.9,
+            "age_hours": 293.1,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 212,
             "selftext_chars": 5743,
-            "ups": 1051
+            "ups": 1060
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
           "engagement_score": 15.0,
-          "freshness_score": 2.97,
+          "freshness_score": 2.96,
           "gilded_score": 0.0,
           "length_score": 8.0,
-          "total": 32.3,
-          "ups_score": 5.25,
-          "velocity_score": 1.08,
+          "total": 32.35,
+          "ups_score": 5.3,
+          "velocity_score": 1.09,
           "verdict_score": 0.0
         },
         "setting_variants": [
@@ -2691,7 +2501,7 @@
         "score": {
           "_meta": {
             "age_days": 346.8,
-            "age_hours": 8324.0,
+            "age_hours": 8324.1,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
@@ -2729,14 +2539,14 @@
         "score": {
           "_meta": {
             "age_days": 24.1,
-            "age_hours": 577.4,
+            "age_hours": 577.5,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 22,
             "selftext_chars": 556,
-            "ups": 109
+            "ups": 104
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -2744,9 +2554,9 @@
           "freshness_score": 0.99,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 31.59,
-          "ups_score": 0.55,
-          "velocity_score": 0.06,
+          "total": 31.56,
+          "ups_score": 0.52,
+          "velocity_score": 0.05,
           "verdict_score": 0.0
         },
         "setting_variants": [
@@ -2768,7 +2578,7 @@
         "score": {
           "_meta": {
             "age_days": 24.8,
-            "age_hours": 595.6,
+            "age_hours": 595.7,
             "awards": 0,
             "crossposts": 1,
             "flair": "",
@@ -2783,7 +2593,7 @@
           "freshness_score": 0.86,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 31.55,
+          "total": 31.54,
           "ups_score": 0.17,
           "velocity_score": 0.02,
           "verdict_score": 0.0
@@ -2806,14 +2616,14 @@
         "score": {
           "_meta": {
             "age_days": 23.8,
-            "age_hours": 571.6,
+            "age_hours": 571.7,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 12,
             "selftext_chars": 1218,
-            "ups": 52
+            "ups": 47
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -2821,9 +2631,9 @@
           "freshness_score": 1.03,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 31.32,
-          "ups_score": 0.26,
-          "velocity_score": 0.03,
+          "total": 31.29,
+          "ups_score": 0.24,
+          "velocity_score": 0.02,
           "verdict_score": 0.0
         },
         "setting_variants": [
@@ -2844,15 +2654,15 @@
         "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
         "score": {
           "_meta": {
-            "age_days": 312.8,
-            "age_hours": 7508.3,
+            "age_days": 312.9,
+            "age_hours": 7508.4,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 62,
             "selftext_chars": 709,
-            "ups": 245
+            "ups": 247
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -2860,7 +2670,7 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 31.23,
+          "total": 31.24,
           "ups_score": 1.23,
           "velocity_score": 0.01,
           "verdict_score": 0.0
@@ -2876,6 +2686,44 @@
         "cluster": "survival",
         "cluster_letter": "S",
         "hook_variants": [
+          "still don't know if he was a real internet cable."
+        ],
+        "id": "1tcrmhv",
+        "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
+        "score": {
+          "_meta": {
+            "age_days": 4.5,
+            "age_hours": 107.5,
+            "awards": 0,
+            "crossposts": 0,
+            "flair": "",
+            "gilded": 0,
+            "num_comments": 8,
+            "selftext_chars": 2895,
+            "ups": 52
+          },
+          "awards_score": 0.0,
+          "crosspost_score": 0.0,
+          "engagement_score": 11.54,
+          "freshness_score": 4.25,
+          "gilded_score": 0.0,
+          "length_score": 15.0,
+          "total": 31.2,
+          "ups_score": 0.26,
+          "velocity_score": 0.15,
+          "verdict_score": 0.0
+        },
+        "setting_variants": [
+          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
+        ],
+        "subreddit": "creepyencounters",
+        "title": "still don't know if he was a real internet cable technician or a creep",
+        "url": "https://www.reddit.com/r/creepyencounters/comments/1tcrmhv/still_dont_know_if_he_was_a_real_internet_cable/"
+      },
+      {
+        "cluster": "survival",
+        "cluster_letter": "S",
+        "hook_variants": [
           "12 AM creepy encounter."
         ],
         "id": "1su91ax",
@@ -2883,14 +2731,14 @@
         "score": {
           "_meta": {
             "age_days": 24.5,
-            "age_hours": 587.9,
+            "age_hours": 588.0,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 13,
             "selftext_chars": 2427,
-            "ups": 55
+            "ups": 52
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -2898,8 +2746,8 @@
           "freshness_score": 0.92,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 31.22,
-          "ups_score": 0.27,
+          "total": 31.2,
+          "ups_score": 0.26,
           "velocity_score": 0.03,
           "verdict_score": 0.0
         },
@@ -2921,14 +2769,14 @@
         "score": {
           "_meta": {
             "age_days": 34.7,
-            "age_hours": 832.8,
+            "age_hours": 833.0,
             "awards": 0,
             "crossposts": 1,
             "flair": "",
             "gilded": 0,
             "num_comments": 35,
             "selftext_chars": 1445,
-            "ups": 121
+            "ups": 122
           },
           "awards_score": 0.0,
           "crosspost_score": 0.5,
@@ -2937,7 +2785,7 @@
           "gilded_score": 0.0,
           "length_score": 15.0,
           "total": 31.15,
-          "ups_score": 0.6,
+          "ups_score": 0.61,
           "velocity_score": 0.04,
           "verdict_score": 0.0
         },
@@ -2959,14 +2807,14 @@
         "score": {
           "_meta": {
             "age_days": 109.9,
-            "age_hours": 2637.4,
+            "age_hours": 2637.5,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 47,
             "selftext_chars": 1610,
-            "ups": 196
+            "ups": 197
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -2974,7 +2822,7 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 31.0,
+          "total": 31.01,
           "ups_score": 0.98,
           "velocity_score": 0.02,
           "verdict_score": 0.0
@@ -2990,44 +2838,6 @@
         "cluster": "survival",
         "cluster_letter": "S",
         "hook_variants": [
-          "still don't know if he was a real internet cable."
-        ],
-        "id": "1tcrmhv",
-        "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
-        "score": {
-          "_meta": {
-            "age_days": 4.5,
-            "age_hours": 107.4,
-            "awards": 0,
-            "crossposts": 0,
-            "flair": "",
-            "gilded": 0,
-            "num_comments": 8,
-            "selftext_chars": 2895,
-            "ups": 53
-          },
-          "awards_score": 0.0,
-          "crosspost_score": 0.0,
-          "engagement_score": 11.32,
-          "freshness_score": 4.25,
-          "gilded_score": 0.0,
-          "length_score": 15.0,
-          "total": 30.99,
-          "ups_score": 0.27,
-          "velocity_score": 0.15,
-          "verdict_score": 0.0
-        },
-        "setting_variants": [
-          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
-        ],
-        "subreddit": "creepyencounters",
-        "title": "still don't know if he was a real internet cable technician or a creep",
-        "url": "https://www.reddit.com/r/creepyencounters/comments/1tcrmhv/still_dont_know_if_he_was_a_real_internet_cable/"
-      },
-      {
-        "cluster": "survival",
-        "cluster_letter": "S",
-        "hook_variants": [
           "I think my Lyft driver thought we were reconnecting."
         ],
         "id": "1rxo7jm",
@@ -3035,14 +2845,14 @@
         "score": {
           "_meta": {
             "age_days": 60.7,
-            "age_hours": 1457.2,
+            "age_hours": 1457.3,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 47,
             "selftext_chars": 1795,
-            "ups": 187
+            "ups": 191
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -3050,8 +2860,8 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 30.97,
-          "ups_score": 0.94,
+          "total": 30.99,
+          "ups_score": 0.95,
           "velocity_score": 0.04,
           "verdict_score": 0.0
         },
@@ -3073,14 +2883,14 @@
         "score": {
           "_meta": {
             "age_days": 41.2,
-            "age_hours": 989.8,
+            "age_hours": 989.9,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 46,
             "selftext_chars": 2885,
-            "ups": 153
+            "ups": 154
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -3088,7 +2898,7 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 30.81,
+          "total": 30.82,
           "ups_score": 0.77,
           "velocity_score": 0.05,
           "verdict_score": 0.0
@@ -3111,14 +2921,14 @@
         "score": {
           "_meta": {
             "age_days": 38.1,
-            "age_hours": 913.5,
+            "age_hours": 913.6,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 27,
             "selftext_chars": 1666,
-            "ups": 135
+            "ups": 134
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -3126,8 +2936,8 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 30.72,
-          "ups_score": 0.68,
+          "total": 30.71,
+          "ups_score": 0.67,
           "velocity_score": 0.04,
           "verdict_score": 0.0
         },
@@ -3149,14 +2959,14 @@
         "score": {
           "_meta": {
             "age_days": 36.1,
-            "age_hours": 866.8,
+            "age_hours": 866.9,
             "awards": 0,
             "crossposts": 1,
             "flair": "",
             "gilded": 0,
             "num_comments": 8,
             "selftext_chars": 1767,
-            "ups": 33
+            "ups": 31
           },
           "awards_score": 0.0,
           "crosspost_score": 0.5,
@@ -3164,8 +2974,8 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 30.68,
-          "ups_score": 0.17,
+          "total": 30.67,
+          "ups_score": 0.15,
           "velocity_score": 0.01,
           "verdict_score": 0.0
         },
@@ -3180,44 +2990,6 @@
         "cluster": "survival",
         "cluster_letter": "S",
         "hook_variants": [
-          "Good Samaritan or creepy weirdo."
-        ],
-        "id": "1solwv0",
-        "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
-        "score": {
-          "_meta": {
-            "age_days": 30.7,
-            "age_hours": 736.5,
-            "awards": 0,
-            "crossposts": 0,
-            "flair": "",
-            "gilded": 0,
-            "num_comments": 33,
-            "selftext_chars": 1597,
-            "ups": 105
-          },
-          "awards_score": 0.0,
-          "crosspost_score": 0.0,
-          "engagement_score": 15.0,
-          "freshness_score": 0.0,
-          "gilded_score": 0.0,
-          "length_score": 15.0,
-          "total": 30.57,
-          "ups_score": 0.53,
-          "velocity_score": 0.04,
-          "verdict_score": 0.0
-        },
-        "setting_variants": [
-          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
-        ],
-        "subreddit": "creepyencounters",
-        "title": "Good Samaritan or creepy weirdo?",
-        "url": "https://www.reddit.com/r/creepyencounters/comments/1solwv0/good_samaritan_or_creepy_weirdo/"
-      },
-      {
-        "cluster": "survival",
-        "cluster_letter": "S",
-        "hook_variants": [
           "Am I just being paranoid."
         ],
         "id": "1rosuvu",
@@ -3225,14 +2997,14 @@
         "score": {
           "_meta": {
             "age_days": 70.5,
-            "age_hours": 1693.0,
+            "age_hours": 1693.1,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 32,
             "selftext_chars": 996,
-            "ups": 108
+            "ups": 112
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -3240,8 +3012,8 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 30.56,
-          "ups_score": 0.54,
+          "total": 30.58,
+          "ups_score": 0.56,
           "velocity_score": 0.02,
           "verdict_score": 0.0
         },
@@ -3256,6 +3028,44 @@
         "cluster": "survival",
         "cluster_letter": "S",
         "hook_variants": [
+          "Good Samaritan or creepy weirdo."
+        ],
+        "id": "1solwv0",
+        "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
+        "score": {
+          "_meta": {
+            "age_days": 30.7,
+            "age_hours": 736.6,
+            "awards": 0,
+            "crossposts": 0,
+            "flair": "",
+            "gilded": 0,
+            "num_comments": 33,
+            "selftext_chars": 1597,
+            "ups": 101
+          },
+          "awards_score": 0.0,
+          "crosspost_score": 0.0,
+          "engagement_score": 15.0,
+          "freshness_score": 0.0,
+          "gilded_score": 0.0,
+          "length_score": 15.0,
+          "total": 30.55,
+          "ups_score": 0.51,
+          "velocity_score": 0.04,
+          "verdict_score": 0.0
+        },
+        "setting_variants": [
+          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
+        ],
+        "subreddit": "creepyencounters",
+        "title": "Good Samaritan or creepy weirdo?",
+        "url": "https://www.reddit.com/r/creepyencounters/comments/1solwv0/good_samaritan_or_creepy_weirdo/"
+      },
+      {
+        "cluster": "survival",
+        "cluster_letter": "S",
+        "hook_variants": [
           "Heard one knock.",
           "Stalked to my apartment."
         ],
@@ -3264,14 +3074,14 @@
         "score": {
           "_meta": {
             "age_days": 86.7,
-            "age_hours": 2080.5,
+            "age_hours": 2080.6,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 32,
             "selftext_chars": 1673,
-            "ups": 106
+            "ups": 107
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -3302,14 +3112,14 @@
         "score": {
           "_meta": {
             "age_days": 63.1,
-            "age_hours": 1514.8,
+            "age_hours": 1514.9,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 16,
             "selftext_chars": 647,
-            "ups": 78
+            "ups": 77
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -3317,7 +3127,7 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 30.41,
+          "total": 30.4,
           "ups_score": 0.39,
           "velocity_score": 0.02,
           "verdict_score": 0.0
@@ -3340,23 +3150,23 @@
         "score": {
           "_meta": {
             "age_days": 324.9,
-            "age_hours": 7798.6,
+            "age_hours": 7798.7,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 156,
             "selftext_chars": 1999,
-            "ups": 1582
+            "ups": 1583
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
-          "engagement_score": 7.4,
+          "engagement_score": 7.39,
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
           "total": 30.37,
-          "ups_score": 7.91,
+          "ups_score": 7.92,
           "velocity_score": 0.06,
           "verdict_score": 0.0
         },
@@ -3378,14 +3188,14 @@
         "score": {
           "_meta": {
             "age_days": 46.2,
-            "age_hours": 1109.3,
+            "age_hours": 1109.4,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
             "gilded": 0,
             "num_comments": 26,
             "selftext_chars": 1121,
-            "ups": 70
+            "ups": 69
           },
           "awards_score": 0.0,
           "crosspost_score": 0.0,
@@ -3393,8 +3203,8 @@
           "freshness_score": 0.0,
           "gilded_score": 0.0,
           "length_score": 15.0,
-          "total": 30.37,
-          "ups_score": 0.35,
+          "total": 30.36,
+          "ups_score": 0.34,
           "velocity_score": 0.02,
           "verdict_score": 0.0
         },
@@ -3416,7 +3226,7 @@
         "score": {
           "_meta": {
             "age_days": 90.7,
-            "age_hours": 2175.6,
+            "age_hours": 2175.7,
             "awards": 0,
             "crossposts": 0,
             "flair": "",
@@ -3442,9 +3252,199 @@
         "subreddit": "creepyencounters",
         "title": "A hooded man was taking pictures of my (23f) car.",
         "url": "https://www.reddit.com/r/creepyencounters/comments/1r6vswb/a_hooded_man_was_taking_pictures_of_my_23f_car/"
+      },
+      {
+        "cluster": "survival",
+        "cluster_letter": "S",
+        "hook_variants": [
+          "A man followed and recorded me when I was 11."
+        ],
+        "id": "1shhxa6",
+        "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
+        "score": {
+          "_meta": {
+            "age_days": 38.4,
+            "age_hours": 922.0,
+            "awards": 0,
+            "crossposts": 0,
+            "flair": "",
+            "gilded": 0,
+            "num_comments": 11,
+            "selftext_chars": 2435,
+            "ups": 45
+          },
+          "awards_score": 0.0,
+          "crosspost_score": 0.0,
+          "engagement_score": 15.0,
+          "freshness_score": 0.0,
+          "gilded_score": 0.0,
+          "length_score": 15.0,
+          "total": 30.24,
+          "ups_score": 0.22,
+          "velocity_score": 0.01,
+          "verdict_score": 0.0
+        },
+        "setting_variants": [
+          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
+        ],
+        "subreddit": "creepyencounters",
+        "title": "A man followed and recorded me when I was 11.",
+        "url": "https://www.reddit.com/r/creepyencounters/comments/1shhxa6/a_man_followed_and_recorded_me_when_i_was_11/"
+      },
+      {
+        "cluster": "survival",
+        "cluster_letter": "S",
+        "hook_variants": [
+          "Weird experience at king of Prussia mall."
+        ],
+        "id": "1r4xo9i",
+        "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
+        "score": {
+          "_meta": {
+            "age_days": 92.9,
+            "age_hours": 2229.4,
+            "awards": 0,
+            "crossposts": 0,
+            "flair": "",
+            "gilded": 0,
+            "num_comments": 33,
+            "selftext_chars": 706,
+            "ups": 42
+          },
+          "awards_score": 0.0,
+          "crosspost_score": 0.0,
+          "engagement_score": 15.0,
+          "freshness_score": 0.0,
+          "gilded_score": 0.0,
+          "length_score": 15.0,
+          "total": 30.22,
+          "ups_score": 0.21,
+          "velocity_score": 0.01,
+          "verdict_score": 0.0
+        },
+        "setting_variants": [
+          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
+        ],
+        "subreddit": "creepyencounters",
+        "title": "Weird experience at king of Prussia mall",
+        "url": "https://www.reddit.com/r/creepyencounters/comments/1r4xo9i/weird_experience_at_king_of_prussia_mall/"
+      },
+      {
+        "cluster": "survival",
+        "cluster_letter": "S",
+        "hook_variants": [
+          "A frightening encounter in childhood."
+        ],
+        "id": "1r50vwh",
+        "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
+        "score": {
+          "_meta": {
+            "age_days": 92.8,
+            "age_hours": 2227.0,
+            "awards": 0,
+            "crossposts": 0,
+            "flair": "",
+            "gilded": 0,
+            "num_comments": 21,
+            "selftext_chars": 1730,
+            "ups": 40
+          },
+          "awards_score": 0.0,
+          "crosspost_score": 0.0,
+          "engagement_score": 15.0,
+          "freshness_score": 0.0,
+          "gilded_score": 0.0,
+          "length_score": 15.0,
+          "total": 30.21,
+          "ups_score": 0.2,
+          "velocity_score": 0.01,
+          "verdict_score": 0.0
+        },
+        "setting_variants": [
+          "swap 'tent' \u2192 truck bed, lean-to, snow cave"
+        ],
+        "subreddit": "creepyencounters",
+        "title": "A frightening encounter in childhood.",
+        "url": "https://www.reddit.com/r/creepyencounters/comments/1r50vwh/a_frightening_encounter_in_childhood/"
+      },
+      {
+        "cluster": "survival",
+        "cluster_letter": "S",
+        "hook_variants": [
+          "Did I almost get robbed/abducted."
+        ],
+        "id": "1r8r0n1",
+        "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
+        "score": {
+          "_meta": {
+            "age_days": 88.6,
+            "age_hours": 2126.0,
+            "awards": 0,
+            "crossposts": 0,
+            "flair": "",
+            "gilded": 0,
+            "num_comments": 11,
+            "selftext_chars": 973,
+            "ups": 38
+          },
+          "awards_score": 0.0,
+          "crosspost_score": 0.0,
+          "engagement_score": 15.0,
+          "freshness_score": 0.0,
+          "gilded_score": 0.0,
+          "length_score": 15.0,
+          "total": 30.2,
+          "ups_score": 0.19,
+          "velocity_score": 0.01,
+          "verdict_score": 0.0
+        },
+        "setting_variants": [
+          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
+        ],
+        "subreddit": "creepyencounters",
+        "title": "Did I almost get robbed/abducted?",
+        "url": "https://www.reddit.com/r/creepyencounters/comments/1r8r0n1/did_i_almost_get_robbedabducted/"
+      },
+      {
+        "cluster": "survival",
+        "cluster_letter": "S",
+        "hook_variants": [
+          "A psychiatrist I saw long ago repeatedly kept asking me."
+        ],
+        "id": "1r6so8m",
+        "premise_paraphrase": "First-person survival/creepy-encounter retelling. Narrator describes a threat-perception moment (footprints, sounds, figure, etc) in a remote or isolated setting. Original prose only \u2014 use source URL for tone, never for phrasing.",
+        "score": {
+          "_meta": {
+            "age_days": 90.8,
+            "age_hours": 2178.1,
+            "awards": 0,
+            "crossposts": 0,
+            "flair": "",
+            "gilded": 0,
+            "num_comments": 13,
+            "selftext_chars": 740,
+            "ups": 34
+          },
+          "awards_score": 0.0,
+          "crosspost_score": 0.0,
+          "engagement_score": 15.0,
+          "freshness_score": 0.0,
+          "gilded_score": 0.0,
+          "length_score": 15.0,
+          "total": 30.17,
+          "ups_score": 0.17,
+          "velocity_score": 0.0,
+          "verdict_score": 0.0
+        },
+        "setting_variants": [
+          "(no canonical noun matched \u2014 pick a less-clich\u00e9d setting at writing time)"
+        ],
+        "subreddit": "creepyencounters",
+        "title": "A psychiatrist I saw long ago repeatedly kept asking me to touch his shoulder over and over\u2026",
+        "url": "https://www.reddit.com/r/creepyencounters/comments/1r6so8m/a_psychiatrist_i_saw_long_ago_repeatedly_kept/"
       }
     ]
   },
-  "generated_at": "2026-05-18T19:37:42.368809+00:00",
+  "generated_at": "2026-05-18T19:45:14.654564+00:00",
   "limit_per_cluster": 30
 }
