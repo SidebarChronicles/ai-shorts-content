@@ -13,6 +13,9 @@ output/scripts/*/trailer_raw.mp4
 output/scripts/*/trailer_raw.mp4.part
 output/scripts/*/clips/
 output/scripts/*/clips_portrait/
+output/scripts/*/clips_source/
+output/scripts/*/clips/
+.claude/worktrees/
 output/scripts/*/bg_clips_concat.txt
 output/scripts/*/captions.ass
 output/scripts/*/karaoke.filter
