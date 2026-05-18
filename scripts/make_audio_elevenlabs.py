@@ -53,6 +53,25 @@ DEFAULT_BUDGET = 22.0
 # Turbo v2 on Starter tier as of mid-2026 — ~$0.30 per 1k chars
 COST_PER_CHAR = 0.30 / 1000
 
+# Voice library reference — voice picks per vertical (used by orchestrators
+# to populate game_config.json with the appropriate voice_id).
+#
+#   Slot         Voice ID                              Best for
+#   -----------  -----------------------------------   ----------------------------------
+VOICE_LIBRARY = {
+    "Adam":    "pNInz6obpgDQGcFmaJgB",  # deep, serious documentary — games hype, action
+    "Charlie": "IKne3meq5aSn9XLyUdCD",  # natural conversational — top-X, casual explainers
+    "Callum":  "N2lVS1w4EtoT3dr4eOWO",  # energetic punchy — sports, gaming hype
+    "Brian":   "nPczCjzI2devNBz1zQrb",  # narrator authoritative — cases, mysteries, history
+    "Rachel":  "21m00Tcm4TlvDq8ikWAM",  # warm authoritative — psychology, self-improvement
+    "Daniel":  "onwK4e9ZLuTAKqWW03F9",  # British formal — finance, news
+}
+
+# Model picks per content type:
+#   - eleven_turbo_v2:        high-energy, fast pace (games, movies, top-X, tech)
+#   - eleven_multilingual_v2: slower documentary tone (cases, mysteries, history, finance)
+SUPPORTED_MODELS = {"eleven_turbo_v2", "eleven_multilingual_v2", "eleven_flash_v2_5", "eleven_v3"}
+
 
 class BudgetExceeded(Exception):
     pass
@@ -217,6 +236,10 @@ def main() -> None:
     group.add_argument("--case", metavar="ID", help="Case ID or number (e.g. 07, GG_01_slug)")
     group.add_argument("--text-file", metavar="PATH", help="Path to a plain-text narration file")
     parser.add_argument("--voice-id", default=None, help="Override ElevenLabs voice ID")
+    parser.add_argument("--voice", default=None, choices=list(VOICE_LIBRARY.keys()),
+                        help=f"Pick a named voice from the library: {', '.join(VOICE_LIBRARY)}")
+    parser.add_argument("--model", default=None,
+                        help=f"ElevenLabs model. One of: {', '.join(sorted(SUPPORTED_MODELS))}")
     parser.add_argument("--out", metavar="PATH", default=None, help="Output .mp3 path (overrides default)")
     parser.add_argument("--dry-run", action="store_true", help="Estimate cost without calling the API")
     args = parser.parse_args()
@@ -224,19 +247,34 @@ def main() -> None:
     # Config from environment
     api_key = os.environ.get("ELEVENLABS_API_KEY", "")
     voice_id = args.voice_id or os.environ.get("ELEVENLABS_VOICE_ID", DEFAULT_VOICE_ID)
-    model_id = os.environ.get("ELEVENLABS_MODEL", DEFAULT_MODEL)
+    model_id = args.model or os.environ.get("ELEVENLABS_MODEL", DEFAULT_MODEL)
 
-    # If a game case, prefer voice_id baked into game_config.json by the
-    # batch-production routine. CLI --voice-id still wins if explicitly passed.
-    if args.case and not args.voice_id:
+    # --voice <Name> resolves through the library; only honored when --voice-id wasn't explicit
+    if args.voice and not args.voice_id:
+        voice_id = VOICE_LIBRARY[args.voice]
+
+    # If a game/case, prefer voice_id + model_id baked into game_config.json by the
+    # batch-production routine. CLI flags still win if explicitly passed.
+    need_voice_from_cfg = args.case and not args.voice_id and not args.voice
+    need_model_from_cfg = args.case and not args.model
+    if need_voice_from_cfg or need_model_from_cfg:
         config_path = SCRIPTS_DIR / args.case / "game_config.json"
         if config_path.exists():
             try:
-                cfg_voice = json.loads(config_path.read_text()).get("voice_id", "")
-                if cfg_voice:
-                    voice_id = cfg_voice
+                cfg = json.loads(config_path.read_text())
+                if need_voice_from_cfg:
+                    cfg_voice = cfg.get("voice_id", "")
+                    if cfg_voice:
+                        voice_id = cfg_voice
+                if need_model_from_cfg:
+                    cfg_model = cfg.get("model_id", "")
+                    if cfg_model:
+                        model_id = cfg_model
             except (json.JSONDecodeError, OSError):
                 pass
+
+    if model_id not in SUPPORTED_MODELS:
+        sys.exit(f"ERROR: Unknown model '{model_id}'. Supported: {sorted(SUPPORTED_MODELS)}")
     budget = float(os.environ.get("ELEVENLABS_MONTHLY_BUDGET", DEFAULT_BUDGET))
     use_alignment = os.environ.get("ELEVENLABS_ALIGNMENT", "true").lower() == "true"
 
