@@ -19,7 +19,7 @@ For a 0-sub channel with no production data on the new format, the right strateg
 
 ## Schedule overview
 
-- **Cron:** `7 8,13,18 * * *` — fires at 8:07am, 1:07pm, 6:07pm Eastern (with ~9.6 min jitter)
+- **Cron:** `7 7,12,20 * * *` — fires at 7:07 AM, 12:07 PM, 8:07 PM Eastern (with ~9.6 min jitter). Times picked to hit the three peak YouTube Shorts windows: morning commute (7-9 AM), lunch break (11 AM-1 PM), and evening prime time (7-10 PM, the highest-traffic window).
 - **Per-fire production cap:** 2 videos
 - **Per-day output:** 6 videos
 - **Upload behavior:** immediate (each video goes public within minutes of production)
@@ -36,11 +36,11 @@ For a 0-sub channel with no production data on the new format, the right strateg
 
 ### Daily routine
 
-| Time | Verticals produced | Cumulative day |
-|---|---|---|
-| 8:07am | A, B | 2 |
-| 1:07pm | C, D | 4 |
-| 6:07pm | E, F | 6 |
+| Time (ET) | Verticals produced | Cumulative day | Algorithm window |
+|---|---|---|---|
+| 7:07 AM | A, B | 2 | Morning commute |
+| 12:07 PM | C, D | 4 | Lunch break |
+| 8:07 PM | E, F | 6 | Prime-time evening (PEAK) |
 
 Where A→F rotates: games → movies → mythology → mysteries → topx → finance → games (wrap). The two slots per fire are always DIFFERENT verticals in Phase 1.
 
@@ -176,7 +176,7 @@ Auto-advance is OFF by default (`auto_advance: false`). This is intentional — 
 
 Every morning during Phases 1-3:
 
-1. **Check fire success.** Did the 3 fires actually run? `ls -lt output/scripts/ | head -10` should show new directories from the last 24h. If not, the Mac was asleep — wake it up + check the cron with `python3 scripts/analyze_performance.py --since 12h`.
+1. **Check fire success.** Did the 3 fires actually run (7:07 AM / 12:07 PM / 8:07 PM)? `ls -lt output/scripts/ | head -10` should show new directories from the last 24h. If not, the Mac was asleep — wake it up + check the cron with `python3 scripts/analyze_performance.py --since 12h`.
 2. **Check budget.** `cat output/elevenlabs_usage.json | grep -A1 $(date +%Y-%m)`. If you're projected to exceed the soft-cap by Day 14, decide: upgrade EL to Creator or drop to 3/day.
 3. **Check blocked log.** `cat output/_blocked.log` for linter failures + budget skips. If >10 blocks in 24h, something's wrong with the writer or the linter; investigate.
 4. **Check view counts on yesterday's drops.** Bottom 2 retention videos: any common failure mode (weak hook? wrong music? wrong vertical?)? Top 2: anything to amplify?

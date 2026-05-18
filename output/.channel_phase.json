@@ -25,9 +25,9 @@
   "videos_per_fire": 2,
   "fires_per_day": 3,
   "_videos_per_fire_note": "Cap is 2. Phase 1+2 produce 2 different verticals per fire. Phase 3 may produce 2 of same vertical with different hook formulas.",
-  "el_budget_softcap_chars": 25000,
-  "el_tier": "starter",
-  "_el_budget_note": "Soft cap at 25k chars/mo (5k headroom under Starter's 30k). Hard refuse at 30k unless --over-budget flag passed.",
+  "el_budget_softcap_chars": 90000,
+  "el_tier": "creator",
+  "_el_budget_note": "Soft cap at 90k chars/mo (10k headroom under Creator's 100k). Upgraded from Starter (25k cap) on 2026-05-18 after user moved to Creator tier. Hard refuse at 90k unless --over-budget flag passed.",
   "decision_criteria_next_phase": {
     "drop_below_avg_view_pct": 0.30,
     "keep_above_avg_view_pct": 0.40,
