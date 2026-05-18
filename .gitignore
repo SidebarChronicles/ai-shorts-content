@@ -16,6 +16,8 @@ output/scripts/*/clips_portrait/
 output/scripts/*/bg_clips_concat.txt
 output/scripts/*/captions.ass
 output/scripts/*/karaoke.filter
+output/scripts/*/top_title.filter
+output/scripts/*/audio_mixed.mp3
 output/videos/*.mp4
 output/videos/*.mp4.part
 output/game_videos/*.mp4
@@ -35,6 +37,10 @@ assets/audio/*.aiff
 assets/audio/*.mp3
 assets/audio/*.mp3.part
 assets/audio/*.alignment.json
+assets/music/**/*.mp3
+assets/music/**/*.wav
+assets/sfx/*.wav
+assets/sfx/*.mp3
 
 # Pytest
 .pytest_cache/

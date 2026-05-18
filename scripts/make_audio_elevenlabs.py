@@ -50,6 +50,12 @@ DEFAULT_VOICE_ID = "pNInz6obpgDQGcFmaJgB"  # Adam — serious documentary male
 DEFAULT_MODEL = "eleven_turbo_v2"
 DEFAULT_BUDGET = 22.0
 
+# Voice speed defaults targeting 140-150 WPM (research: above 160 WPM
+# ElevenLabs voices audibly degrade — clipped syllables, lost inflection).
+# Per-vertical mapping; the orchestrators bake voice_speed into their
+# script_config.json files.
+DEFAULT_VOICE_SPEED = 0.92  # ~145 WPM on most voices
+
 # Turbo v2 on Starter tier as of mid-2026 — ~$0.30 per 1k chars
 COST_PER_CHAR = 0.30 / 1000
 
@@ -189,6 +195,7 @@ def synthesize(
     model_id: str,
     api_key: str,
     use_alignment: bool,
+    voice_speed: float = 1.0,
 ) -> None:
     headers = {
         "xi-api-key": api_key,
@@ -200,6 +207,7 @@ def synthesize(
         "voice_settings": {
             "stability": 0.5,
             "similarity_boost": 0.75,
+            "speed": voice_speed,
         },
     }
 
@@ -246,6 +254,10 @@ def main() -> None:
                         help=f"Pick a named voice from the library: {', '.join(VOICE_LIBRARY)}")
     parser.add_argument("--model", default=None,
                         help=f"ElevenLabs model. One of: {', '.join(sorted(SUPPORTED_MODELS))}")
+    parser.add_argument("--voice-speed", type=float, default=None,
+                        help=f"Voice speed multiplier (default {DEFAULT_VOICE_SPEED}). "
+                             f"Per-vertical guidance: cases/mysteries 0.88, mythology 0.90, "
+                             f"finance 0.93, games/movies 0.95. Above 1.0 = faster (risks AI degradation).")
     parser.add_argument("--out", metavar="PATH", default=None, help="Output .mp3 path (overrides default)")
     parser.add_argument("--dry-run", action="store_true", help="Estimate cost without calling the API")
     args = parser.parse_args()
@@ -254,17 +266,19 @@ def main() -> None:
     api_key = os.environ.get("ELEVENLABS_API_KEY", "")
     voice_id = args.voice_id or os.environ.get("ELEVENLABS_VOICE_ID", DEFAULT_VOICE_ID)
     model_id = args.model or os.environ.get("ELEVENLABS_MODEL", DEFAULT_MODEL)
+    voice_speed = args.voice_speed if args.voice_speed is not None else \
+                  float(os.environ.get("ELEVENLABS_VOICE_SPEED", DEFAULT_VOICE_SPEED))
 
     # --voice <Name> resolves through the library; only honored when --voice-id wasn't explicit
     if args.voice and not args.voice_id:
         voice_id = VOICE_LIBRARY[args.voice]
 
-    # If a game/case, prefer voice_id + model_id baked into the config by the
-    # batch-production routine. Checks game_config.json (games/movies) AND
-    # script_config.json (cases/finance/mythology/etc.). CLI flags still win.
+    # If a game/case, prefer voice_id + model_id + voice_speed baked into the config by the
+    # batch-production routine. CLI flags still win.
     need_voice_from_cfg = args.case and not args.voice_id and not args.voice
     need_model_from_cfg = args.case and not args.model
-    if need_voice_from_cfg or need_model_from_cfg:
+    need_speed_from_cfg = args.case and args.voice_speed is None
+    if need_voice_from_cfg or need_model_from_cfg or need_speed_from_cfg:
         for filename in ("script_config.json", "game_config.json"):
             config_path = SCRIPTS_DIR / args.case / filename
             if not config_path.exists():
@@ -279,9 +293,19 @@ def main() -> None:
                     cfg_model = cfg.get("model_id", "")
                     if cfg_model:
                         model_id = cfg_model
+                if need_speed_from_cfg:
+                    cfg_speed = cfg.get("voice_speed")
+                    if cfg_speed is not None:
+                        try:
+                            voice_speed = float(cfg_speed)
+                        except (TypeError, ValueError):
+                            pass
                 break  # first match wins
             except (json.JSONDecodeError, OSError):
                 pass
+
+    # Clamp speed to ElevenLabs supported range (0.7 - 1.2 per their API docs)
+    voice_speed = max(0.7, min(1.2, voice_speed))
 
     if model_id not in SUPPORTED_MODELS:
         sys.exit(f"ERROR: Unknown model '{model_id}'. Supported: {sorted(SUPPORTED_MODELS)}")
@@ -314,6 +338,7 @@ def main() -> None:
     print(f"── ElevenLabs TTS: {case_label} ──")
     print(f"  Voice:   {voice_id}")
     print(f"  Model:   {model_id}")
+    print(f"  Speed:   {voice_speed}")
     print(f"  Chars:   {chars:,}")
     print(f"  Cost:    ~${cost_estimate:.4f}  (estimate)")
 
@@ -342,7 +367,8 @@ def main() -> None:
         out_alignment = out_mp3.with_suffix(".alignment.json")
 
     print(f"\n  Synthesizing…")
-    synthesize(text, out_mp3, out_alignment, voice_id, model_id, api_key, use_alignment)
+    synthesize(text, out_mp3, out_alignment, voice_id, model_id, api_key, use_alignment,
+               voice_speed=voice_speed)
 
     record_usage(chars)
 

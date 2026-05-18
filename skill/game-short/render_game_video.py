@@ -299,6 +299,30 @@ def main() -> None:
     except Exception as e:
         print(f"  ⚠  Top title generation failed: {e}")
 
+    # Step 3c: Build mixed audio track (narration + music + transition SFX)
+    # Falls back to plain narration if build_audio_track.py fails or no music/SFX
+    # assets exist. The mixer is self-contained; runs as a subprocess.
+    print("  Building mixed audio track (narration + music + SFX)…")
+    audio_mixed_path = game_dir / "audio_mixed.mp3"
+    audio_to_encode = audio_file  # default: bare narration
+    if not args.dry_run:
+        try:
+            mix_result = subprocess.run(
+                ["python3", str(PROJECT_ROOT / "scripts" / "build_audio_track.py"),
+                 "--case", game_id],
+                capture_output=True, text=True, timeout=300,
+                cwd=str(PROJECT_ROOT),
+            )
+            if mix_result.returncode == 0 and audio_mixed_path.exists():
+                audio_to_encode = audio_mixed_path
+                print(f"  ✓ {audio_mixed_path.relative_to(PROJECT_ROOT)}")
+            else:
+                print(f"  ⚠  Audio mix failed — falling back to bare narration")
+                if mix_result.stderr:
+                    print(f"     {mix_result.stderr.strip()[-200:]}")
+        except Exception as e:
+            print(f"  ⚠  Audio mix error: {e} — falling back to bare narration")
+
     # Step 4: Print the FFmpeg encode command (chains karaoke + top-title)
     out_mp4 = PROJECT_ROOT / "output" / "game_videos" / f"{game_id}.mp4"
     out_mp4.parent.mkdir(parents=True, exist_ok=True)
@@ -316,7 +340,7 @@ def main() -> None:
     ffmpeg_cmd = (
         f"ffmpeg -y \\\n"
         f"  -f concat -safe 0 -i {concat_path.relative_to(PROJECT_ROOT)} \\\n"
-        f"  -i {audio_file.relative_to(PROJECT_ROOT)} \\\n"
+        f"  -i {audio_to_encode.relative_to(PROJECT_ROOT)} \\\n"
         f"{vf_line}"
         f"  -map 0:v -map 1:a \\\n"
         f"  -c:v libx264 -preset fast -crf 22 \\\n"
