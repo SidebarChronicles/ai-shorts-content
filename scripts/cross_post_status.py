@@ -135,29 +135,41 @@ def refresh_from_posted_ledgers(state: dict[str, dict]) -> int:
 # Subcommands
 # ---------------------------------------------------------------------------
 
+def _glyph(value) -> str:
+    if value is None:
+        return "✗"
+    if value == SKIPPED_MARKER:
+        return "—"
+    return "✓"
+
+
 def cmd_list(state: dict[str, dict]) -> None:
     if not state:
         print("(no videos tracked yet — run --refresh)")
         return
-    # Sort by youtube timestamp descending (most recent first)
     items = sorted(state.items(),
                    key=lambda kv: kv[1].get("youtube") or "",
                    reverse=True)
-    print(f"  {'case_id':<40}  {'YT':<5}  {'IG':<5}  {'TT':<5}")
-    print(f"  {'-'*40}  {'-'*5}  {'-'*5}  {'-'*5}")
+    print(f"  {'case_id':<40}  {'YT':<3}  {'IG':<3}  {'TT':<3}")
+    print(f"  {'-'*40}  ---  ---  ---")
     for case_id, info in items:
-        yt = "✓" if info.get("youtube") else "✗"
-        ig = "✓" if info.get("instagram") else "✗"
-        tt = "✓" if info.get("tiktok") else "✗"
-        print(f"  {case_id:<40}  {yt:<5}  {ig:<5}  {tt:<5}")
+        print(f"  {case_id:<40}  "
+              f"{_glyph(info.get('youtube')):<3}  "
+              f"{_glyph(info.get('instagram')):<3}  "
+              f"{_glyph(info.get('tiktok')):<3}")
+    print(f"\n  Legend: ✓ posted   ✗ pending   — skipped (intentionally not cross-posting)")
+
+
+SKIPPED_MARKER = "__skipped__"  # special value in a platform field meaning "intentionally not cross-posting"
 
 
 def cmd_pending(state: dict[str, dict], platform_filter: str | None = None) -> None:
-    """Show all cases pending on IG or TT (or both)."""
+    """Show all cases pending on IG or TT (or both). Skipped cases excluded."""
     targets = ["instagram", "tiktok"] if not platform_filter else [PLATFORM_NAMES[platform_filter]]
     pending: list[tuple[str, list[str]]] = []
     for case_id, info in sorted(state.items()):
-        missing = [p for p in targets if not info.get(p)]
+        # A platform is "pending" if its value is None (not skipped, not timestamped)
+        missing = [p for p in targets if info.get(p) is None]
         if missing and info.get("youtube"):  # only show YT-posted cases pending elsewhere
             pending.append((case_id, missing))
     if not pending:
@@ -179,6 +191,44 @@ def cmd_mark(state: dict[str, dict], case_id: str, platform: str) -> None:
     state[case_id][plat_key] = _now_iso()
     save_status(state)
     print(f"  ✓ Marked {case_id} → {plat_key} ({state[case_id][plat_key]})")
+
+
+def cmd_skip(state: dict[str, dict], case_ids: list[str], platforms: list[str]) -> None:
+    """Mark cases as intentionally NOT cross-posted (e.g. old-format library).
+    They disappear from --pending. Set value to the SKIPPED_MARKER constant.
+    """
+    n_marked = 0
+    for case_id in case_ids:
+        if case_id not in state:
+            print(f"  ✗ {case_id}: not in tracker (skipping)")
+            continue
+        for plat in platforms:
+            plat_key = PLATFORM_NAMES.get(plat)
+            if not plat_key:
+                continue
+            if state[case_id].get(plat_key) is None:
+                state[case_id][plat_key] = SKIPPED_MARKER
+                n_marked += 1
+    save_status(state)
+    print(f"  ✓ Marked {n_marked} (case, platform) pairs as skipped.")
+
+
+def cmd_skip_all_old(state: dict[str, dict]) -> None:
+    """Convenience: skip every case currently pending on both IG + TT.
+    Useful for one-shot retroactive cleanup of the legacy library."""
+    targets = ["instagram", "tiktok"]
+    n_cases = 0
+    n_pairs = 0
+    for case_id, info in state.items():
+        if not info.get("youtube"):
+            continue
+        for p in targets:
+            if info.get(p) is None:
+                info[p] = SKIPPED_MARKER
+                n_pairs += 1
+        n_cases += 1
+    save_status(state)
+    print(f"  ✓ Marked {n_pairs} pending entries across {n_cases} cases as skipped.")
 
 
 def cmd_airdrop(state: dict[str, dict], case_id: str) -> None:
@@ -234,6 +284,10 @@ def main() -> int:
                    help="Show videos pending on ig, tt, or both (default: both)")
     g.add_argument("--mark", nargs=2, metavar=("CASE_ID", "PLATFORM"),
                    help="Mark a video as posted on a platform (yt|ig|tt)")
+    g.add_argument("--skip", nargs="+", metavar="CASE_ID",
+                   help="Mark cases as intentionally NOT cross-posted (skipped from --pending)")
+    g.add_argument("--skip-all-pending", action="store_true",
+                   help="One-shot: skip every case currently pending on IG+TT (cleanup the legacy library)")
     g.add_argument("--airdrop", metavar="CASE_ID",
                    help="Print bundle paths (MP4 + captions) for quick AirDrop")
     g.add_argument("--refresh", action="store_true",
@@ -252,6 +306,10 @@ def main() -> int:
         cmd_pending(state, platform)
     elif args.mark:
         cmd_mark(state, args.mark[0], args.mark[1])
+    elif args.skip:
+        cmd_skip(state, args.skip, ["instagram", "tiktok"])
+    elif args.skip_all_pending:
+        cmd_skip_all_old(state)
     elif args.airdrop:
         cmd_airdrop(state, args.airdrop)
     elif args.refresh:
