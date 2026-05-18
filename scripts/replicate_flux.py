@@ -103,12 +103,19 @@ def generate_flux_image(prompt: str,
             return out_path
 
     # Default negative prompt — blocks cartoon/anime/game-character hallucinations
-    # that ruin photo-real narrative shorts. Pokemon, Disney, plush, anime aesthetic
-    # were all explicitly hallucinating in early smoke tests.
+    # AND subject fabrication from narrative pronouns. Pokemon, Disney, plush,
+    # anime were all hallucinating in SY_01; pronoun-driven "saw them" was
+    # triggering creature generation in Pixverse hero shots.
     negative = (
+        # Cartoon / IP
         "cartoon, anime, pokemon, disney, pixar, video game character, "
-        "plush toy, mascot, chibi, children's illustration, mascot, lowres, "
-        "watermark, text overlay, low quality, oversaturated, deformed, "
+        "plush toy, mascot, chibi, children's illustration, "
+        # Subject fabrication
+        "creature, monster, animal, person, character, figure, "
+        "humanoid, face, eyes, fictional being, fantasy creature, "
+        "anthropomorphic, sentient being, "
+        # Tech artifact baseline
+        "lowres, watermark, text overlay, low quality, oversaturated, deformed, "
         "extra limbs, bad anatomy, blurry, jpeg artifacts"
     )
 
@@ -198,6 +205,13 @@ def generate_flux_image(prompt: str,
     if use_cache:
         cached = _cached_path(prompt, seed, width, height)
         cached.write_bytes(out_path.read_bytes())
+
+    # Cost ledger — best-effort, never break a render
+    try:
+        from _cost_ledger import record_flux
+        record_flux(1)
+    except Exception:
+        pass
 
     if verbose:
         size_kb = out_path.stat().st_size // 1024

@@ -46,6 +46,8 @@ assets/music/**/*.mp3
 assets/music/**/*.wav
 assets/sfx/*.wav
 assets/sfx/*.mp3
+assets/sfx/**/*.wav
+assets/sfx/**/*.mp3
 
 # Pytest
 .pytest_cache/

@@ -98,13 +98,126 @@ def pick_music_track(vertical: str) -> Path | None:
 
 
 def pick_sfx() -> Path | None:
-    """Pick a random whoosh SFX. Returns None if none available."""
+    """Legacy single-pick — kept for backwards compat. Per-vertical selection
+    happens in pick_sfx_for_beat() below."""
     if not SFX_DIR.exists():
         return None
     sfx_files = list(SFX_DIR.glob("whoosh*.wav")) + list(SFX_DIR.glob("whoosh*.mp3"))
     if not sfx_files:
         return None
     return random.choice(sfx_files)
+
+
+# ---------------------------------------------------------------------------
+# Per-vertical SFX selection
+# ---------------------------------------------------------------------------
+
+# Map case_id prefix → SFX subfolder. Story sub-genres (S/R/H) get their own
+# folders; other verticals map to single folder names.
+SFX_VERTICAL_MAP = {
+    "GG_": "games",
+    "MV_": "movies",
+    "MY_": "mythology",
+    "UM_": "mysteries",
+    "TX_": "topx",
+    "FN_": "finance",
+}
+DEFAULT_SFX_VERTICAL = "cases"
+
+# Story sub-genre letter → SFX subfolder
+STORY_SFX_MAP = {
+    "S": "story_survival",
+    "R": "story_reddit",
+    "H": "story_horror",
+}
+
+# Category prefix → category name. Used by pick_sfx_for_beat to vary across
+# 5 SFX placements (no two adjacent picks should share a category).
+SFX_CATEGORIES = ("whoosh", "sting", "riser", "drop", "atmos")
+
+
+def detect_sfx_vertical(case_id: str) -> str:
+    """Map case_id to the assets/sfx/<vertical>/ folder name."""
+    if case_id.startswith("SY_"):
+        parts = case_id.split("_")
+        if len(parts) >= 3 and parts[2] in STORY_SFX_MAP:
+            return STORY_SFX_MAP[parts[2]]
+        return "story_survival"  # fallback
+    for prefix, vertical in SFX_VERTICAL_MAP.items():
+        if case_id.startswith(prefix):
+            return vertical
+    return DEFAULT_SFX_VERTICAL
+
+
+def _categorize_sfx(path: Path) -> str:
+    """Infer category from filename prefix (e.g. whoosh_basic_01.wav → 'whoosh')."""
+    stem = path.stem.lower()
+    for cat in SFX_CATEGORIES:
+        if stem.startswith(cat):
+            return cat
+    return "other"
+
+
+def pick_sfx_for_beat(slot_idx: int, n_slots: int, case_id: str,
+                      prev_paths: list[Path], seed: int | None = None) -> Path | None:
+    """Pick a varied SFX for slot_idx of n_slots total, based on case_id's vertical.
+
+    Rules:
+      - Slot 0 (opener)   → prefer sting or whoosh (attention)
+      - Slot N-1 (closer) → prefer drop or sting (punctuation)
+      - Middle slots      → rotate across whoosh / riser / atmos
+      - Story horror      → bias 30% toward riser/atmos at any slot
+      - Never the same file twice in a row
+      - Fall back to _shared/ if the vertical folder is empty
+    """
+    vertical = detect_sfx_vertical(case_id)
+    vertical_dir = SFX_DIR / vertical
+    shared_dir = SFX_DIR / "_shared"
+
+    # Walk both dirs; vertical-specific files take priority
+    pool: list[Path] = []
+    if vertical_dir.exists():
+        pool.extend(sorted(vertical_dir.glob("*.wav")))
+        pool.extend(sorted(vertical_dir.glob("*.mp3")))
+    if shared_dir.exists():
+        pool.extend(sorted(shared_dir.glob("*.wav")))
+        pool.extend(sorted(shared_dir.glob("*.mp3")))
+    if not pool:
+        return None
+
+    # Categorize the pool
+    by_cat: dict[str, list[Path]] = {}
+    for p in pool:
+        by_cat.setdefault(_categorize_sfx(p), []).append(p)
+
+    # Decide preferred categories for this slot
+    is_horror = vertical == "story_horror"
+    if slot_idx == 0:
+        prefs = ["sting", "whoosh"]
+    elif slot_idx == n_slots - 1:
+        prefs = ["drop", "sting", "whoosh"]
+    else:
+        prefs = ["whoosh", "riser", "atmos"]
+
+    # Horror bias: 30% chance to inject riser/atmos at any slot
+    if is_horror and random.random() < 0.30:
+        prefs = ["riser", "atmos"] + prefs
+
+    # Excluded files: last 2 picks (no immediate repeats)
+    excluded = set(prev_paths[-2:])
+
+    # Try each preferred category until we find a non-excluded file
+    for cat in prefs:
+        candidates = [p for p in by_cat.get(cat, []) if p not in excluded]
+        if candidates:
+            return random.choice(candidates)
+
+    # No category-preferred match → any non-excluded file from the whole pool
+    candidates = [p for p in pool if p not in excluded]
+    if candidates:
+        return random.choice(candidates)
+    # Worst case (small pool, all excluded): allow repeat
+    return random.choice(pool)
 
 
 def get_narration_duration(narration_path: Path) -> float:
@@ -346,34 +459,49 @@ def main() -> None:
 
     # SFX at cut timestamps — capped to MAX_SFX_PER_VIDEO and spaced ≥4s apart
     # so we get punchy emphasis, not a relentless whoosh-every-cut soundtrack.
-    # The concat list often has 12+ sub-clip boundaries due to pattern-interrupt
-    # splitting; we want SFX only at major beat transitions, not every sub-clip.
+    # Per-vertical SFX selection with category variety: see pick_sfx_for_beat.
     MAX_SFX_PER_VIDEO = 5
     MIN_SFX_SPACING_SECONDS = 4.0
     sfx_cuts: list[tuple[float, Path]] = []
     if not args.no_sfx:
         concat = case_dir / "bg_clips_concat.txt"
         cut_times = parse_cut_timestamps(concat)
-        sfx_pool = list((SFX_DIR.glob("whoosh*.wav") if SFX_DIR.exists() else []))
-        sfx_pool += list((SFX_DIR.glob("whoosh*.mp3") if SFX_DIR.exists() else []))
-        if sfx_pool and cut_times:
+        # Sanity check: any SFX files anywhere under assets/sfx/?
+        any_sfx = list(SFX_DIR.rglob("*.wav")) + list(SFX_DIR.rglob("*.mp3")) if SFX_DIR.exists() else []
+        if any_sfx and cut_times:
             # Filter to a sparse subset: keep cuts ≥4s apart, cap at 5 total
             sparse_cuts: list[float] = []
-            last_t = -MIN_SFX_SPACING_SECONDS  # ensures first cut is always allowed
+            last_t = -MIN_SFX_SPACING_SECONDS
             for t in cut_times:
                 if t - last_t >= MIN_SFX_SPACING_SECONDS:
                     sparse_cuts.append(t)
                     last_t = t
                 if len(sparse_cuts) >= MAX_SFX_PER_VIDEO:
                     break
-            for t in sparse_cuts:
-                sfx_cuts.append((t, random.choice(sfx_pool)))
-            print(f"  SFX:        {len(sfx_cuts)}/{len(cut_times)} whooshes @ {SFX_DB}dB "
-                  f"(spaced ≥{MIN_SFX_SPACING_SECONDS}s, cap {MAX_SFX_PER_VIDEO})  "
-                  f"at: {', '.join(f'{t:.1f}s' for t in sparse_cuts)}")
+            # Per-vertical, category-varied SFX selection
+            picked_paths: list[Path] = []
+            sfx_vertical = detect_sfx_vertical(args.case)
+            for slot_idx, t in enumerate(sparse_cuts):
+                sfx_path = pick_sfx_for_beat(
+                    slot_idx=slot_idx,
+                    n_slots=len(sparse_cuts),
+                    case_id=args.case,
+                    prev_paths=picked_paths,
+                )
+                if sfx_path:
+                    sfx_cuts.append((t, sfx_path))
+                    picked_paths.append(sfx_path)
+            # Pretty-print which file went where
+            picks_str = ", ".join(
+                f"{t:.1f}s={p.parent.name}/{p.stem}"
+                for t, p in sfx_cuts
+            )
+            print(f"  SFX:        {len(sfx_cuts)}/{len(cut_times)} (vertical={sfx_vertical}, "
+                  f"spaced ≥{MIN_SFX_SPACING_SECONDS}s, cap {MAX_SFX_PER_VIDEO}) @ {SFX_DB}dB")
+            print(f"              → {picks_str}")
         else:
             why = "no concat list" if not cut_times else "no SFX files in assets/sfx/"
-            print(f"  SFX:        ✗ {why} — skipping")
+            print(f"  SFX:        ✗ {why} — skipping (run scripts/seed_sfx_assets.py)")
 
     out_path = case_dir / "audio_mixed.mp3"
     print(f"\n  Mixing…")

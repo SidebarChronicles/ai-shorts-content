@@ -125,9 +125,15 @@ def generate_pika_clip(prompt: str,
     pixverse_input = {
         "prompt": prompt,
         "negative_prompt": (
+            # Cartoon / IP hallucinations (SY_01 yellow Pokemon bug)
             "cartoon, anime, pokemon, disney, pixar, video game character, "
-            "plush toy, mascot, chibi, children's illustration, lowres, "
-            "watermark, text overlay, low quality, deformed, extra limbs"
+            "plush toy, mascot, chibi, children's illustration, "
+            # Subject-fabrication anti-prompts (narrative pronouns triggered these)
+            "creature, monster, animal, person, character, mascot, figure, "
+            "humanoid, face, eyes, fictional being, fantasy creature, "
+            "anthropomorphic, sentient being, "
+            # Tech artifact baseline
+            "lowres, watermark, text overlay, low quality, deformed, extra limbs"
         ),
         "aspect_ratio": DEFAULT_ASPECT,
         "quality": DEFAULT_QUALITY,
@@ -204,6 +210,13 @@ def generate_pika_clip(prompt: str,
     if use_cache:
         cached = _cached_path(prompt, seed, seconds, ref_bytes)
         cached.write_bytes(out_path.read_bytes())
+
+    # Cost ledger — best-effort, never break a render
+    try:
+        from _cost_ledger import record_pika
+        record_pika(seconds)
+    except Exception:
+        pass
 
     if verbose:
         size_mb = out_path.stat().st_size / (1024 * 1024)

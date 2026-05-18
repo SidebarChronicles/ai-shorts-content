@@ -294,32 +294,60 @@ HERO_LABELS = ("mid_anchor", "payoff")
 # ---------------------------------------------------------------------------
 
 def render_ken_burns(image_path: Path, out_clip: Path, duration: float,
-                     zoom_in: bool = True, dry_run: bool = False) -> None:
+                     zoom_in: bool = True, zoom_start: float | None = None,
+                     zoom_end: float | None = None, fade_in: bool = False,
+                     dry_run: bool = False) -> None:
     """Render a 1080x1920 portrait MP4 from a still image with slow zoom motion.
 
-    Uses FFmpeg's zoompan filter. Direction alternates between zoom-in and
-    zoom-out across consecutive clips to keep visual rhythm varied.
+    Two calling modes:
+
+    - Continuous mode (preferred for sub-clips of the same image): pass explicit
+      zoom_start + zoom_end. The clip ramps from start → end. When sub-clip N+1
+      starts at sub-clip N's end value, there's no visible snap.
+
+    - Legacy mode: pass zoom_in (True = 1.0→1.2, False = 1.2→1.0). Used by
+      callers that don't care about continuity.
+
+    Total zoom range reduced from 1.0→1.5 to 1.0→1.2 (2026-05-18) so the
+    residual zoom-reset between different beats' images is barely perceptible.
+
+    fade_in=True applies a 200ms `fade=t=in:st=0:d=0.2` after the zoompan,
+    used on the FIRST sub-clip of each new beat to hide the source-image
+    change.
     """
     out_clip.parent.mkdir(parents=True, exist_ok=True)
 
     frames = int(duration * KB_FPS)
-    if zoom_in:
-        z = f"min(zoom+{KB_ZOOM_RATE},1.5)"
-    else:
-        z = f"if(eq(on,0),1.5,max(zoom-{KB_ZOOM_RATE},1.0))"
 
-    # zoompan parameters:
-    #   z: zoom expression (per-frame zoom factor)
-    #   d: duration in frames
-    #   s: output size (1080x1920 portrait)
-    #   fps: target framerate
-    #   x,y: center the zoom on image center
+    # Resolve zoom_start / zoom_end (legacy zoom_in path → default range)
+    if zoom_start is None or zoom_end is None:
+        if zoom_in:
+            zoom_start, zoom_end = 1.0, 1.2
+        else:
+            zoom_start, zoom_end = 1.2, 1.0
+    # Clamp to safe range so FFmpeg never gets <1.0 (zoompan clamps to 1.0 anyway)
+    zoom_start = max(1.0, min(zoom_start, 1.5))
+    zoom_end = max(1.0, min(zoom_end, 1.5))
+
+    delta = zoom_end - zoom_start
+    if frames < 2:
+        frames = 2  # zoompan needs ≥2 frames to interpolate
+    # Per-frame increment (positive or negative)
+    per_frame = delta / frames
+    # Expression: start at zoom_start on frame 0, linearly march toward zoom_end
+    if delta >= 0:
+        z = f"if(eq(on,0),{zoom_start:.4f},min(zoom+{per_frame:.6f},{zoom_end:.4f}))"
+    else:
+        z = f"if(eq(on,0),{zoom_start:.4f},max(zoom+{per_frame:.6f},{zoom_end:.4f}))"
+
+    fade_tail = ",fade=t=in:st=0:d=0.2" if fade_in else ""
+
     vf = (
-        # First scale image to fill the target size while preserving aspect
         f"scale={W*2}:{H*2}:force_original_aspect_ratio=increase,"
         f"crop={W*2}:{H*2},"
         f"zoompan=z='{z}':d={frames}:s={W}x{H}:fps={KB_FPS}:"
         f"x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
+        f"{fade_tail}"
     )
 
     cmd = [
@@ -561,13 +589,23 @@ def main() -> None:
     hero_clips: dict[int, Path] = {}  # beat_idx → pre-rendered video clip path
     for i, beat in enumerate(beats, 1):
         beat_label = beat.get("label", "")
-        # For story-vertical hero beats: try Pika first (real video > Ken Burns still)
+        # For story-vertical hero beats: try Pika first (real video > Ken Burns still).
+        # CRITICAL: do NOT pass the narrative beat text — it contains pronouns
+        # ("I saw them", "he discovered") that cause Pixverse to hallucinate
+        # creature subjects (the yellow Pokemon bug from SY_01). Build the
+        # prompt from concrete keyword(s) + photo-realism anchors only.
         if ai_fallback_enabled and beat_label in HERO_LABELS:
             visual_hint = beat.get("visual_style_hint", "")
+            primary_kw = (beat.get("keywords") or ["atmospheric scene"])[0]
+            visual_palette = cfg.get("visual_palette", "")
             ai_prompt = (
-                f"{beat.get('text', '')[:120]}, {visual_hint}, "
-                f"9:16 portrait video, cinematic"
-            ).strip(", ")
+                f"{primary_kw}, extreme close-up, photorealistic documentary shot, "
+                f"no people, no creatures, no characters, no faces, "
+                f"real-world objects only, natural environment, "
+                f"{visual_palette}, "
+                f"9:16 portrait video, cinematic lighting, "
+                f"no fictional elements, no fantasy"
+            ).strip(", ").replace("  ", " ")
             hero_clip = maybe_generate_hero_video(
                 beat_idx=i,
                 beat_label=beat_label,
@@ -656,35 +694,65 @@ def main() -> None:
             remaining_dur = max(0.0, dur - 5.0)
             n_sub = max(1, int((remaining_dur + MAX_CLIP_SECONDS - 0.001) // MAX_CLIP_SECONDS))
             sub_dur = remaining_dur / n_sub if n_sub > 0 else 0
+            # Continuous zoom across tail sub-clips of the same image
+            beat_zooms_in = True if is_story else (beat_idx % 2 == 1)
+            beat_zoom_total_range = 0.20
             for s in range(n_sub):
                 clip_seq += 1
                 out_clip = clips_dir / f"clip_{clip_seq:02d}_portrait.mp4"
-                # Story vertical: always zoom-in (narrative urgency). Others: alternate by beat.
-                zoom_in = True if is_story else (beat_idx % 2 == 1)
+                if beat_zooms_in:
+                    z_start = 1.0 + (beat_zoom_total_range * s / n_sub)
+                    z_end   = 1.0 + (beat_zoom_total_range * (s + 1) / n_sub)
+                else:
+                    z_start = 1.0 + (beat_zoom_total_range * (n_sub - s) / n_sub)
+                    z_end   = 1.0 + (beat_zoom_total_range * (n_sub - s - 1) / n_sub)
+                # No fade-in here — Pika hero clip already established this beat
                 print(f"  clip_{clip_seq:02d} (beat{beat_idx} tail {s+1}/{n_sub}, "
-                      f"{sub_dur:.1f}s)… ", end="", flush=True)
-                render_ken_burns(img, out_clip, sub_dur, zoom_in=zoom_in, dry_run=args.dry_run)
+                      f"{sub_dur:.1f}s, zoom {z_start:.2f}→{z_end:.2f})… ",
+                      end="", flush=True)
+                render_ken_burns(img, out_clip, sub_dur,
+                                 zoom_start=z_start, zoom_end=z_end,
+                                 fade_in=False,
+                                 dry_run=args.dry_run)
                 if not args.dry_run:
                     print("✓")
                 clip_paths.append(out_clip)
             continue
 
-        # Standard path: split into Ken Burns sub-clips
+        # Standard path: split into Ken Burns sub-clips with CONTINUOUS zoom
+        # across all sub-clips of the same beat (same source image). Total
+        # zoom range 1.0 → 1.2 distributed evenly per sub-clip so the seam
+        # between sub-clips is continuous (no zoom snap-back).
         n_sub = max(1, int((dur + MAX_CLIP_SECONDS - 0.001) // MAX_CLIP_SECONDS))
         sub_dur = dur / n_sub
+        # Zoom direction per beat (not per sub-clip):
+        #   Story vertical: always zoom-IN (consistent narrative push)
+        #   Others: alternate by beat
+        beat_zooms_in = True if is_story else (beat_idx % 2 == 1)
+        beat_zoom_total_range = 0.20  # 1.0 → 1.2 across the entire beat
         for s in range(n_sub):
             clip_seq += 1
             out_clip = clips_dir / f"clip_{clip_seq:02d}_portrait.mp4"
-            # Zoom direction policy:
-            #   Story vertical: always zoom-in (consistent narrative push toward viewer)
-            #   Others: alternate per BEAT (not per sub-clip) to avoid jumpy zoom toggles
-            #           within a single beat
-            zoom_in = True if is_story else (beat_idx % 2 == 1)
+            # Sub-clip's slice of the beat's total zoom range
+            if beat_zooms_in:
+                z_start = 1.0 + (beat_zoom_total_range * s / n_sub)
+                z_end   = 1.0 + (beat_zoom_total_range * (s + 1) / n_sub)
+            else:
+                z_start = 1.0 + (beat_zoom_total_range * (n_sub - s) / n_sub)
+                z_end   = 1.0 + (beat_zoom_total_range * (n_sub - s - 1) / n_sub)
+            # 200ms fade-in only on the first sub-clip of each beat
+            # (hides the residual 1.2→1.0 zoom reset when source image changes)
+            fade_in_this = (s == 0)
             label = (f"beat{beat_idx}" if n_sub == 1
                      else f"beat{beat_idx}/{s+1}of{n_sub}")
             print(f"  clip_{clip_seq:02d} ({label}, {sub_dur:.1f}s, "
-                  f"zoom_{'in' if zoom_in else 'out'})… ", end="", flush=True)
-            render_ken_burns(img, out_clip, sub_dur, zoom_in=zoom_in, dry_run=args.dry_run)
+                  f"zoom {z_start:.2f}→{z_end:.2f}"
+                  f"{', fade-in' if fade_in_this else ''})… ",
+                  end="", flush=True)
+            render_ken_burns(img, out_clip, sub_dur,
+                             zoom_start=z_start, zoom_end=z_end,
+                             fade_in=fade_in_this,
+                             dry_run=args.dry_run)
             if not args.dry_run:
                 print("✓")
             clip_paths.append(out_clip)
