@@ -44,7 +44,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 # Shared helpers
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _env import load_dotenv  # noqa: E402
-from _atomic import atomic_write_text  # noqa: E402
+from _atomic import atomic_write_text, atomic_write_json  # noqa: E402
 
 load_dotenv(PROJECT_ROOT / ".env")
 
@@ -525,7 +525,10 @@ def main() -> None:
             beat["keywords"] = text.split()[:4]
 
     visuals_dir = case_dir / "visuals_raw"
-    clips_dir = case_dir / "clips_portrait"
+    # Output rendered Ken Burns / Pixverse clips to clips_source/ — distinct
+    # from the renderer's own clips_portrait/ output dir to avoid the same-file
+    # in/out collision that broke the SY_01 smoke test.
+    clips_dir = case_dir / "clips_source"
     visuals_dir.mkdir(parents=True, exist_ok=True)
     clips_dir.mkdir(parents=True, exist_ok=True)
 
@@ -691,6 +694,30 @@ def main() -> None:
     write_concat_list(clip_paths, concat_path, dry_run=args.dry_run)
     if not args.dry_run:
         print(f"\n  ✓ {concat_path.relative_to(PROJECT_ROOT)}")
+
+    # Write clips_manifest.json so the renderer (render_game_video.py) can
+    # consume the already-portrait clips without re-processing them through
+    # pillarbox_blur. Each entry sets already_portrait=True → renderer does
+    # a thin re-encode + color grade + fps lock instead of crop pass.
+    manifest = [
+        {
+            "file": str(p.relative_to(PROJECT_ROOT)),
+            "label": f"beat{i+1}",
+            "already_portrait": True,
+        }
+        for i, p in enumerate(clip_paths)
+    ]
+    manifest_path = case_dir / "clips_manifest.json"
+    if not args.dry_run:
+        atomic_write_json(manifest_path, manifest, indent=2)
+        print(f"  ✓ {manifest_path.relative_to(PROJECT_ROOT)}")
+
+    # Patch the script_config.json with the manifest path so render_game_video
+    # finds it without manual editing.
+    if not args.dry_run:
+        cfg_now = json.loads(config_path.read_text())
+        cfg_now["clips_manifest"] = str(manifest_path.relative_to(PROJECT_ROOT))
+        atomic_write_json(config_path, cfg_now, indent=2)
 
     print(f"\n  Next:")
     print(f"    python scripts/make_audio_elevenlabs.py --case {args.case}")
