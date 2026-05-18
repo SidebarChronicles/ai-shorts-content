@@ -1,6 +1,6 @@
 # GG_06_legobatmanlegacy — LEGO Batman: Legacy of the Dark Knight
 
-**Status:** RENDERED
+**Status:** DELIVERED
 **Score:** 7/10
 **Platform(s):** PC (Steam, Epic) / PS5 / Xbox Series X|S
 **Steam App ID:** 2215200

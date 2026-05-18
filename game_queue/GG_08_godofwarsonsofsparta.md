@@ -1,6 +1,6 @@
 # GG_08_godofwarsonsofsparta — God of War: Sons of Sparta
 
-**Status:** RENDERED
+**Status:** DELIVERED
 **Score:** 7/10
 **Platform(s):** PS5
 **Steam App ID:** N/A

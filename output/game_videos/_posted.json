@@ -22,5 +22,41 @@
     "uploaded_at": "2026-05-18T05:58:08.692939+00:00",
     "video_id": "0cYS_nfdZ5c",
     "watch_url": "https://www.youtube.com/watch?v=0cYS_nfdZ5c"
+  },
+  "GG_05_directive8020": {
+    "scheduled_publish": "immediate",
+    "uploaded_at": "2026-05-18T06:02:04.333554+00:00",
+    "video_id": "QPTi_F-iWfE",
+    "watch_url": "https://www.youtube.com/watch?v=QPTi_F-iWfE"
+  },
+  "GG_06_legobatmanlegacy": {
+    "scheduled_publish": "immediate",
+    "uploaded_at": "2026-05-18T06:02:11.805475+00:00",
+    "video_id": "tdQt9Ghe3Eg",
+    "watch_url": "https://www.youtube.com/watch?v=tdQt9Ghe3Eg"
+  },
+  "GG_07_marathon": {
+    "scheduled_publish": "immediate",
+    "uploaded_at": "2026-05-18T06:02:18.566364+00:00",
+    "video_id": "PVbZx1PpD0Y",
+    "watch_url": "https://www.youtube.com/watch?v=PVbZx1PpD0Y"
+  },
+  "GG_08_godofwarsonsofsparta": {
+    "scheduled_publish": "immediate",
+    "uploaded_at": "2026-05-18T06:02:25.057710+00:00",
+    "video_id": "K6DTIj_EbIk",
+    "watch_url": "https://www.youtube.com/watch?v=K6DTIj_EbIk"
+  },
+  "GG_09_southofmidnight": {
+    "scheduled_publish": "immediate",
+    "uploaded_at": "2026-05-18T06:02:32.188382+00:00",
+    "video_id": "yc6nWhqXnv0",
+    "watch_url": "https://www.youtube.com/watch?v=yc6nWhqXnv0"
+  },
+  "GG_10_ufc6": {
+    "scheduled_publish": "immediate",
+    "uploaded_at": "2026-05-18T06:02:39.359698+00:00",
+    "video_id": "hL06OLYM6iU",
+    "watch_url": "https://www.youtube.com/watch?v=hL06OLYM6iU"
   }
 }

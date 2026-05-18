@@ -1,6 +1,6 @@
 # GG_05_directive8020 — Directive 8020
 
-**Status:** RENDERED
+**Status:** DELIVERED
 **Score:** 8/10
 **Platform(s):** PC (Steam) / PS5 / Xbox Series X|S
 **Steam App ID:** 2255370

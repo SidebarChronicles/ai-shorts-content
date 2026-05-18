@@ -1,6 +1,6 @@
 # GG_10_ufc6 — EA Sports UFC 6
 
-**Status:** RENDERED
+**Status:** DELIVERED
 **Score:** 6/10
 **Platform(s):** PS5 / Xbox Series X|S
 **Steam App ID:** N/A

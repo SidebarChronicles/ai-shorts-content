@@ -1,6 +1,6 @@
 # GG_09_southofmidnight — South of Midnight
 
-**Status:** RENDERED
+**Status:** DELIVERED
 **Score:** 7/10
 **Platform(s):** PC (Xbox App / Game Pass) / Xbox Series X|S / PS5 / Switch 2
 **Steam App ID:** N/A

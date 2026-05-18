@@ -1,6 +1,6 @@
 # GG_07_marathon — Marathon
 
-**Status:** RENDERED
+**Status:** DELIVERED
 **Score:** 7/10
 **Platform(s):** PC (Steam) / PS5 / Xbox Series X|S
 **Steam App ID:** 3065800
