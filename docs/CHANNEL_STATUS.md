@@ -154,9 +154,9 @@ Detail: `docs/AI_STORIES_PLAYBOOK.md`.
 | Master plan + recent decisions? | `~/.claude/plans/ok-a-few-things-vast-sedgewick.md` |
 | Pre-launch title rewrites? | `docs/TITLE_REWRITES_2026-05-18.md` |
 | Compliance + monetization? | `docs/MONETIZATION.md` |
-| Per-niche topic guidance? | `docs/NICHE_PLAYBOOK.md` |
-| 10-video commit rule + KPI gates? | `docs/TESTING_PROTOCOL.md` |
-| Old morning handoffs (historical)? | `docs/archive/` |
+| Remote trigger (phone-driven queue adds)? | `docs/REMOTE_TRIGGER.md` |
+| Historical / superseded docs? | `docs/archive/` (see its README) |
+| Obsolete macOS-`say` audio scripts? | `scripts/archive/` (see its README) |
 
 ---
 
