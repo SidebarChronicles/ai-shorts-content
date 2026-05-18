@@ -195,4 +195,4 @@ See `docs/MONETIZATION.md` for the activation steps for each path.
 | `docs/CHANNEL_STATUS.md` | Current state summary |
 | `docs/CROSS_POSTING.md` | Manual TikTok/IG workflow |
 | `docs/AI_STORIES_PLAYBOOK.md` | Sub-genre rules for the story vertical |
-| `~/.claude/scheduled-tasks/daily-shorts-pipeline/SKILL.md` | The routine's brain |
+| `.claude/commands/morning.md` | Manual morning orchestrator (replaces the deleted cron routine) |

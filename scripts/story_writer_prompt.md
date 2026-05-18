@@ -1,6 +1,6 @@
 # Story Writer Prompt — AI Stories (storyboard-first)
 
-Used by the daily-shorts-pipeline routine when producing SY_NN_* shorts. The
+Read by Claude during the `/morning` workflow when producing SY_NN_* shorts. The
 scaffold from `scripts/story_script_writer.py` provides the 7-beat structure,
 voice settings, and sub-genre-specific defaults. Your job is to fill in beat
 text + visual brief + sound brief per beat, then run the validator.

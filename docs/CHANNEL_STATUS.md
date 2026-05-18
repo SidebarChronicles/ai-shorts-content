@@ -107,11 +107,12 @@ Detail: `docs/AI_STORIES_PLAYBOOK.md`.
 
 ## Files Claude should never modify without a strong reason
 
-- `.env` — API tokens (ElevenLabs, Anthropic, Pexels, TMDB, Replicate, **PostFast**). Keep in `.gitignore`. Never log or echo.
+- `.env` — API tokens (ElevenLabs, Anthropic, Pexels, TMDB, Replicate, **PostFast**, Freesound). Keep in `.gitignore`. Never log or echo.
 - `client_secret.json` + `token.json` — YouTube OAuth credentials.
-- `~/.claude/scheduled-tasks/daily-shorts-pipeline/SKILL.md` — the routine's brain. Self-modification is gated by the auto-mode classifier; needs explicit user authorization.
 - `output/.channel_phase.json` — phase state. Auto-clears priority when `priority_until_count` is reached, but human approves all phase transitions (1→2, 2→3, 3→4).
 - `output/_posted.json` and per-orchestrator `_posted.json` — YouTube upload state. Editing these can cause duplicate uploads.
+
+> The previous cron-driven `~/.claude/scheduled-tasks/daily-shorts-pipeline/` routine was deleted May 18 2026. Production is now triggered manually each morning via `/morning` (see [scripts/morning.md](../.claude/commands/morning.md) — a chained skill calling analytics → tweaks → pick → render → schedule → research).
 
 ---
 
@@ -179,13 +180,13 @@ See `docs/RELEASE_SCHEDULE.md` for the full phase structure, `docs/MONETIZATION.
 | What are the story sub-genres + rules? | `docs/AI_STORIES_PLAYBOOK.md` |
 | Why is the pipeline designed this way? | `docs/RETENTION_PLAYBOOK.md` (research foundation, ~30 sources) |
 | What's the music licensing? | `docs/MUSIC_ATTRIBUTION.md` |
-| What's the routine's flow? | `~/.claude/scheduled-tasks/daily-shorts-pipeline/SKILL.md` |
+| What's the morning production flow? | `.claude/commands/morning.md` (chained skill: analytics → tweaks → pick → render → schedule → research) |
 | Current phase state? | `output/.channel_phase.json` |
 | EL spend MTD? | `output/elevenlabs_usage.json` |
 | Master plan + recent decisions? | `~/.claude/plans/ok-a-few-things-vast-sedgewick.md` |
 | Pre-launch title rewrites? | `docs/TITLE_REWRITES_2026-05-18.md` |
 | Compliance + monetization? | `docs/MONETIZATION.md` |
-| Remote trigger (phone-driven queue adds)? | `docs/REMOTE_TRIGGER.md` |
+| Remote trigger (phone-driven queue adds)? | `docs/archive/REMOTE_TRIGGER_2026-05-18.md` (archived — referenced deleted cron routine) |
 | Historical / superseded docs? | `docs/archive/` (see its README) |
 | Obsolete macOS-`say` audio scripts? | `scripts/archive/` (see its README) |
 

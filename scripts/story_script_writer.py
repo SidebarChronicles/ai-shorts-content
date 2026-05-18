@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Story sub-genre script templates and config scaffolding.
 
-The actual narrative writing is done by Claude during the routine fire
-(STEP 3 of daily-shorts-pipeline/SKILL.md). This module provides the
-deterministic scaffolding: hook templates, voice assignments, visual
-style hints, and the 7-beat structure each sub-genre must follow.
+The actual narrative writing is done by Claude during the `/morning`
+workflow (read `scripts/story_writer_prompt.md` for the writing rules).
+This module provides the deterministic scaffolding: hook templates,
+voice assignments, visual style hints, and the 7-beat structure each
+sub-genre must follow.
 
-The routine workflow per story video:
+The workflow per story video:
   1. Read SY_NN_<sub>_<slug>.md from story_queue/ for premise + hook angle
   2. Call get_template(subgenre) here for the canonical scaffold
   3. Claude writes the 7 beat texts following the template's rules
@@ -336,8 +337,8 @@ def scaffold_script_config(case_id: str, out_path: Path | None = None) -> Path:
     config = {
         "_doc": (
             f"AI Story script ({template['subgenre']}). "
-            f"This file scaffolds the 7-beat structure. The daily-shorts-pipeline "
-            f"routine fills in 'text', 'keywords', 'title', 'description', "
+            f"This file scaffolds the 7-beat structure. The /morning workflow "
+            f"fills in 'text', 'keywords', 'title', 'description', "
             f"'visual_brief' and 'sound_brief' fields at production time, then runs "
             f"check_script_structure.py to lint, then make_audio_elevenlabs.py + "
             f"build_visuals_track.py + build_sound_design.py."
