@@ -1,0 +1,30 @@
+[
+  {
+    "file": "output/scripts/GG_02_007firstlight/clips/clip_01.mp4",
+    "start": 21.27,
+    "end": 32.27,
+    "duration": 11.0,
+    "label": "hook"
+  },
+  {
+    "file": "output/scripts/GG_02_007firstlight/clips/clip_02.mp4",
+    "start": 48.75,
+    "end": 59.75,
+    "duration": 11.0,
+    "label": "gameplay"
+  },
+  {
+    "file": "output/scripts/GG_02_007firstlight/clips/clip_03.mp4",
+    "start": 72.93,
+    "end": 83.93,
+    "duration": 11.0,
+    "label": "standout"
+  },
+  {
+    "file": "output/scripts/GG_02_007firstlight/clips/clip_04.mp4",
+    "start": 98.82,
+    "end": 109.82,
+    "duration": 11.0,
+    "label": "cta"
+  }
+]

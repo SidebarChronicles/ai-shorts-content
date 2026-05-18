@@ -1,0 +1,73 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Poppins,84,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,1,0,1,5,2,2,80,80,320,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:00.94,Default,,0,0,0,,WHEN HACKERS COULDN'T
+Dialogue: 0,0:00:00.96,0:00:01.89,Default,,0,0,0,,TRICK THEIR VICTIMS
+Dialogue: 0,0:00:01.91,0:00:02.85,Default,,0,0,0,,INTO HANDING OVER
+Dialogue: 0,0:00:02.87,0:00:03.80,Default,,0,0,0,,THEIR CRYPTO
+Dialogue: 0,0:00:03.82,0:00:04.76,Default,,0,0,0,,THEY CALLED
+Dialogue: 0,0:00:04.78,0:00:05.71,Default,,0,0,0,,MARLON FERRO
+Dialogue: 0,0:00:05.73,0:00:06.67,Default,,0,0,0,,HE'D BREAK INTO
+Dialogue: 0,0:00:06.69,0:00:07.62,Default,,0,0,0,,YOUR HOUSE
+Dialogue: 0,0:00:07.64,0:00:08.58,Default,,0,0,0,,AND TAKE IT
+Dialogue: 0,0:00:09.10,0:00:09.95,Default,,0,0,0,,FERRO, 20, WAS
+Dialogue: 0,0:00:09.97,0:00:10.82,Default,,0,0,0,,THE "INSTRUMENT
+Dialogue: 0,0:00:10.84,0:00:11.69,Default,,0,0,0,,OF LAST RESORT"
+Dialogue: 0,0:00:11.71,0:00:12.56,Default,,0,0,0,,FOR A
+Dialogue: 0,0:00:12.58,0:00:13.43,Default,,0,0,0,,$250 MILLION
+Dialogue: 0,0:00:13.45,0:00:14.30,Default,,0,0,0,,SOCIAL-ENGINEERING RING
+Dialogue: 0,0:00:14.32,0:00:15.17,Default,,0,0,0,,WHEN VICTIMS STORED
+Dialogue: 0,0:00:15.19,0:00:16.04,Default,,0,0,0,,THEIR CRYPTO ON
+Dialogue: 0,0:00:16.06,0:00:16.91,Default,,0,0,0,,HARDWARE WALLETS —
+Dialogue: 0,0:00:16.93,0:00:17.78,Default,,0,0,0,,DEVICES THAT
+Dialogue: 0,0:00:17.80,0:00:18.65,Default,,0,0,0,,CAN'T BE HACKED
+Dialogue: 0,0:00:18.67,0:00:19.52,Default,,0,0,0,,REMOTELY —
+Dialogue: 0,0:00:19.54,0:00:20.39,Default,,0,0,0,,THE ENTERPRISE
+Dialogue: 0,0:00:20.41,0:00:21.26,Default,,0,0,0,,SENT HIM IN
+Dialogue: 0,0:00:21.78,0:00:22.70,Default,,0,0,0,,FEBRUARY 2024
+Dialogue: 0,0:00:22.72,0:00:23.64,Default,,0,0,0,,WINNSBORO, TEXAS
+Dialogue: 0,0:00:23.66,0:00:24.58,Default,,0,0,0,,FERRO BROKE INTO
+Dialogue: 0,0:00:24.60,0:00:25.52,Default,,0,0,0,,A HOME
+Dialogue: 0,0:00:25.54,0:00:26.46,Default,,0,0,0,,AND WALKED OUT WITH
+Dialogue: 0,0:00:26.48,0:00:27.40,Default,,0,0,0,,100 BITCOIN
+Dialogue: 0,0:00:27.42,0:00:28.34,Default,,0,0,0,,MORE THAN
+Dialogue: 0,0:00:28.36,0:00:29.28,Default,,0,0,0,,FIVE MILLION DOLLARS
+Dialogue: 0,0:00:29.80,0:00:30.79,Default,,0,0,0,,JULY 2024
+Dialogue: 0,0:00:30.81,0:00:31.81,Default,,0,0,0,,NEW MEXICO
+Dialogue: 0,0:00:31.83,0:00:32.82,Default,,0,0,0,,HE STAKED OUT
+Dialogue: 0,0:00:32.84,0:00:33.84,Default,,0,0,0,,THE HOUSE FOR DAYS
+Dialogue: 0,0:00:33.86,0:00:34.85,Default,,0,0,0,,WHEN CO-CONSPIRATORS
+Dialogue: 0,0:00:34.87,0:00:35.87,Default,,0,0,0,,TRACKED THE VICTIM'S iCLOUD
+Dialogue: 0,0:00:35.89,0:00:36.88,Default,,0,0,0,,AND CONFIRMED
+Dialogue: 0,0:00:36.90,0:00:37.90,Default,,0,0,0,,HE WAS GONE
+Dialogue: 0,0:00:37.92,0:00:38.91,Default,,0,0,0,,FERRO SMASHED
+Dialogue: 0,0:00:38.93,0:00:39.93,Default,,0,0,0,,A WINDOW WITH A BRICK
+Dialogue: 0,0:00:39.95,0:00:40.94,Default,,0,0,0,,THE HOME CAMERA
+Dialogue: 0,0:00:40.96,0:00:41.96,Default,,0,0,0,,CAUGHT HIM
+Dialogue: 0,0:00:42.48,0:00:43.58,Default,,0,0,0,,THE STOLEN MONEY
+Dialogue: 0,0:00:43.60,0:00:44.70,Default,,0,0,0,,BOUGHT HERMÈS
+Dialogue: 0,0:00:44.72,0:00:45.82,Default,,0,0,0,,BIRKIN BAGS
+Dialogue: 0,0:00:45.84,0:00:46.94,Default,,0,0,0,,EXOTIC CARS
+Dialogue: 0,0:00:46.96,0:00:48.06,Default,,0,0,0,,UP TO $3.8 MILLION
+Dialogue: 0,0:00:48.08,0:00:49.17,Default,,0,0,0,,NIGHTCLUB TABS OF
+Dialogue: 0,0:00:49.19,0:00:50.29,Default,,0,0,0,,HALF A MILLION A NIGHT
+Dialogue: 0,0:00:50.31,0:00:51.41,Default,,0,0,0,,AND PRIVATE JETS
+Dialogue: 0,0:00:51.93,0:00:53.07,Default,,0,0,0,,FERRO WAS ARRESTED
+Dialogue: 0,0:00:53.09,0:00:54.22,Default,,0,0,0,,WITH TWO FIREARMS
+Dialogue: 0,0:00:54.24,0:00:55.38,Default,,0,0,0,,AND A FAKE ID
+Dialogue: 0,0:00:55.40,0:00:56.53,Default,,0,0,0,,THIS MONTH
+Dialogue: 0,0:00:56.55,0:00:57.68,Default,,0,0,0,,A FEDERAL JUDGE
+Dialogue: 0,0:00:57.70,0:00:58.84,Default,,0,0,0,,SENTENCED HIM TO
+Dialogue: 0,0:00:58.86,0:00:59.99,Default,,0,0,0,,78 MONTHS IN PRISON —
+Dialogue: 0,0:01:00.01,0:01:01.15,Default,,0,0,0,,AND $2.5 MILLION
+Dialogue: 0,0:01:01.17,0:01:02.30,Default,,0,0,0,,IN RESTITUTION

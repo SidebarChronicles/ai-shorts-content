@@ -1,0 +1,88 @@
+{
+  "case_id": "02_ransomware_negotiator",
+  "audio_file": "assets/audio/narration_02.aiff",
+  "header_line_1": "U.S. DISTRICT COURT  ·  SOUTHERN DISTRICT OF FLORIDA",
+  "header_line_2": "CASE 26-383  ·  UNITED STATES v. MARTINO",
+  "segments": [
+    {
+      "name": "hook",
+      "word_count": 18,
+      "chunks": ["HIS CLIENTS HIRED HIM", "TO FIGHT", "THE RANSOMWARE GANG", "ATTACKING THEM", "HE WAS SECRETLY", "WORKING FOR", "THE GANG"]
+    },
+    {
+      "name": "setup",
+      "word_count": 30,
+      "chunks": ["ANGELO MARTINO, 41", "OF LAND O'LAKES, FLORIDA", "WORKED AS A", "RANSOMWARE NEGOTIATOR", "AT A U.S.", "CYBER INCIDENT RESPONSE FIRM", "FIVE VICTIMS PAID HIS EMPLOYER", "TO BARGAIN DOWN", "BLACKCAT RANSOMS"]
+    },
+    {
+      "name": "betrayal",
+      "word_count": 26,
+      "chunks": ["INSTEAD, MARTINO SOLD", "BLACKCAT EACH VICTIM'S", "INSURANCE POLICY LIMITS —", "AND THEIR INTERNAL", "NEGOTIATING STRATEGY", "THE HACKERS PAID HIM", "FOR IT", "THE RANSOMS WENT UP"]
+    },
+    {
+      "name": "escalation",
+      "word_count": 32,
+      "chunks": ["THEN HE JOINED", "THE CONSPIRACY OUTRIGHT", "WITH TWO CO-DEFENDANTS", "HE DEPLOYED BLACKCAT", "RANSOMWARE AGAINST", "NEW AMERICAN VICTIMS —", "EXTORTING ONE COMPANY", "FOR $1.2 MILLION", "IN BITCOIN", "SPLIT THREE WAYS"]
+    },
+    {
+      "name": "scale",
+      "word_count": 20,
+      "chunks": ["FEDERAL AGENTS SEIZED", "$10 MILLION", "OF HIS ASSETS —", "DIGITAL CURRENCY", "VEHICLES", "A FOOD TRUCK", "AND A LUXURY", "FISHING BOAT"]
+    },
+    {
+      "name": "outcome",
+      "word_count": 26,
+      "chunks": ["THIS APRIL, MARTINO", "PLEADED GUILTY", "TO CONSPIRACY", "TO COMMIT EXTORTION", "HE FACES", "UP TO 20 YEARS", "IN FEDERAL PRISON", "SENTENCED THIS JULY"]
+    }
+  ],
+  "scenes": [
+    {
+      "type": "title",
+      "label": "THE CASE OF",
+      "main": "MARTINO",
+      "subline_top": "ANGELO MARTINO  ·  AGE 41",
+      "subline_bottom": "LAND O'LAKES, FLORIDA",
+      "decorative_bar": "BLACKCAT / ALPHV  ·  RANSOMWARE"
+    },
+    {
+      "type": "three_step",
+      "header": "THE SETUP",
+      "steps": [["01", "HIRED"], ["02", "INSIDER"], ["03", "SOLD OUT"]]
+    },
+    {
+      "type": "big_stat",
+      "label": "BLACKCAT PAID HIM TO LEAK",
+      "value": "5 VICTIMS",
+      "value_color": "red",
+      "subline_top": "INSURANCE LIMITS  ·  NEGOTIATING STRATEGY",
+      "subline_bottom": "RANSOMS THEN INCREASED",
+      "boxes": [["INSURANCE LIMITS", "LEAKED"], ["NEGOTIATING POSITIONS", "LEAKED"], ["RANSOMS", "INFLATED"]]
+    },
+    {
+      "type": "big_stat",
+      "label": "EXTORTED FROM ONE VICTIM",
+      "value": "$1.2M",
+      "value_color": "yellow",
+      "subline_top": "IN BITCOIN",
+      "subline_bottom": "SPLIT 3 WAYS WITH CO-DEFENDANTS"
+    },
+    {
+      "type": "receipt",
+      "header": "ASSETS SEIZED  ·  $10 MILLION",
+      "items": [
+        ["DIGITAL CURRENCY", "SEIZED"],
+        ["VEHICLES", "SEIZED"],
+        ["FOOD TRUCK", "SEIZED"],
+        ["LUXURY FISHING BOAT", "SEIZED"]
+      ]
+    },
+    {
+      "type": "outcome",
+      "header": "FACES UP TO",
+      "months": "20",
+      "months_unit": "YEARS",
+      "restitution_label": "SENTENCING",
+      "restitution_value": "JULY 9, 2026"
+    }
+  ]
+}

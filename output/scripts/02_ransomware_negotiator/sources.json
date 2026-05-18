@@ -1,0 +1,18 @@
+{
+  "case_id": "02_ransomware_negotiator",
+  "title": "The Ransomware Negotiator Who Sold Out His Clients",
+  "defendant": "Angelo Martino",
+  "source_url": "https://www.justice.gov/opa/pr/florida-man-working-ransomware-negotiator-pleads-guilty-conspiracy-deploy-ransomware-and",
+  "source_name": "U.S. Department of Justice — Office of Public Affairs",
+  "source_date": "2026-04-20",
+  "fetched_at": "2026-05-17",
+  "quotes": [
+    {"cite_id": "Q1", "text": "Angelo Martino, 41, of Land O'Lakes, Florida, collaborated with the operators of the Blackcat/ALPHV ('BlackCat') ransomware variant used by cybercriminals to attack and extort institutions and companies."},
+    {"cite_id": "Q2", "text": "Beginning in April 2023, Martino abused his role at a U.S.-based cyber incident response company to assist BlackCat actors. Working as a negotiator on behalf of five different ransomware victims, Martino provided BlackCat attackers with confidential information about the negotiating position and strategy of his company's clients without the clients' or his employer's knowledge or permission."},
+    {"cite_id": "Q3", "text": "This confidential information assisted the ransomware actors and maximized the ransoms that the victims were required to pay. The confidential information included the victims' insurance policy limits and internal negotiation positions. The BlackCat actors paid Martino for this confidential information."},
+    {"cite_id": "Q4", "text": "Martino has admitted to conspiring with Ryan Goldberg of Georgia and Kevin Martin of Texas to successfully deploy BlackCat ransomware between April 2023 and November 2023 against multiple victims located throughout the United States."},
+    {"cite_id": "Q5", "text": "After successfully extorting one victim for approximately $1.2 million in Bitcoin, the men split their share of the ransom three ways and laundered the funds through various means."},
+    {"cite_id": "Q6", "text": "To date, law enforcement has seized $10 million of assets from Martino, including digital currency, vehicles, a food truck, and a luxury fishing boat that Martino obtained using proceeds of the offense or acquired as a result of the offense."},
+    {"cite_id": "Q7", "text": "Martino pleaded guilty to one count of conspiracy to obstruct, delay or affect commerce or the movement of any article or commodity in commerce by extortion. He is scheduled to be sentenced on July 9 and faces a maximum penalty of 20 years in prison."}
+  ]
+}

@@ -1,0 +1,16 @@
+# Full requirements for all pipeline scripts
+# Install into .venv-upload: pip install -r requirements_full.txt
+
+# Already in requirements_upload.txt (Google/YouTube API)
+google-api-python-client>=2.100.0
+google-auth-httplib2>=0.2.0
+google-auth-oauthlib>=1.1.0
+
+# ElevenLabs TTS (make_audio_elevenlabs.py)
+requests>=2.31.0
+
+# YouTube trailer fetcher fallback (fetch_trailer.py)
+yt-dlp>=2024.1.0
+
+# Claude API analytics suggestions (suggest_improvements.py)
+anthropic>=0.28.0

@@ -1,0 +1,84 @@
+{
+  "case_id": "03_fugitive_crypto_scam",
+  "audio_file": "assets/audio/narration_03.aiff",
+  "header_line_1": "U.S. DISTRICT COURT  ·  CENTRAL DISTRICT OF CALIFORNIA",
+  "header_line_2": "CASE 26-122  ·  UNITED STATES v. LI",
+  "segments": [
+    {
+      "name": "hook",
+      "word_count": 26,
+      "chunks": ["HE PLEADED GUILTY", "THEN HE CUT OFF", "HIS ANKLE MONITOR", "AND RAN", "TODAY, A FEDERAL JUDGE", "SENTENCED HIM TO", "TWENTY YEARS —", "TO AN EMPTY CHAIR"]
+    },
+    {
+      "name": "setup",
+      "word_count": 32,
+      "chunks": ["DAREN LI, 42", "RAN THE LAUNDERING ARM", "OF A CAMBODIAN", "CRYPTO SCAM", "OPERATIVES REACHED", "AMERICAN VICTIMS THROUGH", "UNSOLICITED SOCIAL MEDIA", "PHONE CALLS", "AND DATING APPS"]
+    },
+    {
+      "name": "playbook",
+      "word_count": 22,
+      "chunks": ["THEY BUILT FAKE", "ROMANTIC OR PROFESSIONAL", "RELATIONSHIPS OVER WEEKS", "COMMUNICATING ON", "ENCRYPTED APPS", "THEN CAME", "THE FAKE TRADING PLATFORM"]
+    },
+    {
+      "name": "scam_mechanics",
+      "word_count": 28,
+      "chunks": ["SPOOFED WEBSITES", "THAT MIMICKED", "LEGITIMATE CRYPTO EXCHANGES", "VICTIMS INVESTED", "THE MONEY VANISHED", "$73 MILLION", "ROUTED THROUGH BANK ACCOUNTS", "LI CONTROLLED", "NEARLY $60M", "LAUNDERED VIA SHELL COMPANIES"]
+    },
+    {
+      "name": "flight",
+      "word_count": 22,
+      "chunks": ["LI PLEADED GUILTY", "IN NOVEMBER 2024", "IN DECEMBER", "HE CUT OFF", "HIS ANKLE MONITOR", "AND DISAPPEARED", "HE'S A FUGITIVE"]
+    },
+    {
+      "name": "outcome",
+      "word_count": 18,
+      "chunks": ["THIS FEBRUARY", "SENTENCED IN ABSENTIA", "THE STATUTORY MAXIMUM —", "TWENTY YEARS", "EIGHT CO-CONSPIRATORS", "HAVE ALREADY PLEADED GUILTY"]
+    }
+  ],
+  "scenes": [
+    {
+      "type": "title",
+      "label": "FUGITIVE  ·  WANTED",
+      "main": "DAREN LI",
+      "subline_top": "AGE 42  ·  DUAL NATIONAL",
+      "subline_bottom": "CHINA  ·  ST. KITTS AND NEVIS",
+      "decorative_bar": "ANKLE MONITOR  ·  CUT  ·  DEC 2025"
+    },
+    {
+      "type": "three_step",
+      "header": "THE SCAM PLAYBOOK",
+      "steps": [["01", "CONTACT"], ["02", "ROMANCE"], ["03", "EXTRACT"]]
+    },
+    {
+      "type": "location",
+      "beat_label": "BASE OF OPERATIONS",
+      "date": "CAMBODIA",
+      "place": "SCAM CENTERS  →  U.S. VICTIMS",
+      "shape": "pin",
+      "stat_label": "VICTIMS",
+      "stat_value": "AMERICANS",
+      "stat_sub": "ROMANCE + INVESTMENT FRAUD"
+    },
+    {
+      "type": "big_stat",
+      "label": "LAUNDERED THROUGH LI",
+      "value": "$73M",
+      "value_color": "red",
+      "subline_top": "ROUTED THROUGH U.S. SHELL COMPANIES",
+      "subline_bottom": "$59.8M VIA SHELLS ALONE"
+    },
+    {
+      "type": "three_step",
+      "header": "THE FLIGHT",
+      "steps": [["NOV", "PLED GUILTY"], ["DEC", "CUT MONITOR"], ["FEB", "20 YEARS"]]
+    },
+    {
+      "type": "outcome",
+      "header": "SENTENCED IN ABSENTIA",
+      "months": "20",
+      "months_unit": "YEARS",
+      "restitution_label": "STATUS",
+      "restitution_value": "FUGITIVE"
+    }
+  ]
+}

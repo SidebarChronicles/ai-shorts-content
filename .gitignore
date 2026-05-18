@@ -1,0 +1,27 @@
+# Secrets — never commit these
+client_secret.json
+token.json
+.env
+
+# Python
+.venv*/
+__pycache__/
+*.pyc
+
+# Large binary / regeneratable media
+output/scripts/*/trailer_raw.mp4
+output/scripts/*/clips/
+output/videos/
+output/game_videos/
+assets/audio/*.aiff
+assets/audio/*.mp3
+
+# Render artifacts (regeneratable)
+output/scripts/*/frames/
+output/scripts/*/scenes/
+output/scripts/*/timeline_baked.txt
+output/scripts/*/preview_frames/
+output/qa_frames/
+
+# macOS noise
+.DS_Store

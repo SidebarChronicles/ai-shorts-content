@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(upload-next-video)",
+      "Skill(upload-next-video:*)",
+      "Skill(upload-list)",
+      "Skill(analytics)",
+      "Bash(python scripts/make_audio_elevenlabs.py*)",
+      "Bash(python scripts/quality_loop.py*)",
+      "Bash(python scripts/research_top_channels.py*)",
+      "Bash(python scripts/suggest_improvements.py*)",
+      "Bash(python scripts/fetch_trailer.py*)",
+      "Bash(python scripts/select_clips.py*)",
+      "Bash(python scripts/analyze_performance.py*)"
+    ]
+  }
+}

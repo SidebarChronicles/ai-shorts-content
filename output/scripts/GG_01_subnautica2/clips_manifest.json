@@ -1,0 +1,30 @@
+[
+  {
+    "file": "output/scripts/GG_01_subnautica2/clips/clip_01.mp4",
+    "start": 24.07,
+    "end": 35.07,
+    "duration": 11.0,
+    "label": "hook"
+  },
+  {
+    "file": "output/scripts/GG_01_subnautica2/clips/clip_02.mp4",
+    "start": 39.78,
+    "end": 50.78,
+    "duration": 11.0,
+    "label": "gameplay"
+  },
+  {
+    "file": "output/scripts/GG_01_subnautica2/clips/clip_03.mp4",
+    "start": 59.58,
+    "end": 70.58,
+    "duration": 11.0,
+    "label": "standout"
+  },
+  {
+    "file": "output/scripts/GG_01_subnautica2/clips/clip_04.mp4",
+    "start": 80.52,
+    "end": 91.52,
+    "duration": 11.0,
+    "label": "cta"
+  }
+]

@@ -1,0 +1,13 @@
+# Python deps for the YouTube uploader (install ONCE on your Mac).
+# Recommended in a venv to avoid system-Python clutter:
+#
+#   cd "/Users/justinlee/Documents/Claude/Projects/Youtube Shorts Autonomous Channel"
+#   python3 -m venv .venv-upload
+#   source .venv-upload/bin/activate
+#   pip install -r scripts/requirements_upload.txt
+#
+# Then run scripts/youtube_oauth_setup.py from the same venv.
+
+google-api-python-client>=2.130.0
+google-auth-oauthlib>=1.2.0
+google-auth-httplib2>=0.2.0

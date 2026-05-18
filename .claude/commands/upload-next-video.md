@@ -1,0 +1,1 @@
+/Users/justinlee/Documents/Claude/Projects/Youtube Shorts Autonomous Channel/scripts/claude_commands/upload-next-video.md

@@ -1,0 +1,90 @@
+{
+  "case_id": "04_cargo_heist",
+  "audio_file": "assets/audio/narration_04.aiff",
+  "header_line_1": "U.S. DISTRICT COURT  ·  SOUTHERN DISTRICT OF INDIANA",
+  "header_line_2": "UNITED STATES v. PEREZ-GONZALEZ et al.",
+  "segments": [
+    {
+      "name": "hook",
+      "word_count": 22,
+      "chunks": ["THEY FOLLOWED", "META AND MICROSOFT", "TRUCKS OUT OF", "THE LOADING DOCK", "WHEN THE DRIVER", "STOPPED FOR FUEL", "THEY DROVE OFF WITH", "THE WHOLE TRAILER"]
+    },
+    {
+      "name": "setup",
+      "word_count": 32,
+      "chunks": ["FOR EIGHTEEN MONTHS", "A SIX-MAN CREW", "OPERATED OUT OF", "FLORIDA AND KENTUCKY", "TRAVELING TO DISTRIBUTION", "FACILITIES IN", "INDIANA, KENTUCKY, AND OHIO", "META · MICROSOFT · L BRANDS", "WATCHED THE LOADING DOCKS", "TAILED THE TRUCKS"]
+    },
+    {
+      "name": "method",
+      "word_count": 27,
+      "chunks": ["WHEN A DRIVER", "STOPPED TO REST", "THE CREW STOLE", "THE ENTIRE TRACTOR-TRAILER", "THEN THEY SWAPPED TRACTORS", "PAINTED OVER THE LOGOS", "CHANGED THE LICENSE PLATES", "SOLD IN MIAMI"]
+    },
+    {
+      "name": "scale",
+      "word_count": 36,
+      "chunks": ["FOURTEEN SEPARATE HEISTS", "$2 MILLION", "IN OCULUS HEADSETS", "$940,000", "IN MICROSOFT PRODUCTS", "$1 MILLION", "IN BATH & BODY WORKS", "AND VICTORIA'S SECRET", "$669,000", "IN HARMAN-JBL AUDIO", "$480,000", "IN BOSE SPEAKERS"]
+    },
+    {
+      "name": "discount",
+      "word_count": 12,
+      "chunks": ["ALL SOLD IN MIAMI", "FOR A FRACTION", "OF RETAIL VALUE", "TO KNOWN BUYERS"]
+    },
+    {
+      "name": "outcome",
+      "word_count": 28,
+      "chunks": ["THIS JANUARY", "RINGLEADER", "JUAN PEREZ-GONZALEZ", "SENTENCED TO", "13.5 YEARS", "IN FEDERAL PRISON", "FIVE CO-DEFENDANTS RECEIVED", "TIME SERVED TO", "NEARLY 8 YEARS"]
+    }
+  ],
+  "scenes": [
+    {
+      "type": "title",
+      "label": "THE CASE OF",
+      "main": "THE CARGO HEIST",
+      "subline_top": "6 DEFENDANTS  ·  14 THEFTS",
+      "subline_bottom": "FL  ·  KY  ·  IN  ·  OH  ·  MIAMI",
+      "decorative_bar": "NOV 2021  →  MAY 2023"
+    },
+    {
+      "type": "three_step",
+      "header": "THE METHOD",
+      "steps": [["01", "SURVEIL"], ["02", "STEAL"], ["03", "SWAP"]]
+    },
+    {
+      "type": "big_stat",
+      "label": "VICTIMIZED COMPANIES",
+      "value": "META",
+      "value_color": "white",
+      "subline_top": "MICROSOFT  ·  L BRANDS",
+      "subline_bottom": "DISTRIBUTION FACILITIES IN 3 STATES"
+    },
+    {
+      "type": "receipt",
+      "header": "FOURTEEN HEISTS  ·  STOLEN MERCHANDISE",
+      "items": [
+        ["OCULUS VR HEADSETS", "$2,000,000"],
+        ["MICROSOFT PRODUCTS", "$940,000"],
+        ["BBW + VICTORIA'S SECRET", "$1,000,000"],
+        ["HARMAN-JBL AUDIO", "$669,000"],
+        ["BOSE SPEAKERS", "$480,000"]
+      ]
+    },
+    {
+      "type": "location",
+      "beat_label": "RESOLD AT",
+      "date": "MIAMI, FL",
+      "place": "AT A FRACTION OF RETAIL",
+      "shape": "pin",
+      "stat_label": "BUYER",
+      "stat_value": "CO-DEFENDANT",
+      "stat_sub": "ALSO CONVICTED"
+    },
+    {
+      "type": "outcome",
+      "header": "RINGLEADER SENTENCED TO",
+      "months": "162",
+      "months_unit": "MONTHS",
+      "restitution_label": "+ 5 CO-DEFENDANTS",
+      "restitution_value": "TIME SERVED → 95 MO"
+    }
+  ]
+}
