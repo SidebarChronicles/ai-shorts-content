@@ -1,6 +1,6 @@
 # Release schedule — 4-phase strategy (May 19 – June 16, 2026)
 
-> **TL;DR** — The pipeline produces 6 videos/day on a strict 28-day learning curve. Phase 1 explores 6 verticals, Phase 2 narrows to the top 2-3, Phase 3 locks the winning format, Phase 4 scales toward YPP eligibility. Every phase ends with a mechanical decision rule, not a vibe check.
+> **TL;DR** — The pipeline produces 8 videos/day on a strict 28-day learning curve. Phase 1 explores 6 verticals, Phase 2 narrows to the top 2-3, Phase 3 locks the winning format, Phase 4 scales toward YPP eligibility. Every phase ends with a mechanical decision rule, not a vibe check.
 
 ---
 
@@ -19,9 +19,9 @@ For a 0-sub channel with no production data on the new format, the right strateg
 
 ## Schedule overview
 
-- **Cron:** `7 7,12,20 * * *` — fires at 7:07 AM, 12:07 PM, 8:07 PM Eastern (with ~9.6 min jitter). Times picked to hit the three peak YouTube Shorts windows: morning commute (7-9 AM), lunch break (11 AM-1 PM), and evening prime time (7-10 PM, the highest-traffic window).
+- **Cron:** `7 7,12,18,21 * * *` — fires at 7:07 AM, 12:07 PM, 6:07 PM, 9:07 PM Eastern (with ~9.6 min jitter). Times picked to hit the four peak YouTube Shorts windows: morning commute (7-9 AM), lunch break (11 AM-1 PM), after-work dinner scroll (5-7 PM), and prime-time evening (8-10 PM, the highest-traffic window).
 - **Per-fire production cap:** 2 videos
-- **Per-day output:** 6 videos
+- **Per-day output:** 8 videos
 - **Upload behavior:** immediate (each video goes public within minutes of production)
 - **Phase state:** read from `output/.channel_phase.json` at fire-time; updated manually at phase transitions
 
@@ -30,8 +30,8 @@ For a 0-sub channel with no production data on the new format, the right strateg
 ## Phase 1 — Saturation week (Days 1–7)
 
 **Pool:** games, movies, mythology, mysteries, topx, finance (6 verticals)
-**Total expected output:** ~42 videos
-**Per-vertical n:** 6-7 videos each
+**Total expected output:** ~56 videos
+**Per-vertical n:** 9-10 videos each
 **Cases vertical:** EXCLUDED in Phase 1 (already have 6 live in old format; conserve EL budget for new verticals)
 
 ### Daily routine
@@ -40,9 +40,10 @@ For a 0-sub channel with no production data on the new format, the right strateg
 |---|---|---|---|
 | 7:07 AM | A, B | 2 | Morning commute |
 | 12:07 PM | C, D | 4 | Lunch break |
-| 8:07 PM | E, F | 6 | Prime-time evening (PEAK) |
+| 6:07 PM | E, F | 6 | After-work dinner scroll |
+| 9:07 PM | G, H | 8 | Prime-time evening (PEAK) |
 
-Where A→F rotates: games → movies → mythology → mysteries → topx → finance → games (wrap). The two slots per fire are always DIFFERENT verticals in Phase 1.
+Where A→H rotates through 6 verticals on a wrap: games → movies → mythology → mysteries → topx → finance → games → movies (Day 1, 8 slots). The two slots per fire are always DIFFERENT verticals in Phase 1. Over 7 days × 8 slots = 56 production slots / 6 verticals ≈ 9-10 videos per vertical.
 
 ### Day 7 decision
 
@@ -65,8 +66,8 @@ Output the result to `output/analytics/phase_1_report.md`, hand-approve, then up
 ## Phase 2 — Narrowing (Days 8–14)
 
 **Pool:** top 2-3 from Phase 1
-**Total expected output:** ~42 videos
-**Per-vertical n:** 14-21 videos each (cumulative with Phase 1)
+**Total expected output:** ~56 videos
+**Per-vertical n:** 19-28 videos each (cumulative with Phase 1)
 
 ### Daily routine
 
@@ -94,8 +95,8 @@ Update `.channel_phase.json` to phase 3 with `kept_verticals: [winner]` and `hoo
 ## Phase 3 — Format optimization (Days 15–28)
 
 **Pool:** winner vertical only
-**Total expected output:** ~84 videos
-**Test grid:** 2 hooks × 3 voices × 2 lengths = 12 cells × ~7 videos = 84 videos
+**Total expected output:** ~112 videos
+**Test grid:** 2 hooks × 3 voices × 2 lengths = 12 cells × ~9-10 videos = 112 videos
 
 ### The grid
 
@@ -105,7 +106,7 @@ Update `.channel_phase.json` to phase 3 with `kept_verticals: [winner]` and `hoo
 | Voice (varies by vertical) | Adam / Charlie / Brian (or vertical-canonical 3) |
 | Length | ~45s (short) vs ~60s (long) |
 
-The routine cycles through cells deterministically: cell index = `(day_index * 6 + slot_in_day) % 12`. Each cell gets ~7 videos by Day 28.
+The routine cycles through cells deterministically: cell index = `(day_index * 8 + slot_in_day) % 12`. Each cell gets ~9-10 videos by Day 28.
 
 ### Day 28 decision
 
@@ -176,8 +177,8 @@ Auto-advance is OFF by default (`auto_advance: false`). This is intentional — 
 
 Every morning during Phases 1-3:
 
-1. **Check fire success.** Did the 3 fires actually run (7:07 AM / 12:07 PM / 8:07 PM)? `ls -lt output/scripts/ | head -10` should show new directories from the last 24h. If not, the Mac was asleep — wake it up + check the cron with `python3 scripts/analyze_performance.py --since 12h`.
-2. **Check budget.** `cat output/elevenlabs_usage.json | grep -A1 $(date +%Y-%m)`. If you're projected to exceed the soft-cap by Day 14, decide: upgrade EL to Creator or drop to 3/day.
+1. **Check fire success.** Did the 4 fires actually run (7:07 AM / 12:07 PM / 6:07 PM / 9:07 PM)? `ls -lt output/scripts/ | head -10` should show new directories from the last 24h. If not, the Mac was asleep — wake it up + check the cron with `python3 scripts/analyze_performance.py --since 12h`.
+2. **Check budget.** `cat output/elevenlabs_usage.json | grep -A1 $(date +%Y-%m)`. Creator cap is 100k chars/mo, soft-cap 90k. At 8/day × ~290 chars × 30 days ≈ 70k chars projected — comfortable. If projected to exceed 90k, drop to 6/day by reducing fires_per_day in .channel_phase.json.
 3. **Check blocked log.** `cat output/_blocked.log` for linter failures + budget skips. If >10 blocks in 24h, something's wrong with the writer or the linter; investigate.
 4. **Check view counts on yesterday's drops.** Bottom 2 retention videos: any common failure mode (weak hook? wrong music? wrong vertical?)? Top 2: anything to amplify?
 

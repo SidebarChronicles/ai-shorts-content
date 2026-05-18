@@ -23,8 +23,9 @@
     "personal-stakes"
   ],
   "videos_per_fire": 2,
-  "fires_per_day": 3,
+  "fires_per_day": 4,
   "_videos_per_fire_note": "Cap is 2. Phase 1+2 produce 2 different verticals per fire. Phase 3 may produce 2 of same vertical with different hook formulas.",
+  "_fires_per_day_note": "Bumped from 3 to 4 on 2026-05-18 (Creator EL tier unlocked headroom). Fires at peak Shorts windows: 7:07 AM commute, 12:07 PM lunch, 6:07 PM after-work, 9:07 PM prime-time evening. Total: 8 videos/day, 56/week, ~9 per vertical in Phase 1.",
   "el_budget_softcap_chars": 90000,
   "el_tier": "creator",
   "_el_budget_note": "Soft cap at 90k chars/mo (10k headroom under Creator's 100k). Upgraded from Starter (25k cap) on 2026-05-18 after user moved to Creator tier. Hard refuse at 90k unless --over-budget flag passed.",
