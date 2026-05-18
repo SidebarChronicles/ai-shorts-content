@@ -2,6 +2,8 @@
 
 The DROP channel's 7th vertical: AI-generated narrative shorts. Three sub-genres rotate inside this vertical, sharing the production pipeline but with distinct writing rules, voices, and visual signatures.
 
+**Daily production workflow:** see [docs/MORNING_WORKFLOW.md](MORNING_WORKFLOW.md) for the `/morning` chained-skills routine that runs analytics → pick → render → schedule → research in ~20 minutes a day.
+
 ---
 
 ## Why this vertical exists

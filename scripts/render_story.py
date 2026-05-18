@@ -37,7 +37,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import re
 import shutil
 import subprocess
 import sys
@@ -61,6 +60,15 @@ PYTHON = str(VENV_PY) if VENV_PY.exists() else sys.executable
 
 # Per-call rough costs for the budget rollup (informational only).
 ROUGH_COST_PER_CASE = 1.50  # ~$0.20 EL + ~$1.30 Replicate (Flux + Pika)
+
+# Audio mix levels (in linear gain, applied via ffmpeg `volume` filter).
+NARRATION_GAIN = 1.0   # narration sits at unity (anchor)
+SOUND_BED_GAIN = 0.55  # sound design ducks under VO by ~-5dB
+
+# Custom exception so a step's "user-facing exit" is distinguishable from
+# subprocess failures (which raise CalledProcessError).
+class StepValidationError(RuntimeError):
+    """A step refuses to run because of bad config / missing inputs."""
 
 
 # ---------------------------------------------------------------------------
@@ -104,36 +112,40 @@ def case_paths(case_id: str) -> dict[str, Path]:
 
 # ---------------------------------------------------------------------------
 # Step implementations
+#
+# All steps share signature: step(case_id, p, *, dry_run, force) -> None
+# Steps that don't need `force` accept it for signature uniformity (avoids
+# reflection-based dispatch). They MAY raise StepValidationError to signal
+# bad config or CalledProcessError to signal subprocess failure.
 # ---------------------------------------------------------------------------
 
-def step_1_validate(case_id: str, p: dict[str, Path]) -> None:
-    """Verify script_config.json exists + beats[].text is populated (writer ran)."""
+def step_1_validate(case_id: str, p: dict[str, Path], *, dry_run: bool, force: bool) -> None:
+    """Verify script_config.json exists + beats[].text + briefs are populated."""
     if not p["config"].exists():
-        sys.exit(f"ERROR: {p['config']} not found. Run story_script_writer.py first.")
+        raise StepValidationError(
+            f"{p['config']} not found. Run story_script_writer.py --case {case_id} first."
+        )
     cfg = json.loads(p["config"].read_text())
     beats = cfg.get("beats", [])
     if not beats:
-        sys.exit(f"ERROR: {p['config']} has no beats[].")
-    placeholders = []
+        raise StepValidationError(f"{p['config']} has no beats[].")
+    placeholders: list[str] = []
     for i, b in enumerate(beats):
         text = (b.get("text") or "").strip()
         if not text or text.startswith("[FILL IN") or text.startswith("[fill in"):
-            placeholders.append(i)
-        vb = b.get("visual_brief") or {}
-        if vb.get("_FILL_IN"):
-            placeholders.append(f"{i}.visual_brief")
-        sb = b.get("sound_brief") or {}
-        if sb.get("_FILL_IN"):
-            placeholders.append(f"{i}.sound_brief")
+            placeholders.append(f"beats[{i}].text")
+        if (b.get("visual_brief") or {}).get("_FILL_IN"):
+            placeholders.append(f"beats[{i}].visual_brief")
+        if (b.get("sound_brief") or {}).get("_FILL_IN"):
+            placeholders.append(f"beats[{i}].sound_brief")
     if placeholders:
-        sys.exit(
-            f"ERROR: writer hasn't filled all briefs/text. Placeholders at: {placeholders}\n"
-            f"Have Claude fill in the script + visual_brief + sound_brief per "
-            f"scripts/story_writer_prompt.md, then re-run."
+        raise StepValidationError(
+            f"writer hasn't filled all briefs/text. Placeholders at: {placeholders}. "
+            f"Fill them per scripts/story_writer_prompt.md, then re-run."
         )
 
 
-def step_2_check_structure(case_id: str, p: dict[str, Path], dry_run: bool) -> None:
+def step_2_check_structure(case_id: str, p: dict[str, Path], *, dry_run: bool, force: bool) -> None:
     run_step(
         "check_script_structure",
         [PYTHON, str(PROJECT_ROOT / "scripts" / "check_script_structure.py"),
@@ -142,7 +154,7 @@ def step_2_check_structure(case_id: str, p: dict[str, Path], dry_run: bool) -> N
     )
 
 
-def step_3_make_audio(case_id: str, p: dict[str, Path], dry_run: bool, force: bool) -> None:
+def step_3_make_audio(case_id: str, p: dict[str, Path], *, dry_run: bool, force: bool) -> None:
     if not force and p["narration"].exists() and p["alignment"].exists():
         print(f"  → make_audio_elevenlabs [skip — narration + alignment already exist]")
         return
@@ -154,7 +166,7 @@ def step_3_make_audio(case_id: str, p: dict[str, Path], dry_run: bool, force: bo
     )
 
 
-def step_4_visuals(case_id: str, p: dict[str, Path], dry_run: bool, force: bool) -> None:
+def step_4_visuals(case_id: str, p: dict[str, Path], *, dry_run: bool, force: bool) -> None:
     if not force and p["concat_list"].exists() and p["clips_manifest"].exists():
         print(f"  → build_visuals_track [skip — clips already exist]")
         return
@@ -166,11 +178,11 @@ def step_4_visuals(case_id: str, p: dict[str, Path], dry_run: bool, force: bool)
     )
 
 
-def step_5_sound_design(case_id: str, p: dict[str, Path], dry_run: bool, force: bool) -> None:
+def step_5_sound_design(case_id: str, p: dict[str, Path], *, dry_run: bool, force: bool) -> None:
     if not force and p["sound_design"].exists():
         print(f"  → build_sound_design [skip — sound_design.wav exists]")
         return
-    # sound_design is graceful — falls back to silence if Freesound key missing
+    # sound_design is graceful — failure falls through to narration-only audio at mix time.
     try:
         run_step(
             "build_sound_design (Freesound ambient + SFX)",
@@ -182,7 +194,7 @@ def step_5_sound_design(case_id: str, p: dict[str, Path], dry_run: bool, force: 
         print(f"      ⚠  sound_design failed — render will continue with narration-only audio")
 
 
-def step_6_copy_alignment(case_id: str, p: dict[str, Path], dry_run: bool) -> None:
+def step_6_copy_alignment(case_id: str, p: dict[str, Path], *, dry_run: bool, force: bool) -> None:
     """Renderer expects alignment.json adjacent to audio_mixed.mp3."""
     print(f"  → copy alignment for renderer lookup")
     if dry_run:
@@ -195,7 +207,7 @@ def step_6_copy_alignment(case_id: str, p: dict[str, Path], dry_run: bool) -> No
     shutil.copy2(p["alignment"], p["audio_mixed_alignment"])
 
 
-def step_7_renderer_aliases(case_id: str, p: dict[str, Path], dry_run: bool) -> None:
+def step_7_renderer_aliases(case_id: str, p: dict[str, Path], *, dry_run: bool, force: bool) -> None:
     """render_game_video.py expects game_id/audio_file/clips_manifest fields."""
     print(f"  → add renderer-required aliases to script_config.json")
     if dry_run:
@@ -209,7 +221,7 @@ def step_7_renderer_aliases(case_id: str, p: dict[str, Path], dry_run: bool) -> 
     p["config"].write_text(json.dumps(cfg, indent=2))
 
 
-def step_8_filters(case_id: str, p: dict[str, Path], dry_run: bool, force: bool) -> None:
+def step_8_filters(case_id: str, p: dict[str, Path], *, dry_run: bool, force: bool) -> None:
     if not force and p["karaoke_filter"].exists() and p["top_title_filter"].exists():
         print(f"  → build_*_filter [skip — both filters exist]")
         return
@@ -233,9 +245,11 @@ def step_8_filters(case_id: str, p: dict[str, Path], dry_run: bool, force: bool)
     )
 
 
-def step_9_render_game_video(case_id: str, p: dict[str, Path], dry_run: bool) -> None:
+def step_9_render_game_video(case_id: str, p: dict[str, Path], *, dry_run: bool, force: bool) -> None:
     """Invoke the existing game-short renderer. Builds hook_overlay.filter + concat list.
-    Note: this also rebuilds audio_mixed.mp3 from its own pipeline — we OVERRIDE in step 10.
+
+    The renderer also rebuilds audio_mixed.mp3 from its own pipeline — step 10
+    overrides with our narration+sound_design mix.
     """
     run_step(
         "render_game_video (builds hook_overlay + concat + renderer audio)",
@@ -245,13 +259,14 @@ def step_9_render_game_video(case_id: str, p: dict[str, Path], dry_run: bool) ->
     )
 
 
-def step_10_override_audio_mix(case_id: str, p: dict[str, Path], dry_run: bool) -> None:
+def step_10_override_audio_mix(case_id: str, p: dict[str, Path], *, dry_run: bool, force: bool) -> None:
     """OVERWRITES the renderer's audio_mixed.mp3 with our narration + sound_design mix.
 
-    The renderer rebuilds audio_mixed.mp3 from narration + music + SFX via
-    build_audio_track. For story vertical we prefer the storyboard-first
-    sound_design.wav (per-beat ambient + SFX + music) — so we mix narration +
-    sound_design AFTER the renderer runs, before the final encode.
+    The renderer (`render_game_video.py`) rebuilds audio_mixed from its own
+    narration + music + SFX chain. For the story vertical we prefer the
+    storyboard-first sound_design.wav (per-beat ambient + SFX + music brief),
+    so we mix narration + sound_design AFTER the renderer runs, before
+    final encode.
     """
     if not p["sound_design"].exists():
         print(f"  → audio mix override [skip — no sound_design.wav; renderer's audio_mixed kept]")
@@ -265,8 +280,8 @@ def step_10_override_audio_mix(case_id: str, p: dict[str, Path], dry_run: bool) 
          "-i", str(p["narration"]),
          "-i", str(p["sound_design"]),
          "-filter_complex",
-         "[1:a]volume=0.55[bg];[0:a]volume=1.0[vo];"
-         "[vo][bg]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[out]",
+         f"[1:a]volume={SOUND_BED_GAIN}[bg];[0:a]volume={NARRATION_GAIN}[vo];"
+         f"[vo][bg]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[out]",
          "-map", "[out]",
          "-c:a", "libmp3lame", "-q:a", "2", "-ar", "44100",
          str(p["audio_mixed"])],
@@ -274,7 +289,7 @@ def step_10_override_audio_mix(case_id: str, p: dict[str, Path], dry_run: bool) 
     )
 
 
-def step_11_final_encode(case_id: str, p: dict[str, Path], dry_run: bool, force: bool) -> None:
+def step_11_final_encode(case_id: str, p: dict[str, Path], *, dry_run: bool, force: bool) -> None:
     if not force and p["final_mp4"].exists():
         print(f"  → final encode [skip — {p['final_mp4'].name} exists; use --force to re-encode]")
         return
@@ -283,8 +298,8 @@ def step_11_final_encode(case_id: str, p: dict[str, Path], dry_run: bool, force:
         print(f"      [dry-run] ffmpeg concat + filters + audio_mixed → final mp4")
         return
 
-    # Assemble vf chain from whichever filter files actually exist
-    vf_parts = []
+    # Assemble vf chain from whichever filter files actually exist + non-empty
+    vf_parts: list[str] = []
     for filt in (p["karaoke_filter"], p["top_title_filter"], p["hook_overlay_filter"]):
         if filt.exists() and filt.stat().st_size > 0:
             vf_parts.append(filt.read_text().strip())
@@ -305,7 +320,7 @@ def step_11_final_encode(case_id: str, p: dict[str, Path], dry_run: bool, force:
     )
 
 
-def step_12_mark_rendered(case_id: str, p: dict[str, Path], dry_run: bool) -> None:
+def step_12_mark_rendered(case_id: str, p: dict[str, Path], *, dry_run: bool, force: bool) -> None:
     run_step(
         "story_orchestrator --mark-status RENDERED",
         [PYTHON, str(PROJECT_ROOT / "scripts" / "story_orchestrator.py"),
@@ -375,16 +390,9 @@ def render_one(case_id: str, dry_run: bool, force: bool,
             if idx < from_step:
                 print(f"  → {label} [skip — before --from-step {from_step}]")
                 continue
-            sig = fn.__code__.co_varnames[:fn.__code__.co_argcount]
-            kwargs = {"case_id": case_id, "p": p}
-            if "dry_run" in sig:
-                kwargs["dry_run"] = dry_run
-            if "force" in sig:
-                kwargs["force"] = force
             try:
-                fn(**kwargs)
-            except SystemExit as e:
-                # step_1_validate uses sys.exit on bad config — surface cleanly
+                fn(case_id, p, dry_run=dry_run, force=force)
+            except StepValidationError as e:
                 print(f"      ✗ {label}: {e}", file=sys.stderr)
                 return False
         elapsed = time.time() - t_start

@@ -180,7 +180,7 @@ See `docs/RELEASE_SCHEDULE.md` for the full phase structure, `docs/MONETIZATION.
 | What are the story sub-genres + rules? | `docs/AI_STORIES_PLAYBOOK.md` |
 | Why is the pipeline designed this way? | `docs/RETENTION_PLAYBOOK.md` (research foundation, ~30 sources) |
 | What's the music licensing? | `docs/MUSIC_ATTRIBUTION.md` |
-| What's the morning production flow? | `.claude/commands/morning.md` (chained skill: analytics → tweaks → pick → render → schedule → research) |
+| What's the morning production flow? | **[docs/MORNING_WORKFLOW.md](MORNING_WORKFLOW.md)** (full user guide) or `.claude/commands/morning.md` (the skill itself) |
 | Current phase state? | `output/.channel_phase.json` |
 | EL spend MTD? | `output/elevenlabs_usage.json` |
 | Master plan + recent decisions? | `~/.claude/plans/ok-a-few-things-vast-sedgewick.md` |
