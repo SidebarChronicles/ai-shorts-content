@@ -149,3 +149,39 @@ Once we have 7 days of cross-post data:
 | 24 min/day of tapping becomes painful before Day 7 | Switch to Buffer ($12/mo) — same outcome, less friction |
 
 The Day 7 phase-transition decision in `docs/RELEASE_SCHEDULE.md` includes a "kept_verticals" reduction — cross-posting effort should be limited to whichever verticals survive that cut.
+
+---
+
+## Tracking IG + TikTok analytics (manual for now)
+
+Same wall as publishing: Meta Insights API + TikTok Analytics API both gate behind 2-4 week app review. We deferred that. Until Day 7 data justifies the effort, **eyeball stats manually on your phone**.
+
+### What to check on each platform
+
+**Instagram Reels** (open the Reel → tap "Insights" at the bottom):
+- **Plays** — top-line view count (the number that maps to YouTube "views")
+- **Accounts reached** — unique viewers (impressions)
+- **Likes / Comments / Saves / Shares** — engagement signals (Saves + Shares are the strongest)
+- **Watch time + Average watch time** — retention. Aim for ≥50% of video duration.
+- **Follows** — sub conversion equivalent
+
+**TikTok** (open the video → tap "Analytics" or check TikTok Studio app):
+- **Views** — top-line count
+- **Likes / Comments / Shares / Saves** — engagement
+- **Avg. watch time** + **Watched full video %** — retention. Aim for ≥40% full-watch rate.
+- **Followers gained** — sub conversion equivalent
+- **Traffic source** — "For You" feed share vs Follow vs Profile; high "For You" = algorithm distributing
+
+### When to build the manual-entry tracker
+
+Don't bother now. **Build it (~30 min of dev) ONLY if any of these trigger:**
+
+1. By **Day 4** (4 days after cross-posting begins), IG or TikTok has ≥3× the views of the YouTube version of the same video → cross-posting is the bigger surface; we need real recordkeeping
+2. By **Day 7**, total cross-platform views are ≥30% of total YouTube views → cross-platform earns its own slot in the analytics rollup
+3. You start losing track of "did I cross-post X?" — the tracker handles that for "did you post?", but if you also need "how is it doing?", we build the stats CLI
+
+If none of the above hits by Day 7, drop cross-posting entirely or scale it back to just the winning vertical.
+
+### Day-7 retention decision (cross-platform aware)
+
+The `RELEASE_SCHEDULE.md` Day 7 narrowing currently uses YouTube avg view % only. If by Day 7 cross-platform performance materially differs from YouTube performance (e.g. survival kills on TikTok but flops on YouTube), the decision criteria need an update — bring this back to me with eyeballed numbers and I'll revise.
