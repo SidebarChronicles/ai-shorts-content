@@ -1,187 +1,168 @@
-# Cross-posting to Instagram Reels + TikTok (manual workflow)
+# Cross-posting to Instagram Reels + TikTok (autonomous via PostFast)
 
-> **Why manual:** Full API automation costs 4-6 weeks of Meta + TikTok app review. Buffer/Metricool ($12/mo) works in a day but adds a vendor dependency. We picked manual cross-post first; revisit after Phase 1 data (Day 7) tells us if cross-platform views move the needle.
+> **v2 update (May 18 2026):** Manual AirDrop workflow retired. PostFast (~$15/mo) fronts TikTok Content Posting API + Meta Graph API via their pre-approved developer apps, so we don't have to file our own app reviews (2-6 week wait). Cross-post is now driven by the routine's STEP 4; no daily human action needed for upload itself.
 
-**Target time per video:** ≤3 minutes (AirDrop + paste caption + tap post × 2 platforms).
-
----
-
-## The workflow (per video)
-
-### Step 1 — See what's pending
-
-```bash
-cd "/Users/justinlee/Documents/Claude/Projects/Youtube Shorts Autonomous Channel"
-python3 scripts/cross_post_status.py --pending
-```
-
-Shows every YouTube-posted video that hasn't been cross-posted to IG or TikTok yet.
-
-### Step 2 — Pull the bundle for one video
-
-```bash
-python3 scripts/cross_post_status.py --airdrop SY_01_S_lakecabin
-```
-
-Prints:
-- The MP4 file path on disk
-- The IG caption (formatted for emoji + line breaks)
-- The TikTok caption (formatted as a punchy 1-liner)
-- The two commands to mark done after posting
-
-### Step 3 — Get the MP4 onto your phone
-
-Three options, fastest first:
-
-1. **AirDrop** (recommended) — In Finder, navigate to `output/story_videos/`, right-click the `.mp4` → Share → AirDrop → your phone. ~5 seconds.
-2. **iCloud Drive** — Move the file to `~/Documents` (synced to iCloud). Open Files app on phone, save to camera roll.
-3. **iMessage to yourself** — Drag the MP4 into the Messages app on Mac, send to "You". Receive on phone, save to camera roll.
-
-Whichever method: the goal is having the MP4 in your phone's camera roll.
-
-### Step 4 — Post to Instagram Reels
-
-1. Open Instagram app → tap `+` (new post) → **Reel** tab
-2. Select the video from your camera roll
-3. **Skip** any IG editing — the video is already finished. Just tap "Next."
-4. Cover: leave default (first frame is what we designed for)
-5. **Paste the IG caption** from the airdrop bundle output (you can `pbcopy < ig_caption.txt` from terminal to copy it, then paste in IG)
-6. **⚠️ Required: tap "Advanced settings" → toggle "AI-generated content" ON.** Meta requires this for AI-narrated videos since 2024. Skipping it can mute distribution permanently.
-7. Tap "Share" → "Share to Reels."
-
-### Step 5 — Post to TikTok
-
-1. Open TikTok app → tap `+`
-2. **"Upload"** → select the same video from camera roll
-3. Skip the TikTok editing — tap "Next."
-4. **Paste the TikTok caption** (different from IG — punchier, fewer hashtags)
-5. **⚠️ Required: tap "More options" → toggle "AI-generated content" ON.** TikTok requires this for AI shorts since 2024. Same penalty as IG if skipped.
-6. Cover: use the first frame (the suggested default works fine for our format).
-7. Tap "Post."
-
-### Step 6 — Mark done in the tracker
-
-```bash
-python3 scripts/cross_post_status.py --mark SY_01_S_lakecabin ig
-python3 scripts/cross_post_status.py --mark SY_01_S_lakecabin tt
-```
-
-That removes this video from `--pending` and timestamps when it landed on each platform.
+**Daily human time:** ~3 min/morning (eyeball TT Studio for 48h-old cases → `--gate` flip). Down from ~24 min/day of manual AirDropping.
 
 ---
 
-## Quick reference
+## How it works
 
-**One-line copy IG caption to clipboard:**
-```bash
-pbcopy < output/story_videos/SY_01_S_lakecabin.ig_caption.txt
-```
-
-**One-line copy TikTok caption:**
-```bash
-pbcopy < output/story_videos/SY_01_S_lakecabin.tt_caption.txt
-```
-
-**Regenerate captions (e.g. after updating description.md):**
-```bash
-python3 scripts/build_captions.py --case SY_01_S_lakecabin --videos-dir output/story_videos --force
-```
-
-**Generate captions for every YouTube-posted video that doesn't have them yet:**
-```bash
-python3 scripts/build_captions.py --all-pending --videos-dir output/story_videos
-```
+1. Each fire renders ≤2 videos, uploads gate-open ones to YouTube, generates IG + TT caption sidecars (`build_captions.py`).
+2. SKILL.md STEP 4 then calls `scripts/post_via_scheduler.py --all-pending`, which:
+   - Loads `output/cross_post_status.json` to find cases with `tiktok==null` or `instagram==null`.
+   - POSTs each MP4 + matching caption sidecar to PostFast's `/v1/posts` endpoint with `ai_generated=true` (forwarded as the platform-mandated AI-content flag).
+   - On 2xx: marks the timestamp in tracker (atomic write).
+   - On any failure: leaves tracker untouched. Next fire retries the same (case, platform) pair while skipping ones that already posted. **Idempotent.**
+3. 48h later you eyeball TT Studio for retention %, then `--gate open|closed <pct>`. Next fire's STEP 4 YouTube upload pass picks up gate-open cases.
 
 ---
 
-## Gotchas + best practices
+## One-time setup
 
-### Don't add a watermark
+### 1. PostFast account
 
-We don't apply any platform brand watermark to our MP4s, and **we shouldn't**:
-- Instagram demotes videos with visible TikTok/CapCut/YouTube watermarks by 30-50% (Originality Score + visual fingerprinting, 2026 algorithm)
-- TikTok suppresses content with competitor watermarks but is less aggressive
-- A single unbranded MP4 works clean on all 3 platforms — keep it that way
+1. Sign up at https://postfa.st. Pick the cheapest plan that includes:
+   - TikTok channel
+   - Instagram Reels channel
+   - REST API access
+2. Connect your TikTok account via PostFast dashboard (OAuth flow).
+3. Connect your Instagram account. **Required:** IG must be a **Business** account linked to a Facebook Page. If yours is Personal/Creator, switch in the IG app → Settings → Account type → Switch to Business.
+4. Generate an API key in the PostFast dashboard.
+5. Copy the TikTok + Instagram channel UUIDs from the dashboard's Channels page.
 
-### AI disclosure is non-negotiable
+### 2. Project env
 
-Both IG and TikTok require the AI-content toggle on AI-narrated videos:
-- IG: "Advanced settings" → "AI-generated content"
-- TikTok: "More options" → "AI-generated content"
-- Skipping it can result in permanent shadow-banning. Our captions include "⚠️ AI-narrated story" inline as a belt-and-suspenders disclosure.
+Add to `.env`:
+
+```
+POSTFAST_API_KEY=<bearer token from PostFast>
+POSTFAST_TIKTOK_CHANNEL_ID=<TikTok channel UUID>
+POSTFAST_INSTAGRAM_CHANNEL_ID=<Instagram channel UUID>
+```
+
+(`.env.example` carries the same placeholders, gitignored real values.)
+
+### 3. Smoke-test
+
+```bash
+# Verify the API key + channel IDs are wired up
+python3 scripts/post_via_scheduler.py --check-auth
+
+# Dry-run against the current tracker (no uploads, just lists what would post)
+python3 scripts/post_via_scheduler.py --all-pending --dry-run
+```
+
+### 4. First real post
+
+Push a single case manually before letting the routine auto-queue:
+
+```bash
+python3 scripts/post_via_scheduler.py --case SY_05_H_basement
+```
+
+Confirm:
+- Both platforms show the video as published / scheduled within 5 min (check PostFast dashboard's Posts tab).
+- `output/cross_post_status.json` shows ISO timestamps in `tiktok` and `instagram` fields for that case.
+
+After that, the routine takes over.
+
+---
+
+## Daily ritual (~3 min)
+
+```bash
+# 1. See yesterday's fires fired (sanity)
+ls -lt output/scripts/ | head -8
+
+# 2. Check the gate status — what's awaiting YouTube upload?
+python3 scripts/cross_post_status.py --gate-status
+
+# 3. For any case ≥48h old still in "pending", eyeball TT Studio for watch-through %:
+#    Open TikTok Studio app → Content → tap video → Analytics → Watch time + Watched full video %
+#    Then flip the gate:
+python3 scripts/cross_post_status.py --gate SY_05_H_basement open 34.2     # ≥30% → safe for YT
+python3 scripts/cross_post_status.py --gate SY_04_H_attic closed 18.7      # <30% → stays on TT+IG only
+
+# 4. Budget check
+python3 scripts/revenue_tracker.py --break-even-check
+```
+
+That's it. PostFast handles upload; you only weigh in on the gate.
+
+---
+
+## Failure modes + how to handle them
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `POSTFAST_API_KEY missing` | `.env` not loaded or key blank | Confirm `.env` has the key; rerun `--check-auth` |
+| `HTTP 401` from PostFast | Key revoked or expired | Regenerate key in PostFast dashboard; update `.env` |
+| `HTTP 403` from PostFast | Channel UUID mismatch | Re-copy from dashboard; check you're using TT id for `--platforms tt`, not IG |
+| `HTTP 422` mentioning AI flag | TikTok rejected the AI-content flag | PostFast surfaces; rerun after PostFast retries (usually transient) |
+| `missing bundle files` | Caption sidecars not generated | Run `python3 scripts/build_captions.py --case <id> --videos-dir <dir> --force` |
+| One platform succeeds, other fails | Per-platform handling — tracker marks only successful one | Re-run script; only the failed platform retries |
+| PostFast TT auth revoked (platform side) | TikTok session expired in PostFast | Re-OAuth via PostFast dashboard, ~5 min |
+
+If PostFast is fully down (rare), revert temporarily to the manual workflow:
+1. `python3 scripts/cross_post_status.py --airdrop <case_id>` — prints the MP4 + caption paths.
+2. AirDrop the MP4 to your phone, paste captions, post manually.
+3. `python3 scripts/cross_post_status.py --mark <case_id> ig` and `--mark <case_id> tt` to update the tracker.
+
+The manual code paths are still in `cross_post_status.py` — they're never removed.
+
+---
+
+## Why PostFast (and not DIY API)
+
+| Approach | Time to autonomous | Monthly cost | Risk |
+|---|---|---|---|
+| DIY Meta + TikTok app reviews | 3-6 weeks | $0 (after review) | App rejection; one platform approving while the other lags |
+| **PostFast scheduler** ✓ | ~3 days | ~$15 | Vendor lock-in; mitigated by month-to-month plan |
+| Browser automation | 1-2 days | $0 | **HIGH ban risk** — TikTok 2026 detects Playwright/Selenium fingerprints. One ban = channel dead. |
+
+We picked **PostFast** because Phase 1 (Days 1-7) needs maximum signal velocity. Losing 50% of Phase 1 waiting for app reviews is worse than $15/mo. If the channel doesn't break even by Day 60-90, the scheduler bill stops alongside production.
+
+---
+
+## Compliance — still applies
+
+### AI disclosure
+PostFast forwards `ai_generated=true` to both TikTok + IG, satisfying the 2024+ platform requirements for AI-narrated content. Don't disable this flag.
+
+### Music attribution (Kevin MacLeod CC-BY 4.0)
+Captions include `🎵 Kevin MacLeod (CC-BY 4.0)` inline. Required by the license. Don't strip it.
+
+### No watermarks
+Instagram demotes videos with visible TikTok/CapCut/YouTube watermarks by 30-50%. Our renderer produces clean MP4s — keep it that way.
 
 ### Caption length tuning
-
 | Platform | Sweet spot | Why |
 |---|---|---|
-| IG Reels | 100-300 chars | IG cuts at ~125 chars in feed; you want the hook in the visible portion |
-| TikTok | 80-150 chars | TT shows the whole caption; longer = more skimmable but less punchy |
+| IG Reels | 100-300 chars | IG cuts at ~125 chars in feed; hook in visible portion |
+| TikTok | 80-200 chars | TT shows the whole caption; punchier = better |
 
-Our generator targets these ranges. If a caption is way off, regenerate with `--force` or hand-edit the file before pasting.
+`build_captions.py` already enforces these ranges. If a caption is way off, regenerate with `--force`.
 
 ### Hashtag count
-
-Both platforms now favor **fewer, more-specific hashtags** (algorithm changed in 2024-2025):
-- IG: 3-5 hashtags mixed with text > 30 hashtag wall
-- TikTok: 3-5 hashtags at end > hashtag soup
-
-Our captions pick 5 from the YouTube tag pool. Don't add more by hand.
-
-### Music: leave the CC-BY track in
-
-Instagram and TikTok both have native music libraries. You might be tempted to swap our Kevin MacLeod CC-BY track for a TikTok-trending sound for algorithmic boost. **Don't:**
-- Our music attribution is required by the CC-BY 4.0 license
-- Mixing TT-native music with the same MP4 across platforms breaks the consistency
-- IG/TikTok both fingerprint visual content, not audio — the CC-BY track is fine
-
-If a specific TikTok sound trends hard, regenerate ONE video with that sound (manual TikTok editor flow) rather than swapping everything.
+Both platforms favor 3-5 specific tags over hashtag walls (2024-2025 algorithm change). Generator picks 5. Don't add more by hand.
 
 ---
 
-## Backlog (revisit at Day 7)
+## Analytics — still manual (intentional)
 
-Once we have 7 days of cross-post data:
+We deliberately don't pay $12/mo for an Apify TikTok scraper to autonomously fetch follower count / watch %. Reasons:
 
-| Trigger | Action |
-|---|---|
-| Cross-platform drives ≥30% of total views | Automate via Meta + TikTok APIs (4-6 weeks dev) OR switch to Buffer ($12/mo) |
-| Cross-platform drives <10% of total views | Drop manual work, focus on YouTube |
-| 24 min/day of tapping becomes painful before Day 7 | Switch to Buffer ($12/mo) — same outcome, less friction |
+- The YouTube gate threshold (30% TT watch-through) is coarse — eyeball precision is fine.
+- TikTok has no public Insights API for per-video retention; only paid scrapers reach it.
+- At 8/day, eyeball check is ~2 min/morning. Revisit at Phase 2 (Day 8) if narrowed verticals warrant higher precision.
 
-The Day 7 phase-transition decision in `docs/RELEASE_SCHEDULE.md` includes a "kept_verticals" reduction — cross-posting effort should be limited to whichever verticals survive that cut.
+For Instagram analytics, PostFast's dashboard surfaces reach + plays + watch time per post. Check there or in the IG app's Insights tab. IG is brand layer; it doesn't gate anything, so the signal is informational only.
 
 ---
 
-## Tracking IG + TikTok analytics (manual for now)
+## When to revisit this setup
 
-Same wall as publishing: Meta Insights API + TikTok Analytics API both gate behind 2-4 week app review. We deferred that. Until Day 7 data justifies the effort, **eyeball stats manually on your phone**.
-
-### What to check on each platform
-
-**Instagram Reels** (open the Reel → tap "Insights" at the bottom):
-- **Plays** — top-line view count (the number that maps to YouTube "views")
-- **Accounts reached** — unique viewers (impressions)
-- **Likes / Comments / Saves / Shares** — engagement signals (Saves + Shares are the strongest)
-- **Watch time + Average watch time** — retention. Aim for ≥50% of video duration.
-- **Follows** — sub conversion equivalent
-
-**TikTok** (open the video → tap "Analytics" or check TikTok Studio app):
-- **Views** — top-line count
-- **Likes / Comments / Shares / Saves** — engagement
-- **Avg. watch time** + **Watched full video %** — retention. Aim for ≥40% full-watch rate.
-- **Followers gained** — sub conversion equivalent
-- **Traffic source** — "For You" feed share vs Follow vs Profile; high "For You" = algorithm distributing
-
-### When to build the manual-entry tracker
-
-Don't bother now. **Build it (~30 min of dev) ONLY if any of these trigger:**
-
-1. By **Day 4** (4 days after cross-posting begins), IG or TikTok has ≥3× the views of the YouTube version of the same video → cross-posting is the bigger surface; we need real recordkeeping
-2. By **Day 7**, total cross-platform views are ≥30% of total YouTube views → cross-platform earns its own slot in the analytics rollup
-3. You start losing track of "did I cross-post X?" — the tracker handles that for "did you post?", but if you also need "how is it doing?", we build the stats CLI
-
-If none of the above hits by Day 7, drop cross-posting entirely or scale it back to just the winning vertical.
-
-### Day-7 retention decision (cross-platform aware)
-
-The `RELEASE_SCHEDULE.md` Day 7 narrowing currently uses YouTube avg view % only. If by Day 7 cross-platform performance materially differs from YouTube performance (e.g. survival kills on TikTok but flops on YouTube), the decision criteria need an update — bring this back to me with eyeballed numbers and I'll revise.
+- **Day 7 (Phase 1 → 2):** if cross-platform views ≥30% of total, this layer is paying for itself. Continue. If <10%, consider dropping PostFast and focusing on whatever vertical the data favors.
+- **Phase 4 (Day 29+):** if TikTok Creator Rewards unlocks (10K + 100K/30d), the $15/mo is dwarfed by revenue. Continue.
+- **PostFast pricing change or shutdown:** month-to-month means low switching cost. Re-evaluate Buffer ($18-36/mo) or DIY app review (free, 3-6 weeks).
