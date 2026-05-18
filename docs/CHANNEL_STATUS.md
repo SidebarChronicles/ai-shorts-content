@@ -2,7 +2,7 @@
 
 > **For Claude (or any new contributor) starting fresh.** This is the single source of truth for what the channel is, what's running, what's decided, and what's still open. Read this first; the deeper docs are linked throughout.
 
-Last updated: **May 18, 2026, 12:11 PM ET** (just before Phase 1 Day 1's 12:16 fire kicks off).
+Last updated: **May 18, 2026** (post-PostFast wire-up — autonomous cross-post live).
 
 ---
 
@@ -29,6 +29,7 @@ Last updated: **May 18, 2026, 12:11 PM ET** (just before Phase 1 Day 1's 12:16 f
 | Color grading | Per-vertical `colorchannelmixer` in FFmpeg | Cases/mysteries cool, mythology warm, finance teal, games saturated, movies untouched. |
 | Karaoke captions | FFmpeg drawtext driven by ElevenLabs alignment.json | Word-by-word highlights. Poppins-Bold font. |
 | Top-title overlay | FFmpeg drawtext | Persistent top-of-screen title; per-rank for Top X. |
+| Cross-poster (TT + IG Reels) | PostFast (~$15/mo) | Fronts TikTok Content Posting API + Meta Graph API via pre-approved apps. Auto-queues from STEP 4. See `docs/CROSS_POSTING.md`. |
 
 ---
 
@@ -106,7 +107,7 @@ Detail: `docs/AI_STORIES_PLAYBOOK.md`.
 
 ## Files Claude should never modify without a strong reason
 
-- `.env` — API tokens. Keep in `.gitignore`. Never log or echo.
+- `.env` — API tokens (ElevenLabs, Anthropic, Pexels, TMDB, Replicate, **PostFast**). Keep in `.gitignore`. Never log or echo.
 - `client_secret.json` + `token.json` — YouTube OAuth credentials.
 - `~/.claude/scheduled-tasks/daily-shorts-pipeline/SKILL.md` — the routine's brain. Self-modification is gated by the auto-mode classifier; needs explicit user authorization.
 - `output/.channel_phase.json` — phase state. Auto-clears priority when `priority_until_count` is reached, but human approves all phase transitions (1→2, 2→3, 3→4).
@@ -137,7 +138,7 @@ Revenue paths reordered around what actually fits AI-narrative content:
 
 **Dropped from earlier exploration:** TikTok Shop affiliate, Amazon Associates, per-vertical product CTAs. AI-narrative content doesn't fit click-driven affiliate monetization. Every video's CTA now drives FOLLOWS (per `~/.claude/scheduled-tasks/.../SKILL.md` STEP 3 CTA table).
 
-**Costs:** ~$67/mo (EL $22 + Replicate ~$45). Realistic break-even = 60-90 days. Channel in "research budget" mode until Phase 4.
+**Costs:** ~$82/mo (EL $22 + Replicate ~$45 + PostFast ~$15). Realistic break-even = 60-90 days. Channel in "research budget" mode until Phase 4.
 
 See `docs/RELEASE_SCHEDULE.md` for the full phase structure, `docs/MONETIZATION.md` for unlocked revenue paths.
 
@@ -157,6 +158,7 @@ See `docs/RELEASE_SCHEDULE.md` for the full phase structure, `docs/MONETIZATION.
 - ✅ SFX cap (5 max, ≥4s apart)
 - ✅ 44/44 pytest passing
 - ✅ All commits pushed to `origin/main` (latest: `5d6f41f`)
+- 🟡 **PostFast wired in code**; awaiting user to create account + fill `.env` (`POSTFAST_API_KEY`, channel IDs) — see `docs/CROSS_POSTING.md` for setup steps
 
 ## Known open issues / TODOs
 

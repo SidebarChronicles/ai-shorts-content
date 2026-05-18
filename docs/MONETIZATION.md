@@ -1,6 +1,6 @@
 # Monetization (v2 — May 18 2026)
 
-> **Honest current state:** $0 revenue, ~$67/mo costs (EL $22 + Replicate ~$45). Realistic break-even = 60-90 days. Channel is in pre-revenue "research budget" mode until Phase 4.
+> **Honest current state:** $0 revenue, ~$82/mo costs (EL $22 + Replicate ~$45 + PostFast ~$15). Realistic break-even = 60-90 days. Channel is in pre-revenue "research budget" mode until Phase 4.
 
 ## Why no affiliate links
 
@@ -61,9 +61,15 @@ TikTok requires the "AI-generated content" toggle on AI-narrated videos (since 2
 
 - ElevenLabs Creator tier: $22/mo (90k char soft-cap in `.channel_phase.json`)
 - Replicate: ~$45/mo projected at 8/day cadence (no hard cap; user-set $40 limit in Replicate dashboard recommended)
+- PostFast scheduler: ~$15/mo (autonomous TT + IG Reels cross-poster — see `docs/CROSS_POSTING.md`)
 - **Combined target: ≤$100/mo until break-even**
 
-If costs trend past $100/mo without proportional revenue, reduce production to 6/day (drop one fire) or trim Phase 1 vertical pool. Both are reversible.
+If costs trend past $100/mo without proportional revenue, options (in order of reversibility):
+1. Reduce production to 6/day (drop one fire) — saves ~$11/mo on Replicate.
+2. Cancel PostFast and revert to manual cross-post — saves $15/mo, costs ~24 min/day of finger-work.
+3. Trim Phase 1 vertical pool to the 2-3 strongest.
+
+All reversible.
 
 ## When monetization unlocks — what to do
 
