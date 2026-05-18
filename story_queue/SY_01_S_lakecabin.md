@@ -1,6 +1,6 @@
 # SY_01_S_lakecabin — Day 1 of being snowed in at the lake cabin
 
-**Status:** QUEUED
+**Status:** DELIVERED
 **Subgenre:** survival
 **Voice:** Charlie
 **Model:** eleven_turbo_v2
