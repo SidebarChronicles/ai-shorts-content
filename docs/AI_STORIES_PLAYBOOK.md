@@ -144,7 +144,7 @@ YouTube terminated 16 channels (35M combined subs) for template-cloned AI bulk-p
 | `scripts/story_script_writer.py` | Sub-genre templates + scaffold generator for `script_config.json` |
 | `scripts/replicate_flux.py` | Flux 2 Pro wrapper (still images) |
 | `scripts/replicate_pika.py` | Pika 2.0 wrapper (hero clips) |
-| `scripts/build_visuals_track.py` | Wires the full chain: Pexels → Pixabay → Flux → Pika (hero shots) |
+| `scripts/build_visuals_track.py` | Wires the full chain. **Story vertical is AI-first**: Flux → Pexels → Pixabay (stock as safety net). Hero beats (mid_anchor + payoff) additionally try Pika 2.0 for real video clips. Other verticals stay stock-first. |
 | `scripts/make_audio_elevenlabs.py` | Reads voice_speed + voice_id from sub-genre template |
 | `scripts/check_script_structure.py` | Pre-render lint: hook ≤12 words, mid_anchor at 28-33s |
 | `output/scripts/SY_NN_*/audio_mixed.mp3` | Final mixed audio (gitignored) |

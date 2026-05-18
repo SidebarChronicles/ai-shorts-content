@@ -157,31 +157,72 @@ def download_image(url: str, dest: Path, timeout: int = 30) -> bool:
 # Source chain
 # ---------------------------------------------------------------------------
 
+def _try_flux(prompt: str | None, keywords: list[str], query: str,
+              visuals_dir: Path, beat_idx: int, case_id: str | None) -> Optional[Path]:
+    """Helper: attempt Flux generation. Returns path on success, None on any failure.
+
+    Pulled out so the AI-first vs AI-fallback paths can share it.
+    """
+    if not os.environ.get("REPLICATE_API_TOKEN"):
+        return None
+    full_prompt = prompt or (
+        f"{query}, cinematic, dramatic lighting, 9:16 portrait, "
+        f"high quality photo realistic"
+    )
+    ai_out = visuals_dir / f"beat_{beat_idx:02d}.png"
+    try:
+        from replicate_flux import generate_flux_image, FluxError  # lazy
+        print(f"→ flux 2 pro…", end=" ", flush=True)
+        seed = (hash(case_id or "") % 1_000_000) + beat_idx if case_id else None
+        result = generate_flux_image(full_prompt, ai_out, seed=seed, verbose=False)
+        if result and result.exists():
+            print(f"✓ (flux)")
+            return result
+    except (ImportError, FluxError) as e:
+        print(f"\n    flux failed: {e}")
+    return None
+
+
 def source_image_for_beat(beat_idx: int, keywords: list[str],
                           visuals_dir: Path,
                           pexels_key: str, pixabay_key: str,
                           ai_fallback: bool = False,
+                          ai_first: bool = False,
                           ai_prompt: str | None = None,
                           case_id: str | None = None) -> Optional[Path]:
     """Try each source in priority order until one returns an image.
 
     Args:
         ai_fallback: When True, falls back to Flux 2 Pro after Pexels+Pixabay miss.
-                     Only triggered explicitly (story vertical, or other AI-enabled cases).
-        ai_prompt: Full Flux prompt to use if AI fallback fires. If None, falls back
-                   to joining keywords with "cinematic, dramatic lighting, 9:16".
-        case_id: Used for cache keying so identical prompts within a case don't re-bill.
+                     Used for non-story verticals that opt into AI as a safety net.
+        ai_first:    When True (story vertical), tries Flux FIRST. Stock APIs become
+                     the fallback. Implies ai_fallback. Trades $0.03/image for
+                     consistent narrative imagery that stock libraries can't supply.
+        ai_prompt:   Full Flux prompt to use. If None, joins keywords with
+                     "cinematic, dramatic lighting, 9:16".
+        case_id:     Used for cache keying so identical prompts within a case don't re-bill.
     """
     if not keywords and not ai_prompt:
         print(f"  beat {beat_idx}: no keywords provided — skipping", file=sys.stderr)
         return None
 
     query = " ".join(keywords[:4]) if keywords else ""
-    out_path = visuals_dir / f"beat_{beat_idx:02d}.jpg"
 
-    # 1. Try Pexels
+    # ── AI-FIRST path (story vertical): Flux → Pexels → Pixabay ─────────────
+    if ai_first:
+        print(f"  beat {beat_idx}: ai-first…", end=" ", flush=True)
+        result = _try_flux(ai_prompt, keywords, query, visuals_dir, beat_idx, case_id)
+        if result:
+            return result
+        # Fall through to stock APIs if Flux missed (token absent, API down, etc)
+
+    # ── Stock-first path (default): Pexels → Pixabay ────────────────────────
+    out_path = visuals_dir / f"beat_{beat_idx:02d}.jpg"
     if query:
-        print(f"  beat {beat_idx}: pexels.com query={query!r}…", end=" ", flush=True)
+        if not ai_first:
+            print(f"  beat {beat_idx}: pexels.com query={query!r}…", end=" ", flush=True)
+        else:
+            print(f"  → pexels.com query={query!r}…", end=" ", flush=True)
         pexels_hit = search_pexels(query, pexels_key)
         if pexels_hit:
             src_url = pexels_hit.get("src", {}).get("portrait") or pexels_hit.get("src", {}).get("large2x")
@@ -190,7 +231,6 @@ def source_image_for_beat(beat_idx: int, keywords: list[str],
                 print(f"✓ ({credit})")
                 return out_path
 
-        # 2. Fallback Pixabay
         print(f"→ pixabay.com…", end=" ", flush=True)
         pixabay_hit = search_pixabay(query, pixabay_key)
         if pixabay_hit:
@@ -200,28 +240,11 @@ def source_image_for_beat(beat_idx: int, keywords: list[str],
                 print(f"✓ ({credit})")
                 return out_path
 
-    # 3. Fallback AI generation (Flux 2 Pro via Replicate)
-    # Only fires when ai_fallback=True (story vertical opts in; others stay
-    # on free stock to avoid surprise Replicate bills).
-    if ai_fallback and os.environ.get("REPLICATE_API_TOKEN"):
-        prompt = ai_prompt or (
-            f"{query}, cinematic, dramatic lighting, 9:16 portrait, "
-            f"high quality photo realistic"
-        )
-        # PNG output (Flux default) — Ken Burns step downstream is fine with either
-        ai_out = visuals_dir / f"beat_{beat_idx:02d}.png"
-        try:
-            # Lazy import to avoid forcing the dep on legacy verticals
-            from replicate_flux import generate_flux_image, FluxError
-            print(f"→ flux 2 pro…", end=" ", flush=True)
-            # Seed = beat_idx + case_id hash → deterministic per beat per case
-            seed = (hash(case_id or "") % 1_000_000) + beat_idx if case_id else None
-            result = generate_flux_image(prompt, ai_out, seed=seed, verbose=False)
-            if result and result.exists():
-                print(f"✓ (flux)")
-                return result
-        except (ImportError, FluxError) as e:
-            print(f"\n    flux failed: {e}")
+    # ── Final fallback: Flux (if ai_fallback enabled and we haven't already tried it) ──
+    if ai_fallback and not ai_first:
+        result = _try_flux(ai_prompt, keywords, query, visuals_dir, beat_idx, case_id)
+        if result:
+            return result
 
     print(f"→ ✗ (no source succeeded)")
     return None
@@ -465,13 +488,18 @@ def main() -> None:
                         help=f"Per-beat clip duration when alignment unavailable (default {DEFAULT_BEAT_DURATION}s)")
     parser.add_argument("--dry-run", action="store_true", help="Don't download or render — just report")
     parser.add_argument("--ai-fallback", action="store_true",
-                        help="Enable Flux 2 Pro for missing beats + Pika hero shots for mid_anchor/payoff. "
-                             "Auto-enabled for story vertical (SY_*) case IDs.")
+                        help="Enable Flux 2 Pro as a final fallback after Pexels+Pixabay miss. "
+                             "Auto-enabled for story vertical (SY_*).")
+    parser.add_argument("--ai-first", action="store_true",
+                        help="Try Flux FIRST, falling back to stock APIs. Trades $0.03/image "
+                             "for narrative imagery that stock can't supply. Auto-enabled for SY_*.")
     args = parser.parse_args()
 
-    # Story vertical (SY_*) auto-enables AI fallback so its narrative beats
-    # always have a Flux backstop and hero shots get Pika.
-    ai_fallback_enabled = args.ai_fallback or args.case.startswith("SY_")
+    # Story vertical (SY_*) auto-enables AI-first: Flux generates narrative imagery
+    # that stock libraries can't supply, plus Pika hero clips for mid_anchor/payoff.
+    is_story = args.case.startswith("SY_")
+    ai_first_enabled = args.ai_first or is_story
+    ai_fallback_enabled = args.ai_fallback or is_story or ai_first_enabled
 
     case_dir = SCRIPTS_DIR / args.case
     config_path = case_dir / "script_config.json"
@@ -521,7 +549,11 @@ def main() -> None:
         print(f"  Durations: default {args.beat_duration}s/beat ({sum(durations):.1f}s total)")
 
     # Source images (and Pika hero clips for story vertical mid_anchor/payoff)
-    print(f"\n  Sourcing visuals (ai_fallback={ai_fallback_enabled})…")
+    chain_label = "ai-first (flux → stock)" if ai_first_enabled else (
+        "stock-first (pexels → pixabay → flux)" if ai_fallback_enabled else
+        "stock-only (pexels → pixabay)"
+    )
+    print(f"\n  Sourcing visuals — chain: {chain_label}")
     image_paths: list[Optional[Path]] = []
     hero_clips: dict[int, Path] = {}  # beat_idx → pre-rendered video clip path
     for i, beat in enumerate(beats, 1):
@@ -565,6 +597,7 @@ def main() -> None:
             pexels_key=pexels_key,
             pixabay_key=pixabay_key,
             ai_fallback=ai_fallback_enabled,
+            ai_first=ai_first_enabled,
             ai_prompt=flux_prompt,
             case_id=args.case,
         )
