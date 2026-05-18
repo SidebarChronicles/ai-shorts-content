@@ -1,0 +1,39 @@
+{
+  "_doc": "Channel release-schedule state machine. Read by the daily-shorts-pipeline routine at fire-time to decide which verticals + formats to produce. Updated manually (or by phase_N_report.md output) at phase transitions.",
+  "phase": 1,
+  "phase_name": "saturation_week",
+  "start_date": "2026-05-19",
+  "end_date_planned": "2026-05-25",
+  "day_index": 1,
+  "kept_verticals": [
+    "games",
+    "movies",
+    "mythology",
+    "mysteries",
+    "topx",
+    "finance"
+  ],
+  "_kept_verticals_note": "Phase 1 rotation pool. Cases excluded to conserve EL budget (already have 6 live in old format). Phase 2 narrows to top 2-3 by median avg view %.",
+  "hook_formula_rotation": [
+    "stat-shock",
+    "curiosity-gap",
+    "contradiction",
+    "authority",
+    "list",
+    "personal-stakes"
+  ],
+  "videos_per_fire": 2,
+  "fires_per_day": 3,
+  "_videos_per_fire_note": "Cap is 2. Phase 1+2 produce 2 different verticals per fire. Phase 3 may produce 2 of same vertical with different hook formulas.",
+  "el_budget_softcap_chars": 25000,
+  "el_tier": "starter",
+  "_el_budget_note": "Soft cap at 25k chars/mo (5k headroom under Starter's 30k). Hard refuse at 30k unless --over-budget flag passed.",
+  "decision_criteria_next_phase": {
+    "drop_below_avg_view_pct": 0.30,
+    "keep_above_avg_view_pct": 0.40,
+    "probation_min_sub_conv_per_1k": 3.0,
+    "min_videos_per_vertical_for_decision": 4
+  },
+  "auto_advance": false,
+  "_auto_advance_note": "Always false. Human approves each phase transition after reviewing phase_N_report.md."
+}

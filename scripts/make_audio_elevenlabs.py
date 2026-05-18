@@ -108,6 +108,34 @@ def check_budget(chars_needed: int, budget: float) -> None:
         )
 
 
+def check_char_softcap(chars_needed: int, override: bool = False) -> None:
+    """Soft-cap on monthly characters from output/.channel_phase.json.
+
+    Default for Starter tier: 25,000 chars/mo (5k headroom under EL's 30k cap).
+    When exceeded, raise BudgetExceeded unless override=True. The release
+    schedule routine (SKILL.md STEP 3) checks this BEFORE producing the
+    second slot of each fire — if blocked, it produces just one video.
+    """
+    phase_file = PROJECT_ROOT / "output" / ".channel_phase.json"
+    if not phase_file.exists():
+        return  # no phase config = no soft-cap (legacy behavior)
+    try:
+        phase = json.loads(phase_file.read_text())
+    except (json.JSONDecodeError, OSError):
+        return
+    softcap = phase.get("el_budget_softcap_chars", 25000)
+    month_key = date.today().strftime("%Y-%m")
+    current_chars = load_usage().get(month_key, {}).get("chars", 0)
+    projected = current_chars + chars_needed
+    if projected > softcap and not override:
+        raise BudgetExceeded(
+            f"EL char soft-cap reached: this job would put us at "
+            f"{projected:,} / {softcap:,} chars this month. "
+            f"Pass --over-budget to override, upgrade the EL tier, "
+            f"or wait until next month."
+        )
+
+
 def record_usage(chars: int) -> None:
     month_key = date.today().strftime("%Y-%m")
     data = load_usage()
@@ -260,6 +288,9 @@ def main() -> None:
                              f"finance 0.93, games/movies 0.95. Above 1.0 = faster (risks AI degradation).")
     parser.add_argument("--out", metavar="PATH", default=None, help="Output .mp3 path (overrides default)")
     parser.add_argument("--dry-run", action="store_true", help="Estimate cost without calling the API")
+    parser.add_argument("--over-budget", action="store_true",
+                        help="Override the monthly char soft-cap from .channel_phase.json. "
+                             "Use sparingly — exceeding the cap may incur per-1k overage charges.")
     args = parser.parse_args()
 
     # Config from environment
@@ -351,8 +382,9 @@ def main() -> None:
         print("\n  [dry-run] No API call made.")
         return
 
-    # Budget check
+    # Budget checks: USD ceiling AND char soft-cap from .channel_phase.json
     check_budget(chars, budget)
+    check_char_softcap(chars, override=args.over_budget)
 
     # Output paths
     AUDIO_DIR.mkdir(parents=True, exist_ok=True)
