@@ -117,16 +117,22 @@ def record_usage(chars: int) -> None:
 # ---------------------------------------------------------------------------
 
 def extract_spoken_text(case_id: str) -> str:
-    """Find and extract the spoken narration from game_config.json or script.md."""
-    # Game pipeline: check game_config.json for spoken_text first
-    config_path = SCRIPTS_DIR / case_id / "game_config.json"
-    if config_path.exists():
-        cfg = json.loads(config_path.read_text())
-        text = cfg.get("spoken_text", "").strip()
-        if text:
-            return text
+    """Find and extract the spoken narration from script_config.json,
+    game_config.json, or script.md (in that priority order)."""
+    # New verticals (cases, finance, mythology, etc.) use script_config.json
+    # Games + movies use game_config.json
+    for filename in ("script_config.json", "game_config.json"):
+        config_path = SCRIPTS_DIR / case_id / filename
+        if config_path.exists():
+            try:
+                cfg = json.loads(config_path.read_text())
+                text = cfg.get("spoken_text", "").strip()
+                if text:
+                    return text
+            except (json.JSONDecodeError, OSError):
+                pass
 
-    # Truecrime pipeline: resolve partial case IDs like "07" to full slugs
+    # Truecrime legacy pipeline: resolve partial case IDs like "07" to full slugs
     candidates = list(SCRIPTS_DIR.glob(f"{case_id}_*/script.md")) + \
                  list(SCRIPTS_DIR.glob(f"*{case_id}*/script.md")) + \
                  [SCRIPTS_DIR / case_id / "script.md"]
@@ -253,13 +259,16 @@ def main() -> None:
     if args.voice and not args.voice_id:
         voice_id = VOICE_LIBRARY[args.voice]
 
-    # If a game/case, prefer voice_id + model_id baked into game_config.json by the
-    # batch-production routine. CLI flags still win if explicitly passed.
+    # If a game/case, prefer voice_id + model_id baked into the config by the
+    # batch-production routine. Checks game_config.json (games/movies) AND
+    # script_config.json (cases/finance/mythology/etc.). CLI flags still win.
     need_voice_from_cfg = args.case and not args.voice_id and not args.voice
     need_model_from_cfg = args.case and not args.model
     if need_voice_from_cfg or need_model_from_cfg:
-        config_path = SCRIPTS_DIR / args.case / "game_config.json"
-        if config_path.exists():
+        for filename in ("script_config.json", "game_config.json"):
+            config_path = SCRIPTS_DIR / args.case / filename
+            if not config_path.exists():
+                continue
             try:
                 cfg = json.loads(config_path.read_text())
                 if need_voice_from_cfg:
@@ -270,6 +279,7 @@ def main() -> None:
                     cfg_model = cfg.get("model_id", "")
                     if cfg_model:
                         model_id = cfg_model
+                break  # first match wins
             except (json.JSONDecodeError, OSError):
                 pass
 

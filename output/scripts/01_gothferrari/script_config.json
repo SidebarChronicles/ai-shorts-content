@@ -1,0 +1,31 @@
+{
+  "game_id": "01_gothferrari",
+  "audio_file": "assets/audio/narration_01_gothferrari.mp3",
+  "case_title": "GOTH FERRARI: THE $250M CRYPTO HEIST'S INSTRUMENT OF LAST RESORT",
+  "voice_id": "nPczCjzI2devNBz1zQrb",
+  "voice_name": "Brian",
+  "model_id": "eleven_multilingual_v2",
+  "beats": [
+    {
+      "label": "hook",
+      "text": "When hackers couldn't trick their victims into handing over their crypto, they called Marlon Ferro. He'd break into your house and take it.",
+      "keywords": ["masked thief crowbar night", "cyber crime hacker"]
+    },
+    {
+      "label": "setup",
+      "text": "Ferro, 20, was the so-called instrument of last resort for a 250 million dollar social engineering ring. When victims stored their crypto on hardware wallets, devices that can't be hacked remotely, the enterprise sent him in.",
+      "keywords": ["hardware wallet ledger", "bitcoin device hardware"]
+    },
+    {
+      "label": "escalation",
+      "text": "February 2024. Winnsboro, Texas. Ferro broke into a home and walked out with 100 bitcoin. More than 5 million dollars. July 2024. New Mexico. He staked out the house for days. When co-conspirators tracked the victim's iCloud and confirmed he was gone, Ferro smashed a window with a brick. The home camera caught him.",
+      "keywords": ["broken window house burglary", "home security camera at night"]
+    },
+    {
+      "label": "resolution",
+      "text": "The stolen money bought Hermes Birkin bags, exotic cars up to 3.8 million dollars, nightclub tabs of half a million a night, and private jets. Ferro was arrested with two firearms and a fake ID. This month, a federal judge sentenced him to 78 months in prison, and 2.5 million in restitution.",
+      "keywords": ["courthouse gavel sentencing", "handcuffs federal arrest"]
+    }
+  ],
+  "spoken_text": "When hackers couldn't trick their victims into handing over their crypto, they called Marlon Ferro. He'd break into your house and take it. Ferro, 20, was the so-called instrument of last resort for a 250 million dollar social engineering ring. When victims stored their crypto on hardware wallets, devices that can't be hacked remotely, the enterprise sent him in. February 2024. Winnsboro, Texas. Ferro broke into a home and walked out with 100 bitcoin. More than 5 million dollars. July 2024. New Mexico. He staked out the house for days. When co-conspirators tracked the victim's iCloud and confirmed he was gone, Ferro smashed a window with a brick. The home camera caught him. The stolen money bought Hermes Birkin bags, exotic cars up to 3.8 million dollars, nightclub tabs of half a million a night, and private jets. Ferro was arrested with two firearms and a fake ID. This month, a federal judge sentenced him to 78 months in prison, and 2.5 million in restitution."
+}
