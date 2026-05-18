@@ -8,24 +8,39 @@
   "beats": [
     {
       "label": "hook",
-      "text": "The 5 biggest games dropping before Christmas. Number 1 has been in development for 8 years.",
-      "keywords": ["gaming console controller dramatic", "video game characters action"]
+      "text": "Top 5 games dropping before Christmas. Number 1 has been in development for 8 years.",
+      "source_clip": "output/scripts/GG_01_subnautica2/clips_portrait/clip_01_portrait.mp4"
     },
     {
-      "label": "items_5_to_3",
-      "text": "Number 5. LEGO Batman: Legacy of the Dark Knight. TT Games' most ambitious project, Batman's full origin story across six distinct eras. Number 4. Crimson Desert. Pearl Abyss spent six years on this open world RPG, five million sold in its first month. Number 3. Marathon. Bungie's PvPvE extraction shooter, where you die and lose everything you brought in.",
-      "keywords": ["dark gothic city batman night", "medieval warrior horseback combat", "sci fi astronaut planet alien"]
+      "label": "rank_5",
+      "text": "Number 5. LEGO Batman: Legacy of the Dark Knight. TT Games' most ambitious project, Batman's full origin story across six distinct eras.",
+      "source_clip": "output/scripts/GG_06_legobatmanlegacy/clips_portrait/clip_02_portrait.mp4"
     },
     {
-      "label": "items_2_to_1",
-      "text": "Number 2. EA Sports UFC 6. Markerless capture tech rebuilds every fighter's strikes, with a Flow State mechanic that unlocks signature moves. And number 1. Subnautica 2. Eight years after the original, the same studio is back with co-op multiplayer underwater survival.",
-      "keywords": ["ufc octagon mma fighter punch", "deep ocean underwater dark mysterious"]
+      "label": "rank_4",
+      "text": "Number 4. Crimson Desert. Pearl Abyss spent six years building this open world RPG. Five million players bought it in the first month.",
+      "source_clip": "output/scripts/GG_04_crimsondesert/clips_portrait/clip_02_portrait.mp4"
+    },
+    {
+      "label": "rank_3",
+      "text": "Number 3. Marathon. From Bungie. A PvPvE extraction shooter where you die and lose everything you brought in.",
+      "source_clip": "output/scripts/GG_07_marathon/clips_portrait/clip_02_portrait.mp4"
+    },
+    {
+      "label": "rank_2",
+      "text": "Number 2. EA Sports UFC 6. Markerless capture tech rebuilds every fighter's strikes, with a Flow State mechanic that unlocks signature moves.",
+      "source_clip": "output/scripts/GG_10_ufc6/clips_portrait/clip_02_portrait.mp4"
+    },
+    {
+      "label": "rank_1",
+      "text": "And number 1. Subnautica 2. Eight years after the original, the same studio is back with co-op multiplayer underwater survival.",
+      "source_clip": "output/scripts/GG_01_subnautica2/clips_portrait/clip_02_portrait.mp4"
     },
     {
       "label": "cta",
-      "text": "Five games. Five different reasons to clear your calendar before December. Which one are you actually excited for?",
-      "keywords": ["calendar december red circle", "gaming setup neon dramatic"]
+      "text": "Five games. Which one are you actually excited for?",
+      "source_clip": "output/scripts/GG_10_ufc6/clips_portrait/clip_03_portrait.mp4"
     }
   ],
-  "spoken_text": "The 5 biggest games dropping before Christmas. Number 1 has been in development for 8 years. Number 5. LEGO Batman: Legacy of the Dark Knight. TT Games' most ambitious project, Batman's full origin story across six distinct eras. Number 4. Crimson Desert. Pearl Abyss spent six years on this open world RPG, five million sold in its first month. Number 3. Marathon. Bungie's PvPvE extraction shooter, where you die and lose everything you brought in. Number 2. EA Sports UFC 6. Markerless capture tech rebuilds every fighter's strikes, with a Flow State mechanic that unlocks signature moves. And number 1. Subnautica 2. Eight years after the original, the same studio is back with co-op multiplayer underwater survival. Five games. Five different reasons to clear your calendar before December. Which one are you actually excited for?"
+  "spoken_text": "Top 5 games dropping before Christmas. Number 1 has been in development for 8 years. Number 5. LEGO Batman: Legacy of the Dark Knight. TT Games' most ambitious project, Batman's full origin story across six distinct eras. Number 4. Crimson Desert. Pearl Abyss spent six years building this open world RPG. Five million players bought it in the first month. Number 3. Marathon. From Bungie. A PvPvE extraction shooter where you die and lose everything you brought in. Number 2. EA Sports UFC 6. Markerless capture tech rebuilds every fighter's strikes, with a Flow State mechanic that unlocks signature moves. And number 1. Subnautica 2. Eight years after the original, the same studio is back with co-op multiplayer underwater survival. Five games. Which one are you actually excited for?"
 }
