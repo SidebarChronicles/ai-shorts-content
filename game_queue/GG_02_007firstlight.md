@@ -1,6 +1,6 @@
 # GG_02_007firstlight — 007 First Light
 
-**Status:** QUEUED
+**Status:** DELIVERED
 **Score:** 8/10
 **Platform(s):** PC (Steam, Epic) / PS5 / Xbox Series X|S
 **Steam App ID:** 3768760

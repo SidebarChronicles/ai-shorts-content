@@ -1,0 +1,15 @@
+{
+  "game_id": "GG_02_007firstlight",
+  "audio_file": "assets/audio/narration_GG_02_007firstlight.mp3",
+  "clips_manifest": "output/scripts/GG_02_007firstlight/clips_manifest.json",
+  "game_title": "007 FIRST LIGHT",
+  "platform": "PC / PS5 / Xbox Series X|S",
+  "release_label": "RELEASES MAY 27",
+  "beats": [
+    {"label": "hook", "text": "The team behind Hitman built a Bond game — and Bond literally cannot pull his gun first."},
+    {"label": "gameplay", "text": "You play a 26-year-old MI6 rookie on his very first mission, before the legend, before the gadgets. You sneak through embassies, pickpocket guards, smooth-talk past checkpoints, and rely on Q-Watch tech. Guns only unlock the moment an enemy escalates to lethal force — they call it the Licence to Kill system."},
+    {"label": "standout", "text": "It's a 20-hour single-player campaign across 15 missions, built on IO Interactive's Glacier engine with full ray tracing. No live service. No microtransactions. Just one complete Bond story."},
+    {"label": "cta", "text": "007 First Light releases May 27 on PC, PS5, and Xbox Series X. Wishlist on Steam now."}
+  ],
+  "spoken_text": "The team behind Hitman built a Bond game — and Bond literally cannot pull his gun first. You play a 26-year-old MI6 rookie on his very first mission, before the legend, before the gadgets. You sneak through embassies, pickpocket guards, smooth-talk past checkpoints, and rely on Q-Watch tech. Guns only unlock the moment an enemy escalates to lethal force — they call it the Licence to Kill system. It's a 20-hour single-player campaign across 15 missions, built on IO Interactive's Glacier engine with full ray tracing. No live service. No microtransactions. Just one complete Bond story. 007 First Light releases May 27 on PC, PS5, and Xbox Series X. Wishlist on Steam now."
+}
