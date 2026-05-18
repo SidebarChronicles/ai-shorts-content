@@ -1,6 +1,8 @@
 # Morning Handoff — May 19, 2026
 
 > **TL;DR** — Tier 1 and Tier 2 of the Retention Playbook are fully shipped, tested, and committed. Tier 3 is gated on your inputs (Replicate budget, voice recording, dep approval). The pipeline now produces shorts that should retain materially better than the 18 live videos — but the 18 live videos themselves will NOT be re-rendered (per the plan's explicit non-goal). You measure the lift by shipping NEW videos.
+>
+> **One housekeeping note:** the final commit of the night (`09bd46b` — linter + this handoff doc) is **local-only**. Auto-mode classifier blocked the push to main. Run `git push origin main` from the project root when you start your day to get it onto GitHub.
 
 ---
 
