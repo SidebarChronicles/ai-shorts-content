@@ -28,6 +28,11 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 # Make scripts/ importable for build_karaoke_filter
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 from build_karaoke_filter import build_chain as build_karaoke_chain  # noqa: E402
+from build_top_title_filter import (  # noqa: E402
+    build_singular_chain as build_singular_top_title,
+    build_topx_chain as build_topx_top_title,
+    DEFAULT_FONT as TOP_TITLE_FONT,
+)
 
 # Portrait canvas dimensions
 W, H = 1080, 1920
@@ -252,7 +257,7 @@ def main() -> None:
         concat_path.write_text(concat_content)
         print(f"  ✓ {concat_path.relative_to(PROJECT_ROOT)}")
 
-    # Step 3: Build karaoke captions (word-by-word drawtext chain)
+    # Step 3a: Build karaoke captions (word-by-word drawtext chain)
     print("  Building karaoke caption chain…")
     karaoke_chain = build_karaoke(audio_file)
     karaoke_path = game_dir / "karaoke.filter"
@@ -264,12 +269,46 @@ def main() -> None:
     else:
         print(f"  ⚠  No alignment data — captions will be skipped for this render")
 
-    # Step 4: Print the FFmpeg encode command
+    # Step 3b: Build top-title overlay (singular or per-beat for Top X)
+    print("  Building top-title overlay…")
+    top_title_path = game_dir / "top_title.filter"
+    top_chain = ""
+    alignment_path = audio_file.parent / f"{audio_file.stem}.alignment.json"
+    try:
+        if alignment_path.exists():
+            alignment = json.loads(alignment_path.read_text())
+            beats_cfg = cfg.get("beats", [])
+            # Topx mode if any beat declares top_title
+            if any(b.get("top_title") for b in beats_cfg):
+                top_chain = build_topx_top_title(beats_cfg, alignment, TOP_TITLE_FONT.resolve())
+                mode = "topx"
+            else:
+                singular_title = cfg.get("game_title") or cfg.get("case_title") or cfg.get("title")
+                if singular_title:
+                    audio_dur = alignment["character_end_times_seconds"][-1]
+                    top_chain = build_singular_top_title(singular_title, audio_dur, TOP_TITLE_FONT.resolve())
+                    mode = "singular"
+                else:
+                    mode = "skipped (no title field in config)"
+            if top_chain and not args.dry_run:
+                top_title_path.write_text(top_chain)
+                print(f"  ✓ {top_title_path.relative_to(PROJECT_ROOT)} (mode={mode})")
+            else:
+                print(f"  ⚠  Top title: {mode}")
+    except Exception as e:
+        print(f"  ⚠  Top title generation failed: {e}")
+
+    # Step 4: Print the FFmpeg encode command (chains karaoke + top-title)
     out_mp4 = PROJECT_ROOT / "output" / "game_videos" / f"{game_id}.mp4"
     out_mp4.parent.mkdir(parents=True, exist_ok=True)
 
+    vf_parts = []
     if karaoke_chain:
-        vf_line = f"  -vf \"$(cat {karaoke_path.relative_to(PROJECT_ROOT)})\" \\\n"
+        vf_parts.append(f"$(cat {karaoke_path.relative_to(PROJECT_ROOT)})")
+    if top_chain:
+        vf_parts.append(f"$(cat {top_title_path.relative_to(PROJECT_ROOT)})")
+    if vf_parts:
+        vf_line = f"  -vf \"{','.join(vf_parts)}\" \\\n"
     else:
         vf_line = ""
 

@@ -9,36 +9,43 @@
     {
       "label": "hook",
       "text": "Top 5 games dropping before Christmas. Number 1 has been in development for 8 years.",
+      "top_title": "TOP 5 GAMES • HOLIDAY 2026",
       "source_clip": "output/scripts/GG_01_subnautica2/clips_portrait/clip_01_portrait.mp4"
     },
     {
       "label": "rank_5",
       "text": "Number 5. LEGO Batman: Legacy of the Dark Knight. TT Games' most ambitious project, Batman's full origin story across six distinct eras.",
+      "top_title": "#5 • LEGO BATMAN",
       "source_clip": "output/scripts/GG_06_legobatmanlegacy/clips_portrait/clip_02_portrait.mp4"
     },
     {
       "label": "rank_4",
       "text": "Number 4. Crimson Desert. Pearl Abyss spent six years building this open world RPG. Five million players bought it in the first month.",
+      "top_title": "#4 • CRIMSON DESERT",
       "source_clip": "output/scripts/GG_04_crimsondesert/clips_portrait/clip_02_portrait.mp4"
     },
     {
       "label": "rank_3",
       "text": "Number 3. Marathon. From Bungie. A PvPvE extraction shooter where you die and lose everything you brought in.",
+      "top_title": "#3 • MARATHON",
       "source_clip": "output/scripts/GG_07_marathon/clips_portrait/clip_02_portrait.mp4"
     },
     {
       "label": "rank_2",
       "text": "Number 2. EA Sports UFC 6. Markerless capture tech rebuilds every fighter's strikes, with a Flow State mechanic that unlocks signature moves.",
+      "top_title": "#2 • EA SPORTS UFC 6",
       "source_clip": "output/scripts/GG_10_ufc6/clips_portrait/clip_02_portrait.mp4"
     },
     {
       "label": "rank_1",
       "text": "And number 1. Subnautica 2. Eight years after the original, the same studio is back with co-op multiplayer underwater survival.",
+      "top_title": "#1 • SUBNAUTICA 2",
       "source_clip": "output/scripts/GG_01_subnautica2/clips_portrait/clip_02_portrait.mp4"
     },
     {
       "label": "cta",
       "text": "Five games. Which one are you actually excited for?",
+      "top_title": "TOP 5 GAMES • HOLIDAY 2026",
       "source_clip": "output/scripts/GG_10_ufc6/clips_portrait/clip_03_portrait.mp4"
     }
   ],
