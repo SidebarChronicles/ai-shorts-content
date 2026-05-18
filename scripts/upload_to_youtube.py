@@ -186,7 +186,14 @@ def parse_publish_at(s: str) -> datetime:
 # Upload
 # ---------------------------------------------------------------------------
 
-def build_body(meta: dict, publish_at: datetime, category_id: str) -> dict:
+def build_body(meta: dict, publish_at: datetime | None, category_id: str) -> dict:
+    status: dict = {
+        "privacyStatus": "public" if publish_at is None else "private",
+        "selfDeclaredMadeForKids": False,
+        "containsSyntheticMedia": True,  # ⚠ REQUIRED for AI narration
+    }
+    if publish_at is not None:
+        status["publishAt"] = publish_at.isoformat().replace("+00:00", "Z")
     return {
         "snippet": {
             "title": meta["title"],
@@ -194,16 +201,11 @@ def build_body(meta: dict, publish_at: datetime, category_id: str) -> dict:
             "tags": meta["tags"],
             "categoryId": category_id,
         },
-        "status": {
-            "privacyStatus": "private",
-            "publishAt": publish_at.isoformat().replace("+00:00", "Z"),
-            "selfDeclaredMadeForKids": False,
-            "containsSyntheticMedia": True,  # ⚠ REQUIRED for AI narration
-        },
+        "status": status,
     }
 
 
-def upload_one(case_id: str, publish_at: datetime, dry_run: bool,
+def upload_one(case_id: str, publish_at: datetime | None, dry_run: bool,
                videos_dir: Path, posted_path: Path, category_id: str) -> None:
     mp4 = videos_dir / f"{case_id}.mp4"
     desc_md = videos_dir / f"{case_id}.description.md"
@@ -219,7 +221,7 @@ def upload_one(case_id: str, publish_at: datetime, dry_run: bool,
     print(f"  Title:       {meta['title']}")
     print(f"  Tags:        {', '.join(meta['tags'])}")
     print(f"  File:        {mp4.relative_to(PROJECT_ROOT)}  ({mp4.stat().st_size // 1024} KB)")
-    print(f"  Scheduled:   {publish_at.isoformat()}")
+    print(f"  Publish:     {'IMMEDIATELY (public)' if publish_at is None else publish_at.isoformat()}")
     print(f"  Category ID: {category_id}")
     print(f"  Made for kids:           False")
     print(f"  Contains synthetic:      True  ⚠")
@@ -260,10 +262,13 @@ def upload_one(case_id: str, publish_at: datetime, dry_run: bool,
 
     video_id = response["id"]
     print(f"\n  ✓ Uploaded as video_id={video_id}")
-    print(f"  ✓ Will publish at {publish_at.isoformat()}")
+    if publish_at is None:
+        print(f"  ✓ Published immediately (public)")
+    else:
+        print(f"  ✓ Will publish at {publish_at.isoformat()}")
     print(f"  ✓ Watch URL: https://www.youtube.com/watch?v={video_id}")
 
-    mark_posted(case_id, video_id, publish_at.isoformat(), posted_path)
+    mark_posted(case_id, video_id, (publish_at.isoformat() if publish_at else "immediate"), posted_path)
     print(f"  ✓ Marked posted in {posted_path.relative_to(PROJECT_ROOT)}")
 
 
@@ -286,8 +291,9 @@ def main() -> None:
     parser.add_argument("--category", metavar="ID", default=None,
                         help=f"YouTube category ID (default: {DEFAULT_CATEGORY_ID} Entertainment; "
                              f"use {GAMING_CATEGORY_ID} for gaming).")
-    parser.add_argument("--publish-at", type=str, default=None,
-                        help="ISO datetime override (default: next 6 PM local, ≥24h out).")
+    parser.add_argument("--schedule", type=str, default=None, metavar="DATETIME",
+                        help="Schedule instead of publishing immediately. "
+                             "ISO datetime (e.g. '2026-05-20T18:00:00') or omit for auto next-slot.")
     parser.add_argument("--dry-run", action="store_true",
                         help="Show the upload plan without contacting YouTube.")
     args = parser.parse_args()
@@ -323,7 +329,10 @@ def main() -> None:
     else:
         case_id = resolve_case(args.case, videos_dir)
 
-    publish_at = parse_publish_at(args.publish_at) if args.publish_at else compute_next_slot()
+    if args.schedule:
+        publish_at = parse_publish_at(args.schedule) if args.schedule != "auto" else compute_next_slot()
+    else:
+        publish_at = None  # publish immediately
     upload_one(case_id, publish_at, args.dry_run, videos_dir, posted_path, category_id)
 
 

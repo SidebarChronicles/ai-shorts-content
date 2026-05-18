@@ -2,57 +2,82 @@
 
 ## Title format
 
+Keep the title clean — no hashtags. Hashtags go in the description only (first 3 appear above the title as clickable links).
+
 ```
-{Hook sentence} #{GameTitleNoSpaces} #gaming #shorts
+{Hook sentence — one counterintuitive or striking fact. Max 90 characters.}
 ```
 
-Max 80 characters before the hashtags. Active verb, concrete mechanic or fact.
 Examples:
-- "This survival game makes you fund a war economy. #TheLastFaith #gaming #shorts"
-- "You play as a spy who can rewind time. #Timelock #gaming #shorts"
+- "467,000 players got stranded on an alien ocean planet on day one"
+- "The team that made Hitman built a Bond game where you can't draw your gun first"
 
 ## Description body
 
 ```
 {Hook sentence repeated verbatim from script.}
 
-{2-3 sentence expansion — premise, what makes it special, who it's for.
-Keyword-rich but readable. No marketing copy.}
+{Remaining 3 beats as short sentences — gameplay, standout, CTA.}
 
 🎮 {Game Title}
-📅 {Release Date or "Coming Soon" or "In Early Access"}
+📅 {Release Date or "COMING SOON" or "IN EARLY ACCESS"}
 🖥  Available on: {Platforms}
-🏷  {Developer} / {Publisher}
 
 ⚠ Narration in this video is AI-generated (ElevenLabs).
 
-#{GameTitleNoSpaces} #{Genre} #{Platform} #gaming #shorts #newgame
+#Shorts #GameTrailer #{GameTitleNoSpaces} #{Genre1} #{Genre2} #{Platform} #NewGame
 ```
 
-## Tag strategy
+## Hashtag strategy (5–8 total, description only)
 
-Always include:
-- `#gaming`
-- `#shorts`
-- `#{GameTitleNoSpaces}` (camelCase or run-together, e.g. `#EldenRing`)
+**Always include (first 3 — appear above the title):**
+1. `#Shorts` — always first, still recommended for Shorts tab visibility
+2. `#GameTrailer` or `#GameReview` — signals content format, lower competition than #Gaming
+3. `#{GameTitleNoSpaces}` — highest precision; catches fans of that specific title
 
-Genre tags (pick 2–3):
-- `#actionrpg` `#fps` `#strategy` `#puzzle` `#platformer` `#survival` `#horrorGame`
-- `#indiegame` (if indie) `#soulslite` (if FromSoft-adjacent)
+**Genre tags — pick 1–2 specific to the game:**
+- Survival: `#SurvivalGame`
+- Exploration: `#ExplorationGame`
+- Stealth: `#StealthGame`
+- Action-adventure: `#ActionAdventure`
+- RPG: `#RPG`
+- Horror: `#HorrorGame`
+- FPS/Shooter: `#FPS`
+- Sci-fi: `#SciFiGame`
+- Open world: `#OpenWorld`
+- Indie (if applicable): `#IndieGame`
 
-Platform tags (pick relevant):
-- `#PS5` `#PCGaming` `#XboxSeriesX` `#NintendoSwitch` `#SteamGames`
+**Platform tags — only include platforms the game actually supports:**
+- `#Steam` (PC via Steam)
+- `#PCGaming` (broader PC tag)
+- `#Xbox` or `#XboxSeriesX`
+- `#PS5` or `#PlayStation`
 
-Release signal:
-- `#newgame` (upcoming/recent release)
-- `#earlyaccess` (if EA)
-- `#wishliston steam` (if upcoming on Steam)
+**Release signal (pick one):**
+- `#NewGame` — for recent or upcoming releases
+- `#EarlyAccess` — if EA launch
+
+**Skip entirely:** #FYP, #Viral, #Trending, #Gaming (too broad), #GamingCommunity — YouTube confirmed these do nothing for discovery.
+
+**Sweet spot: 5–8 hashtags total.** More than 15 in the description causes YouTube to hide all hashtags.
+
+## Example — Subnautica 2
+
+Title: `467,000 players got stranded on an alien ocean planet on day one`
+
+Description hashtags: `#Shorts #GameTrailer #Subnautica2 #SurvivalGame #ExplorationGame #Steam #EarlyAccess`
+
+## Example — 007 First Light
+
+Title: `The team behind Hitman built a Bond game where you can't draw your gun first`
+
+Description hashtags: `#Shorts #GameTrailer #007FirstLight #StealthGame #ActionAdventure #Xbox #NewGame`
 
 ## Upload settings
 
 ```
-Category:                20  (Gaming)
-Privacy:                 private → public (scheduled)
-Made for kids:           false
-Contains synthetic:      true  ← REQUIRED (ElevenLabs voice)
+Category:            20  (Gaming)
+Privacy:             public (immediate)
+Made for kids:       false
+Contains synthetic:  true  ← REQUIRED (ElevenLabs voice)
 ```

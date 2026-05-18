@@ -280,25 +280,102 @@ def step_render(game_id: str, dry_run: bool) -> bool:
     return True
 
 
+# Genre keyword → hashtag mapping for auto-tagging
+GENRE_HASHTAGS = {
+    "survival": "#SurvivalGame",
+    "exploration": "#ExplorationGame",
+    "stealth": "#StealthGame",
+    "action": "#ActionAdventure",
+    "adventure": "#ActionAdventure",
+    "rpg": "#RPG",
+    "horror": "#HorrorGame",
+    "fps": "#FPS",
+    "shooter": "#FPS",
+    "sci-fi": "#SciFiGame",
+    "open world": "#OpenWorld",
+    "open-world": "#OpenWorld",
+    "indie": "#IndieGame",
+    "puzzle": "#PuzzleGame",
+    "strategy": "#Strategy",
+    "platformer": "#Platformer",
+}
+
+PLATFORM_HASHTAGS = {
+    "steam": "#Steam",
+    "pc": "#PCGaming",
+    "xbox": "#Xbox",
+    "ps5": "#PS5",
+    "playstation": "#PS5",
+    "nintendo": "#NintendoSwitch",
+}
+
+
+def _genre_tags(genre_str: str) -> list[str]:
+    """Pick up to 2 genre hashtags from the game's genre field."""
+    seen, tags = set(), []
+    lower = genre_str.lower()
+    for keyword, tag in GENRE_HASHTAGS.items():
+        if keyword in lower and tag not in seen:
+            seen.add(tag)
+            tags.append(tag)
+        if len(tags) == 2:
+            break
+    return tags
+
+
+def _platform_tags(platform_str: str) -> list[str]:
+    """Pick up to 2 platform hashtags (only accurate ones)."""
+    seen, tags = set(), []
+    lower = platform_str.lower()
+    for keyword, tag in PLATFORM_HASHTAGS.items():
+        if keyword in lower and tag not in seen:
+            seen.add(tag)
+            tags.append(tag)
+        if len(tags) == 2:
+            break
+    return tags
+
+
 def step_write_description(game_id: str) -> bool:
     """Write the YouTube description.md sidecar from game_config.json."""
     config_path = SCRIPTS_DIR / game_id / "game_config.json"
     if not config_path.exists():
         return False
 
+    # Also read genre/platform from game_queue entry for hashtag selection
+    queue_path = GAME_QUEUE_DIR / f"{game_id}.md"
+    genre_str, platform_from_queue = "", ""
+    if queue_path.exists():
+        content = queue_path.read_text()
+        m = re.search(r"\*\*Genre:\*\*\s*(.+)", content)
+        genre_str = m.group(1).strip() if m else ""
+        m = re.search(r"\*\*Platform\(s\):\*\*\s*(.+)", content)
+        platform_from_queue = m.group(1).strip() if m else ""
+
     cfg = json.loads(config_path.read_text())
     game_title = cfg.get("game_title", game_id)
     release_label = cfg.get("release_label", "")
-    platform = cfg.get("platform", "PC")
+    platform = platform_from_queue or cfg.get("platform", "PC")
     beats = cfg.get("beats", [])
 
     hook_text = beats[0]["text"] if beats else ""
-    slug = game_id.lower().replace("gg_", "").replace("_", "")
 
-    # Build title: hook-style up to 80 chars + tags
-    title = f"{hook_text[:75]} #{slug.replace('_', '').replace(' ', '')} #gaming #shorts"
-    if len(title) > 100:
-        title = f"{game_title} — {hook_text[:50]} #gaming #shorts"
+    # Title: clean hook sentence only — no hashtags in title
+    title = hook_text[:100].rstrip(".")
+    if len(title) > 90:
+        # Trim to last complete word under 90 chars
+        title = title[:90].rsplit(" ", 1)[0]
+
+    # Build hashtags: #Shorts #GameTrailer #GameSlug [genre x2] [platform x1-2] #NewGame
+    game_slug = re.sub(r"[^a-zA-Z0-9]", "", game_title.title())  # e.g. "Subnautica2"
+    hashtags = ["#Shorts", "#GameTrailer", f"#{game_slug}"]
+    hashtags += _genre_tags(genre_str)
+    hashtags += _platform_tags(platform)
+    if "early access" in release_label.lower():
+        hashtags.append("#EarlyAccess")
+    else:
+        hashtags.append("#NewGame")
+    hashtag_line = " ".join(hashtags[:8])  # cap at 8
 
     description_parts = [hook_text, ""]
     for beat in beats[1:]:
@@ -311,15 +388,20 @@ def step_write_description(game_id: str) -> bool:
         "",
         "⚠ Narration in this video is AI-generated (ElevenLabs).",
         "",
-        f"#{slug} #gaming #shorts #newgame",
+        hashtag_line,
     ]
+
+    # Tags field: plain keywords for YouTube tags API
+    tag_keywords = [game_slug, "gaming", "shorts", "game trailer"]
+    tag_keywords += [h.lstrip("#").lower() for h in hashtags[3:]]
+    tags_line = ", ".join(tag_keywords)
 
     desc_path = GAME_VIDEOS_DIR / f"{game_id}.description.md"
     GAME_VIDEOS_DIR.mkdir(parents=True, exist_ok=True)
     desc_path.write_text(
         f"## Title\n\n```\n{title}\n```\n\n"
         f"## DESCRIPTION\n\n```\n{chr(10).join(description_parts)}\n```\n\n"
-        f"## Tags\n\n```\n{slug}, gaming, shorts, newgame, {platform.lower().replace(' / ', ', ').replace('/', ',')}\n```\n"
+        f"## Tags\n\n```\n{tags_line}\n```\n"
     )
     log(f"  [desc] ✓ {desc_path.relative_to(PROJECT_ROOT)}")
     return True
