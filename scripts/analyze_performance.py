@@ -40,6 +40,8 @@ from _atomic import atomic_write_text  # noqa: E402
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 TOKEN_PATH = PROJECT_ROOT / "token.json"
 POSTED_PATH = PROJECT_ROOT / "output" / "videos" / "_posted.json"
+GAME_POSTED_PATH = PROJECT_ROOT / "output" / "game_videos" / "_posted.json"
+SCRIPTS_DIR = PROJECT_ROOT / "output" / "scripts"
 ANALYTICS_DIR = PROJECT_ROOT / "output" / "analytics"
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload",
@@ -81,13 +83,13 @@ def load_credentials() -> Credentials:
     return creds
 
 
-def load_posted() -> dict:
-    if not POSTED_PATH.exists():
+def load_posted(path: Path = POSTED_PATH) -> dict:
+    if not path.exists():
         sys.exit(
-            f"[FATAL] No posted videos found at {POSTED_PATH}.\n"
+            f"[FATAL] No posted videos found at {path}.\n"
             "        Upload at least one video first (or backfill manually-uploaded videos)."
         )
-    return json.loads(POSTED_PATH.read_text())
+    return json.loads(path.read_text())
 
 
 # ---------------------------------------------------------------------------
@@ -317,6 +319,51 @@ def channel_section(rollup: dict, span_days: int) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Voice leaderboard (game videos only)
+# ---------------------------------------------------------------------------
+
+def _lookup_voice(case_id: str) -> tuple[str, str]:
+    """Return (voice_id, voice_name) from game_config.json, or ('unknown', 'Unknown')."""
+    config = SCRIPTS_DIR / case_id / "game_config.json"
+    if config.exists():
+        try:
+            cfg = json.loads(config.read_text())
+            vid = cfg.get("voice_id", "")
+            vname = cfg.get("voice_name", "")
+            if vid:
+                return vid, vname or vid[:8]
+        except (json.JSONDecodeError, OSError):
+            pass
+    return "unknown", "Unknown"
+
+
+def voice_leaderboard_section(voice_data: dict[str, list[float]]) -> str:
+    """voice_data: {voice_name: [avg_view_pct, ...]}. Returns markdown section."""
+    if not voice_data:
+        return ""
+
+    MIN_VIDEOS = 3
+    lines = ["## Voice Leaderboard", "",
+             "| Voice | Videos | Avg view % | Avg views |",
+             "|---|---|---|---|"]
+
+    entries = []
+    for vname, pcts in sorted(voice_data.items()):
+        n = len(pcts)
+        avg_pct = sum(p for p, _ in pcts) / n if pcts else 0.0
+        avg_views = sum(v for _, v in pcts) / n if pcts else 0
+        note = "" if n >= MIN_VIDEOS else " _(< 3 videos — not enough data)_"
+        entries.append((avg_pct, vname, n, avg_pct, avg_views, note))
+
+    for _, vname, n, avg_pct, avg_views, note in sorted(entries, reverse=True):
+        lines.append(f"| {vname}{note} | {n} | {avg_pct:.1f}% | {avg_views:,.0f} |")
+
+    lines += ["", "_Need ≥ 3 videos per voice for reliable comparisons._",
+              "_Switch all new videos to a voice once it leads by 15+ avg view % with ≥5 videos._", ""]
+    return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -326,6 +373,8 @@ def main() -> None:
                         help="Single case to analyze (e.g. '04'). Default: all posted.")
     parser.add_argument("--days", type=int, default=30,
                         help="Lookback window in days (default 30).")
+    parser.add_argument("--game", action="store_true",
+                        help="Analyze game videos (output/game_videos/_posted.json) instead of truecrime")
     args = parser.parse_args()
 
     today = date.today()
@@ -335,20 +384,23 @@ def main() -> None:
     creds = load_credentials()
     yt_analytics = build("youtubeAnalytics", "v2", credentials=creds, cache_discovery=False)
 
-    posted = load_posted()
+    posted_path = GAME_POSTED_PATH if args.game else POSTED_PATH
+    posted = load_posted(posted_path)
     if args.case:
         match = [k for k in posted if k == args.case or k.startswith(args.case)]
         if not match:
             sys.exit(f"[FATAL] No posted case matches {args.case!r}. Available: {list(posted)}")
         posted = {k: posted[k] for k in match}
 
-    print(f"Pulling analytics for {len(posted)} video(s), window {start} → {end}…\n")
+    label = "game" if args.game else "truecrime"
+    print(f"Pulling analytics for {len(posted)} {label} video(s), window {start} → {end}…\n")
 
     # Channel rollup
     rollup = query_channel_rollup(yt_analytics, start, end)
 
-    # Per-video
+    # Per-video — also collect voice data for the leaderboard (game mode only)
     sections = []
+    voice_data: dict[str, list[tuple[float, float]]] = {}
     raw_dump = {"generated_at": datetime.now(timezone.utc).isoformat(),
                 "window": {"start": start, "end": end},
                 "channel_rollup": rollup,
@@ -361,12 +413,20 @@ def main() -> None:
         raw_dump["videos"][case_id] = {"metrics": metrics, "retention_curve": curve, **info}
         sections.append(video_section(case_id, info, metrics, curve, today))
 
+        # Collect voice data when we have real numbers
+        if args.game and "_no_data" not in metrics and "_error" not in metrics:
+            _, vname = _lookup_voice(case_id)
+            avg_pct = float(metrics.get("averageViewPercentage", 0))
+            views = float(metrics.get("views", 0))
+            voice_data.setdefault(vname, []).append((avg_pct, views))
+
     # Write report
     ANALYTICS_DIR.mkdir(parents=True, exist_ok=True)
-    md_path = ANALYTICS_DIR / f"report_{today.isoformat()}.md"
-    json_path = ANALYTICS_DIR / f"report_{today.isoformat()}.json"
+    suffix = "_game" if args.game else ""
+    md_path = ANALYTICS_DIR / f"report_{today.isoformat()}{suffix}.md"
+    json_path = ANALYTICS_DIR / f"report_{today.isoformat()}{suffix}.json"
 
-    md = ["# Analytics Report — " + today.isoformat(),
+    md = [f"# Analytics Report — {today.isoformat()} ({label})",
           "",
           f"Window: **{start} → {end}** ({args.days} days)",
           "",
@@ -374,6 +434,11 @@ def main() -> None:
           "## Per-video",
           ""]
     md.extend(sections)
+
+    if args.game and voice_data:
+        md.append("---")
+        md.append("")
+        md.append(voice_leaderboard_section(voice_data))
 
     md.append("---")
     md.append("")
@@ -386,8 +451,8 @@ def main() -> None:
     md.append("")
     md.append("Bring this report into Cowork and ask Claude to recommend writer-prompt or visual-template tweaks based on what's working / failing.")
 
-    md_path.write_text("\n".join(md))
-    json_path.write_text(json.dumps(raw_dump, indent=2, default=str))
+    atomic_write_text(md_path, "\n".join(md))
+    atomic_write_text(json_path, json.dumps(raw_dump, indent=2, default=str))
 
     print(f"\n✓ Wrote {md_path.relative_to(PROJECT_ROOT)}")
     print(f"✓ Wrote {json_path.relative_to(PROJECT_ROOT)}")

@@ -101,6 +101,13 @@ def next_queued_game() -> str | None:
     return None
 
 
+def next_rendered_game() -> str | None:
+    for game_id, status in load_queue_status().items():
+        if status == "RENDERED":
+            return game_id
+    return None
+
+
 def mark_queue_status(game_id: str, status: str) -> None:
     """Atomically rewrite the first `**Status:** X` line in the queue file.
 
@@ -535,9 +542,42 @@ def run_pipeline(game_id: str, dry_run: bool, skip_upload: bool = False) -> bool
     if failed_step is not None:
         return False
 
-    mark_queue_status(game_id, "DELIVERED")
-    log(f"\n✓ Pipeline complete: {game_id}")
+    final_status = "RENDERED" if skip_upload else "DELIVERED"
+    mark_queue_status(game_id, final_status)
+    log(f"\n✓ Pipeline complete: {game_id} → {final_status}")
     return True
+
+
+def run_upload_only(game_id: str, dry_run: bool) -> bool:
+    """Upload a RENDERED game and mark DELIVERED. Used by the batch upload pass."""
+    log(f"\n── Upload-only: {game_id} ──")
+    if not GAME_ID_RE.match(game_id):
+        log(f"✗ Refusing: '{game_id}' contains chars unsafe for FFmpeg paths")
+        return False
+
+    retries = _read_retry_count(game_id)
+    if retries >= MAX_RETRIES:
+        log(f"✗ {game_id} has failed {retries} times — marking BLOCKED")
+        mark_queue_status(game_id, "BLOCKED")
+        return False
+
+    ok = False
+    try:
+        ok = step_upload(game_id, dry_run)
+    except Exception as e:
+        log(f"  ERROR during upload: {e}")
+
+    if ok:
+        mark_queue_status(game_id, "DELIVERED")
+        log(f"  ✓ {game_id} → DELIVERED")
+    else:
+        new_retries = retries + 1
+        _bump_retry_count(game_id, new_retries)
+        log(f"  ✗ upload failed — retry {new_retries}/{MAX_RETRIES}")
+        if new_retries >= MAX_RETRIES:
+            mark_queue_status(game_id, "BLOCKED")
+        # Leave as RENDERED so next fire retries the upload
+    return ok
 
 
 def run_auto(dry_run: bool) -> None:
@@ -574,11 +614,16 @@ def main() -> None:
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--game-id", help="Run pipeline for a specific game ID")
     mode.add_argument("--next", action="store_true", help="Run pipeline for next QUEUED game")
+    mode.add_argument("--next-rendered", action="store_true",
+                      help="Upload the next RENDERED game")
     mode.add_argument("--auto", action="store_true",
                       help="Full auto: research new games + produce + upload")
     mode.add_argument("--list", action="store_true", help="List queue status")
+    mode.add_argument("--mark-status", nargs=2, metavar=("GAME_ID", "STATUS"),
+                      help="Atomically set queue status (e.g. --mark-status GG_03_foo RENDERED)")
     parser.add_argument("--dry-run", action="store_true", help="Preview without API calls")
-    parser.add_argument("--skip-upload", action="store_true", help="Stop before uploading")
+    parser.add_argument("--skip-upload", action="store_true",
+                        help="Stop before uploading; marks RENDERED instead of DELIVERED")
     args = parser.parse_args()
 
     if args.list:
@@ -590,6 +635,16 @@ def main() -> None:
             print(f"  [{status:10s}] {game_id}")
         return
 
+    if args.mark_status:
+        game_id, status = args.mark_status
+        valid = {"QUEUED", "RENDERED", "DELIVERED", "BLOCKED", "ACTIVE"}
+        if status not in valid:
+            print(f"ERROR: unknown status '{status}'. Valid: {', '.join(sorted(valid))}")
+            raise SystemExit(1)
+        mark_queue_status(game_id, status)
+        print(f"Marked {game_id} → {status}")
+        return
+
     if args.auto:
         run_auto(args.dry_run)
     elif args.next:
@@ -598,6 +653,12 @@ def main() -> None:
             print("No QUEUED games in game_queue/. Run research_games.py or add a queue entry.")
             return
         run_pipeline(game_id, args.dry_run, args.skip_upload)
+    elif args.next_rendered:
+        game_id = next_rendered_game()
+        if not game_id:
+            print("No RENDERED games waiting for upload.")
+            return
+        run_upload_only(game_id, args.dry_run)
     else:
         run_pipeline(args.game_id, args.dry_run, args.skip_upload)
 

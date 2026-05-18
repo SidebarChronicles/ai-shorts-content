@@ -225,6 +225,18 @@ def main() -> None:
     api_key = os.environ.get("ELEVENLABS_API_KEY", "")
     voice_id = args.voice_id or os.environ.get("ELEVENLABS_VOICE_ID", DEFAULT_VOICE_ID)
     model_id = os.environ.get("ELEVENLABS_MODEL", DEFAULT_MODEL)
+
+    # If a game case, prefer voice_id baked into game_config.json by the
+    # batch-production routine. CLI --voice-id still wins if explicitly passed.
+    if args.case and not args.voice_id:
+        config_path = SCRIPTS_DIR / args.case / "game_config.json"
+        if config_path.exists():
+            try:
+                cfg_voice = json.loads(config_path.read_text()).get("voice_id", "")
+                if cfg_voice:
+                    voice_id = cfg_voice
+            except (json.JSONDecodeError, OSError):
+                pass
     budget = float(os.environ.get("ELEVENLABS_MONTHLY_BUDGET", DEFAULT_BUDGET))
     use_alignment = os.environ.get("ELEVENLABS_ALIGNMENT", "true").lower() == "true"
 
