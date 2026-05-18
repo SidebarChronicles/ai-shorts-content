@@ -1,14 +1,30 @@
 # Analytics Report — 2026-05-18 (game)
 
-Window: **2026-04-18 → 2026-05-18** (30 days)
+Window: **2026-05-17 → 2026-05-18** (1 days)
 
-## Channel rollup (last 30 days)
+## YouTube Partner Program eligibility
 
-- **Total views:** 0
-- **Watch time:** 0 minutes (0.0 hours)
-- **Avg view duration across channel:** 0.0s
-- **Net subscribers:** +0
+_**0** subscribers_
 
+### Early Access tier (Super Thanks, channel memberships)
+```
+  Subscribers:  [····················] 0.0%  0 / 500
+  Shorts views: [····················] 0.0%  0 / 3,000,000 (90d)
+  Watch hours:  [····················] 0.0%  0 / 3,000 (90d)
+```
+
+### Full YPP — Ad Revenue tier
+```
+  Subscribers:  [····················] 0.0%  0 / 1,000
+  Shorts views: [····················] 0.0%  0 / 10,000,000 (90d)
+  Watch hours:  [····················] 0.0%  0 / 4,000 (12mo)
+```
+
+⏳ Building toward eligibility — focus on consistent uploads + retention
+
+## Channel rollup
+
+_No channel-level data yet._
 
 ## Per-video
 
@@ -16,56 +32,61 @@ Window: **2026-04-18 → 2026-05-18** (30 days)
 - **Watch:** https://www.youtube.com/watch?v=c_xjg34NVMM
 - **-1 day(s) live (published 2026-05-19)**
 
-| Metric | Value |
-|---|---|
-| Views | **0** |
-| Watch time | 0.0 min total |
-| Avg view duration | 0.0s |
-| Avg view % (retention through) | **0.0%** |
-| Subscribers gained / lost | +0 / -0 |
-| Likes / Dislikes | 0 / 0 (0% positive) |
-| Shares / Comments | 0 / 0 |
-| Engagement rate | 0.00% |
-
-**Audience retention curve:**
-```
-(no retention data yet)
-```
-**Read:**
-- Too early to draw conclusions — needs more views.
+_No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
 
 ### GG_02_007firstlight
 - **Watch:** https://www.youtube.com/watch?v=MaehfObzJxs
 - **published: immediate**
 
-| Metric | Value |
-|---|---|
-| Views | **0** |
-| Watch time | 0.0 min total |
-| Avg view duration | 0.0s |
-| Avg view % (retention through) | **0.0%** |
-| Subscribers gained / lost | +0 / -0 |
-| Likes / Dislikes | 0 / 0 (0% positive) |
-| Shares / Comments | 0 / 0 |
-| Engagement rate | 0.00% |
+_No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
 
-**Audience retention curve:**
-```
-(no retention data yet)
-```
-**Read:**
-- Too early to draw conclusions — needs more views.
+### GG_03_forzahorizon6
+- **Watch:** https://www.youtube.com/watch?v=zYa2akxwY3o
+- **published: immediate**
 
----
+_No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
 
-## Voice Leaderboard
+### GG_04_crimsondesert
+- **Watch:** https://www.youtube.com/watch?v=WshoealNZkA
+- **published: immediate**
 
-| Voice | Videos | Avg view % | Avg views |
-|---|---|---|---|
-| Unknown _(< 3 videos — not enough data)_ | 2 | 0.0% | 0 |
+_No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
 
-_Need ≥ 3 videos per voice for reliable comparisons._
-_Switch all new videos to a voice once it leads by 15+ avg view % with ≥5 videos._
+### GG_05_directive8020
+- **Watch:** https://www.youtube.com/watch?v=EQRCSnFpKD4
+- **published: immediate**
+
+_No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
+
+### GG_06_legobatmanlegacy
+- **Watch:** https://www.youtube.com/watch?v=_qcEm-Xh-B8
+- **published: immediate**
+
+_No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
+
+### GG_07_marathon
+- **Watch:** https://www.youtube.com/watch?v=uqrQPKECFoc
+- **published: immediate**
+
+_No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
+
+### GG_08_godofwarsonsofsparta
+- **Watch:** https://www.youtube.com/watch?v=aLXsnPU0Dlg
+- **published: immediate**
+
+_No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
+
+### GG_09_southofmidnight
+- **Watch:** https://www.youtube.com/watch?v=O2xvTjACaMc
+- **published: immediate**
+
+_No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
+
+### GG_10_ufc6
+- **Watch:** https://www.youtube.com/watch?v=XXtFxuaiQdc
+- **published: immediate**
+
+_No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
 
 ---
 

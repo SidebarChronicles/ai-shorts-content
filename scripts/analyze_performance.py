@@ -298,6 +298,143 @@ def interpret(avg_pct: float, engagement: float, subs_gained: int, views: int, c
     return notes
 
 
+# ---------------------------------------------------------------------------
+# YPP eligibility tracker
+# ---------------------------------------------------------------------------
+
+# YouTube Partner Program thresholds (2026)
+YPP_EARLY_SUBS = 500        # Early access tier (Super Thanks, memberships)
+YPP_EARLY_SHORTS_90D = 3_000_000
+YPP_EARLY_WATCH_HRS = 3_000
+YPP_FULL_SUBS = 1_000       # Full ad revenue tier
+YPP_FULL_SHORTS_90D = 10_000_000
+YPP_FULL_WATCH_HRS = 4_000
+
+
+def fetch_total_subscribers(creds) -> int | None:
+    """Total channel subscribers via YouTube Data API channels.list. Returns None on failure."""
+    try:
+        yt = build("youtube", "v3", credentials=creds, cache_discovery=False)
+        resp = yt.channels().list(part="statistics", mine=True).execute()
+        items = resp.get("items") or []
+        if not items:
+            return None
+        return int(items[0]["statistics"].get("subscriberCount", 0))
+    except (HttpError, KeyError, ValueError, TypeError):
+        return None
+
+
+def fetch_shorts_views_90d(yta) -> tuple[int, int]:
+    """Returns (shorts_views, watch_hours) over the trailing 90 days.
+
+    Attempts to filter by Shorts via creatorContentType. Falls back to all
+    views if the dimension isn't available for this channel.
+    """
+    today = date.today()
+    start = (today - timedelta(days=90)).isoformat()
+    end = today.isoformat()
+
+    # First try with creatorContentType filter for Shorts only
+    try:
+        resp = yta.reports().query(
+            ids="channel==MINE",
+            startDate=start,
+            endDate=end,
+            metrics="views,estimatedMinutesWatched",
+            filters="creatorContentType==SHORTS",
+        ).execute()
+        rows = resp.get("rows") or []
+        if rows:
+            views = int(rows[0][0])
+            watch_hrs = int(float(rows[0][1]) / 60.0)
+            return views, watch_hrs
+    except HttpError:
+        pass
+
+    # Fallback: total channel views (over-counts but better than nothing)
+    try:
+        resp = yta.reports().query(
+            ids="channel==MINE",
+            startDate=start,
+            endDate=end,
+            metrics="views,estimatedMinutesWatched",
+        ).execute()
+        rows = resp.get("rows") or []
+        if rows:
+            views = int(rows[0][0])
+            watch_hrs = int(float(rows[0][1]) / 60.0)
+            return views, watch_hrs
+    except HttpError:
+        pass
+
+    return 0, 0
+
+
+def progress_bar(current: int, target: int, width: int = 20) -> str:
+    """ASCII progress bar showing current vs target."""
+    if target <= 0:
+        return "[" + " " * width + "]"
+    pct = min(current / target, 1.0)
+    filled = int(round(pct * width))
+    return "[" + "█" * filled + "·" * (width - filled) + f"] {pct*100:.1f}%"
+
+
+def ypp_section(subs: int | None, shorts_views_90d: int, watch_hrs_90d: int) -> str:
+    """Render the YPP eligibility tracker section."""
+    if subs is None:
+        subs_line = "_(subscriber count unavailable — needs youtube.readonly scope)_"
+    else:
+        subs_line = f"**{subs:,}** subscribers"
+
+    out = [
+        "## YouTube Partner Program eligibility",
+        "",
+        f"_{subs_line}_",
+        "",
+    ]
+
+    # Early access tier (500 / 3M Shorts views OR 3k watch hrs)
+    out.append("### Early Access tier (Super Thanks, channel memberships)")
+    out.append("```")
+    if subs is not None:
+        out.append(f"  Subscribers:  {progress_bar(subs, YPP_EARLY_SUBS)}  {subs:,} / {YPP_EARLY_SUBS:,}")
+    out.append(f"  Shorts views: {progress_bar(shorts_views_90d, YPP_EARLY_SHORTS_90D)}  "
+               f"{shorts_views_90d:,} / {YPP_EARLY_SHORTS_90D:,} (90d)")
+    out.append(f"  Watch hours:  {progress_bar(watch_hrs_90d, YPP_EARLY_WATCH_HRS)}  "
+               f"{watch_hrs_90d:,} / {YPP_EARLY_WATCH_HRS:,} (90d)")
+    out.append("```")
+    out.append("")
+
+    # Full ad revenue tier (1k / 10M Shorts views OR 4k watch hrs)
+    out.append("### Full YPP — Ad Revenue tier")
+    out.append("```")
+    if subs is not None:
+        out.append(f"  Subscribers:  {progress_bar(subs, YPP_FULL_SUBS)}  {subs:,} / {YPP_FULL_SUBS:,}")
+    out.append(f"  Shorts views: {progress_bar(shorts_views_90d, YPP_FULL_SHORTS_90D)}  "
+               f"{shorts_views_90d:,} / {YPP_FULL_SHORTS_90D:,} (90d)")
+    out.append(f"  Watch hours:  {progress_bar(watch_hrs_90d, YPP_FULL_WATCH_HRS)}  "
+               f"{watch_hrs_90d:,} / {YPP_FULL_WATCH_HRS:,} (12mo)")
+    out.append("```")
+
+    # Status assessment
+    eligible_early = (subs or 0) >= YPP_EARLY_SUBS and (
+        shorts_views_90d >= YPP_EARLY_SHORTS_90D or watch_hrs_90d >= YPP_EARLY_WATCH_HRS
+    )
+    eligible_full = (subs or 0) >= YPP_FULL_SUBS and (
+        shorts_views_90d >= YPP_FULL_SHORTS_90D or watch_hrs_90d >= YPP_FULL_WATCH_HRS
+    )
+    out.append("")
+    if eligible_full:
+        out.append("✅ **Full YPP eligibility met** — apply now in YouTube Studio")
+    elif eligible_early:
+        out.append("✅ **Early Access tier eligible** — apply for Super Thanks + memberships")
+    else:
+        out.append("⏳ Building toward eligibility — focus on consistent uploads + retention")
+    out.append("")
+
+    return "\n".join(out)
+
+
 def channel_section(rollup: dict, span_days: int) -> str:
     if "_no_data" in rollup:
         return "## Channel rollup\n\n_No channel-level data yet._\n"
@@ -384,6 +521,11 @@ def main() -> None:
     creds = load_credentials()
     yt_analytics = build("youtubeAnalytics", "v2", credentials=creds, cache_discovery=False)
 
+    # YPP eligibility tracker — channel-level
+    print("Fetching YPP eligibility metrics…")
+    total_subs = fetch_total_subscribers(creds)
+    shorts_views_90d, watch_hrs_90d = fetch_shorts_views_90d(yt_analytics)
+
     posted_path = GAME_POSTED_PATH if args.game else POSTED_PATH
     posted = load_posted(posted_path)
     if args.case:
@@ -403,6 +545,15 @@ def main() -> None:
     voice_data: dict[str, list[tuple[float, float]]] = {}
     raw_dump = {"generated_at": datetime.now(timezone.utc).isoformat(),
                 "window": {"start": start, "end": end},
+                "ypp": {"subscribers": total_subs,
+                        "shorts_views_90d": shorts_views_90d,
+                        "watch_hours_90d": watch_hrs_90d,
+                        "thresholds": {"early": {"subs": YPP_EARLY_SUBS,
+                                                 "shorts_views_90d": YPP_EARLY_SHORTS_90D,
+                                                 "watch_hours": YPP_EARLY_WATCH_HRS},
+                                       "full":  {"subs": YPP_FULL_SUBS,
+                                                 "shorts_views_90d": YPP_FULL_SHORTS_90D,
+                                                 "watch_hours": YPP_FULL_WATCH_HRS}}},
                 "channel_rollup": rollup,
                 "videos": {}}
     for case_id, info in sorted(posted.items()):
@@ -430,6 +581,7 @@ def main() -> None:
           "",
           f"Window: **{start} → {end}** ({args.days} days)",
           "",
+          ypp_section(total_subs, shorts_views_90d, watch_hrs_90d),
           channel_section(rollup, args.days),
           "## Per-video",
           ""]
