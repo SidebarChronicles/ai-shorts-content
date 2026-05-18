@@ -1,6 +1,6 @@
 # UM_01_dbcooper — The D.B. Cooper Hijacking (1971)
 
-**Status:** QUEUED
+**Status:** DELIVERED
 **Era:** November 1971
 **Location:** Pacific Northwest, USA
 **Source:** FBI case files (NORJAK), publicly available since the case was closed in 2016

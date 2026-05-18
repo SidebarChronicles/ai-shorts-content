@@ -1,6 +1,6 @@
 # TX_01_anticipatedgamesholiday2026 — Top 5 Most Anticipated Games Holiday 2026
 
-**Status:** QUEUED
+**Status:** DELIVERED
 **Format:** Top 5 countdown
 **Theme:** Games — releasing Oct-Dec 2026
 **Voice:** Charlie (IKne3meq5aSn9XLyUdCD)

@@ -1,6 +1,6 @@
 # MY_01_prometheusfire — Prometheus Stole Fire from the Gods
 
-**Status:** QUEUED
+**Status:** DELIVERED
 **Tradition:** Greek
 **Source:** Hesiod's Theogony and Works and Days
 **Voice:** Brian (nPczCjzI2devNBz1zQrb)

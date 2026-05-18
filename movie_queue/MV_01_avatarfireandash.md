@@ -1,6 +1,6 @@
 # MV_01_avatarfireandash — Avatar: Fire and Ash (2025)
 
-**Status:** QUEUED
+**Status:** DELIVERED
 **Score:** 9/10
 **TMDB ID:** 83533
 **YouTube Trailer URL:** https://www.youtube.com/watch?v=Ma1x7ikpid8
