@@ -60,5 +60,11 @@ output/scripts/*/timeline_baked.txt
 output/scripts/*/preview_frames/
 output/qa_frames/
 
+# YOLOv8 weights (auto-downloaded by scripts/smart_crop_yolo.py)
+yolov8*.pt
+*.engine
+*.onnx
+assets/models/
+
 # macOS noise
 .DS_Store

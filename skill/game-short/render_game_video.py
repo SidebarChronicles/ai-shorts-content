@@ -44,7 +44,12 @@ PILLARBOX_BG_DARKNESS = 0.75     # for pillarbox blur background: lighter so sea
 # Crop strategy for converting 16:9 source to 9:16 portrait.
 #  - "pillarbox_blur": full 16:9 frame fits centered, blurred copy fills top/bottom (no content lost — recommended)
 #  - "center_crop":    legacy behavior; scales to fill and center-crops (loses left+right ~33% each)
+#  - "smart_crop":     YOLOv8 subject-tracking crop; follows the dominant subject (person/vehicle).
+#                      Requires `ultralytics + opencv-python` installed (see requirements_full.txt).
+#                      ~20-40% slower than pillarbox; falls back to pillarbox if dependencies missing.
 DEFAULT_CROP_STRATEGY = "pillarbox_blur"
+SMART_CROP_SAMPLE_FPS = 5.0
+SMART_CROP_SMOOTH_SECONDS = 1.0
 
 
 # ---------------------------------------------------------------------------
@@ -127,11 +132,60 @@ def process_clip_to_portrait(clip_path: Path, out_path: Path,
 
     - pillarbox_blur: full source frame centered in middle band, blurred copy fills top/bottom
     - center_crop:    scale to fill height, center-crop (loses ~33% left + ~33% right of frame)
+    - smart_crop:     YOLOv8 subject-tracking crop; falls back to pillarbox if deps unavailable
     """
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Optional final color-grade tail applied to the combined frame
     grade_tail = f",{color_grade}" if color_grade else ""
+
+    if crop_strategy == "smart_crop":
+        # Two-stage: smart_crop_yolo.py writes a 1080x1920 pre-cropped intermediate,
+        # then a thin FFmpeg pass re-encodes with libx264 + optional color grade.
+        # If ultralytics is missing OR detection fails, fall back to pillarbox_blur.
+        proj_root = Path(__file__).resolve().parent.parent.parent
+        smart_script = proj_root / "scripts" / "smart_crop_yolo.py"
+        if not smart_script.exists():
+            print(f"  [smart_crop] script not found at {smart_script}; falling back to pillarbox_blur")
+            return process_clip_to_portrait(clip_path, out_path, game_title, platform_label,
+                                            show_title, dry_run, "pillarbox_blur", color_grade)
+        # Prefer the upload venv's Python since ultralytics is installed there
+        venv_py = proj_root / ".venv-upload" / "bin" / "python"
+        python_exe = str(venv_py) if venv_py.exists() else sys.executable
+        if dry_run:
+            print(f"  [dry-run] Would run: smart_crop_yolo.py --input {clip_path.name} → {out_path.name}")
+            return
+        smart_intermediate = out_path.with_suffix(".smart_raw.mp4")
+        smart_result = subprocess.run(
+            [python_exe, str(smart_script),
+             "--input", str(clip_path),
+             "--output", str(smart_intermediate),
+             "--sample-fps", str(SMART_CROP_SAMPLE_FPS),
+             "--smooth-window", str(SMART_CROP_SMOOTH_SECONDS),
+             "--quiet"],
+            capture_output=True, text=True, timeout=600,
+        )
+        if smart_result.returncode != 0:
+            tail = (smart_result.stderr or smart_result.stdout)[-300:]
+            print(f"  [smart_crop] failed on {clip_path.name}; falling back to pillarbox_blur\n     {tail}")
+            smart_intermediate.unlink(missing_ok=True)
+            return process_clip_to_portrait(clip_path, out_path, game_title, platform_label,
+                                            show_title, dry_run, "pillarbox_blur", color_grade)
+        # Re-encode with libx264 + optional color grade (intermediate is mp4v from OpenCV)
+        vf = f"format=yuv420p{grade_tail}"
+        cmd = [
+            "ffmpeg", "-y",
+            "-i", str(smart_intermediate),
+            "-vf", vf,
+            "-c:v", "libx264", "-preset", "fast", "-crf", "22",
+            "-an",
+            str(out_path),
+        ]
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+        smart_intermediate.unlink(missing_ok=True)
+        if result.returncode != 0:
+            sys.exit(f"ERROR: smart_crop re-encode failed for {clip_path.name}:\n{result.stderr[-500:]}")
+        return
 
     if crop_strategy == "pillarbox_blur":
         # Filter graph:
@@ -255,9 +309,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Render portrait clips and karaoke captions for a game short.")
     parser.add_argument("config", help="Path to game_config.json")
     parser.add_argument("--dry-run", action="store_true", help="Show steps without running FFmpeg")
-    parser.add_argument("--crop", choices=["pillarbox_blur", "center_crop"],
+    parser.add_argument("--crop", choices=["pillarbox_blur", "center_crop", "smart_crop"],
                         default=DEFAULT_CROP_STRATEGY,
-                        help="How to fit 16:9 source into 9:16 portrait (default: pillarbox_blur — keeps full frame visible)")
+                        help="How to fit 16:9 source into 9:16 portrait. "
+                             "pillarbox_blur (default): full frame + blurred bg, no content lost. "
+                             "center_crop: scale + center-crop, ~33% loss each side. "
+                             "smart_crop: YOLOv8 subject-tracking, follows the action (needs ultralytics + opencv-python)")
     args = parser.parse_args()
 
     config_path = Path(args.config)

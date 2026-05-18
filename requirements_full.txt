@@ -18,3 +18,10 @@ anthropic>=0.40.0
 
 # Smoke tests (pure helpers — no API mocks)
 pytest>=7.0.0
+
+# Tier 3.3: YOLOv8 smart-crop for trailers (smart_crop_yolo.py)
+# ~2GB total install with model weights. Only loaded when --crop smart_crop
+# is passed to render_game_video.py; default pillarbox path still works
+# without these installed.
+ultralytics>=8.1.0
+opencv-python>=4.9.0
