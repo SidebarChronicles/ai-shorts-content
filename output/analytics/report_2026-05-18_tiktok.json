@@ -1,0 +1,40 @@
+{
+  "generated_at": "2026-05-18T23:27:19+00:00",
+  "window": {
+    "start": "2026-04-18T23:27:19.210866+00:00",
+    "end": "2026-05-18T23:27:19.210866+00:00"
+  },
+  "source": "postfast",
+  "tiktok_social_media_id": "9c922596-fb12-4d7c-bd6d-7208e3e6b84c",
+  "totals": null,
+  "videos": {
+    "SY_01_S_lakecabin": {
+      "posted_at": "2026-05-18T17:32:45+00:00",
+      "videos_dir": "output/story_videos",
+      "match_confidence": "no_match",
+      "platform_post_id": null,
+      "postfast_post_id": null,
+      "metrics": null,
+      "tiktok_retention_pct": null
+    },
+    "SY_02_S_lakecabin": {
+      "posted_at": "2026-05-18T20:59:57+00:00",
+      "videos_dir": "output/story_videos",
+      "match_confidence": "high",
+      "platform_post_id": "7641339565814451469",
+      "postfast_post_id": "957b4917-6a66-428d-8047-18575b2985c1",
+      "metrics": null,
+      "tiktok_retention_pct": null
+    },
+    "SY_03_R_neighborlawn": {
+      "posted_at": "2026-05-18T17:32:45+00:00",
+      "videos_dir": "output/story_videos",
+      "match_confidence": "no_match",
+      "platform_post_id": null,
+      "postfast_post_id": null,
+      "metrics": null,
+      "tiktok_retention_pct": null
+    }
+  },
+  "unmatched_postfast_posts": []
+}

@@ -19,8 +19,10 @@ echo "── Step 0: daily hygiene ──"
 python scripts/morning_cleanup.py
 
 echo ""
-echo "── Step 1: pull yesterday's analytics ──"
-python scripts/analyze_performance.py --days 1 || echo "(no analytics yet — non-blocking)"
+echo "── Step 1: pull yesterday's analytics (YT + TT in parallel) ──"
+(python scripts/analyze_performance.py --days 1 || echo "(YT analytics non-blocking)") &
+(python scripts/analyze_tiktok_performance.py --days 7 || echo "(TT analytics non-blocking)") &
+wait
 
 echo ""
 echo "── Step 2a: surface tweaks for today ──"
