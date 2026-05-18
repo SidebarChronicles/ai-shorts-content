@@ -374,6 +374,13 @@ def main() -> None:
                              "ISO datetime (e.g. '2026-05-20T18:00:00') or omit for auto next-slot.")
     parser.add_argument("--dry-run", action="store_true",
                         help="Show the upload plan without contacting YouTube.")
+    parser.add_argument("--require-gate", action="store_true",
+                        help="Refuse to upload until the case's TikTok gate is OPEN "
+                             "(per the v2 TikTok-first strategy). Auto-enabled for non-legacy "
+                             "case IDs (anything not starting with a digit). See "
+                             "scripts/cross_post_status.py --gate.")
+    parser.add_argument("--bypass-gate", action="store_true",
+                        help="Override --require-gate; force upload even if gate is not open.")
     args = parser.parse_args()
 
     # Resolve videos directory and posted tracking file
@@ -407,11 +414,43 @@ def main() -> None:
     else:
         case_id = resolve_case(args.case, videos_dir)
 
+    # v2 TikTok-first gate: non-legacy cases must have tiktok_gate=="open" before YouTube upload.
+    # Auto-enabled by case_id prefix (non-digit → needs gate); --require-gate also enables it.
+    # --bypass-gate explicitly overrides for emergency manual uploads.
+    first_part = case_id.split("_", 1)[0]
+    is_legacy = first_part.isdigit()
+    needs_gate_check = (args.require_gate or not is_legacy) and not args.bypass_gate
+    if needs_gate_check:
+        gate_state = _read_tiktok_gate(case_id)
+        if gate_state != "open":
+            print(f"  ⏸ Skipping {case_id}: TikTok gate state is '{gate_state}' (need 'open').")
+            print(f"    After 48h on TikTok with ≥30% watch-through:")
+            print(f"      python3 scripts/cross_post_status.py --gate {case_id} open <retention_pct>")
+            print(f"    To force upload anyway:")
+            print(f"      python3 scripts/upload_to_youtube.py --case {case_id} --bypass-gate")
+            sys.exit(0)  # Exit cleanly — the routine treats this as "deferred", not a failure
+
     if args.schedule:
         publish_at = parse_publish_at(args.schedule) if args.schedule != "auto" else compute_next_slot()
     else:
         publish_at = None  # publish immediately
     upload_one(case_id, publish_at, args.dry_run, videos_dir, posted_path, category_id)
+
+
+def _read_tiktok_gate(case_id: str) -> str:
+    """Read the TikTok gate state for a case from output/cross_post_status.json.
+    Returns 'pending' (default), 'open', 'closed', 'exempt', or 'missing' if not in tracker."""
+    status_file = PROJECT_ROOT / "output" / "cross_post_status.json"
+    if not status_file.exists():
+        return "missing"
+    try:
+        data = json.loads(status_file.read_text())
+    except (json.JSONDecodeError, OSError):
+        return "missing"
+    entry = data.get(case_id)
+    if not entry:
+        return "missing"
+    return entry.get("tiktok_gate", "pending")
 
 
 if __name__ == "__main__":

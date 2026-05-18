@@ -2,132 +2,184 @@
   "01_gothferrari": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "exempt",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/videos",
     "youtube": "2026-05-18T08:07:06.310626+00:00"
   },
   "02_ransomware_negotiator": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "exempt",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/videos",
     "youtube": "2026-05-17T21:00:00+00:00"
   },
   "03_fugitive_crypto_scam": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "exempt",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/videos",
     "youtube": "2026-05-17T21:00:00+00:00"
   },
   "04_cargo_heist": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "exempt",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/videos",
     "youtube": "2026-05-18T08:07:08.720845+00:00"
   },
   "05_nfl_medicare_fraud": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "exempt",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/videos",
     "youtube": "2026-05-18T08:07:10.931425+00:00"
   },
   "06_genetic_testing_fraud": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "exempt",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/videos",
     "youtube": "2026-05-18T08:07:13.069328+00:00"
   },
   "GG_01_subnautica2": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/game_videos",
     "youtube": "2026-05-18T11:10:30.753152+00:00"
   },
   "GG_02_007firstlight": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/game_videos",
     "youtube": "2026-05-18T11:10:34.734063+00:00"
   },
   "GG_03_forzahorizon6": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/game_videos",
     "youtube": "2026-05-18T11:10:38.226076+00:00"
   },
   "GG_04_crimsondesert": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/game_videos",
     "youtube": "2026-05-18T11:10:42.417465+00:00"
   },
   "GG_05_directive8020": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/game_videos",
     "youtube": "2026-05-18T11:10:45.037074+00:00"
   },
   "GG_06_legobatmanlegacy": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/game_videos",
     "youtube": "2026-05-18T11:10:49.349587+00:00"
   },
   "GG_07_marathon": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/game_videos",
     "youtube": "2026-05-18T11:10:52.561965+00:00"
   },
   "GG_08_godofwarsonsofsparta": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/game_videos",
     "youtube": "2026-05-18T11:10:55.281399+00:00"
   },
   "GG_09_southofmidnight": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/game_videos",
     "youtube": "2026-05-18T11:10:58.594806+00:00"
   },
   "GG_10_ufc6": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/game_videos",
     "youtube": "2026-05-18T11:11:04.395000+00:00"
   },
   "MV_01_avatarfireandash": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/movie_videos",
     "youtube": "2026-05-18T11:43:49.866428+00:00"
   },
   "MY_01_prometheusfire": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/mythology_videos",
     "youtube": "2026-05-18T11:43:52.646539+00:00"
   },
   "SY_01_S_lakecabin": {
     "instagram": "2026-05-18T17:32:44+00:00",
     "tiktok": "2026-05-18T17:32:45+00:00",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/story_videos",
     "youtube": "2026-05-18T16:31:07.766640+00:00"
+  },
+  "SY_02_S_lakecabin": {
+    "instagram": null,
+    "tiktok": null,
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
+    "videos_dir": "output/story_videos",
+    "youtube": null
   },
   "SY_03_R_neighborlawn": {
     "instagram": "2026-05-18T17:32:45+00:00",
     "tiktok": "2026-05-18T17:32:45+00:00",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/story_videos",
     "youtube": "2026-05-18T16:31:18.372769+00:00"
   },
   "TX_01_anticipatedgamesholiday2026": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/topx_videos",
     "youtube": "2026-05-18T11:43:57.884461+00:00"
   },
   "UM_01_dbcooper": {
     "instagram": "__skipped__",
     "tiktok": "__skipped__",
+    "tiktok_gate": "pending",
+    "tiktok_retention_pct": null,
     "videos_dir": "output/mystery_videos",
     "youtube": "2026-05-18T11:43:55.047428+00:00"
   }

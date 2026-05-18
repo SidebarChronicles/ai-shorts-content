@@ -114,6 +114,35 @@ Detail: `docs/AI_STORIES_PLAYBOOK.md`.
 
 ---
 
+## v2 strategy (current — May 18 2026)
+
+After SY_01/SY_03 went live and we observed:
+- TikTok: 100-500 view lottery floor + ~4-sec avg watch time (too low)
+- Instagram: similar lottery distribution
+- YouTube: 0 views (normal for 0-sub channel)
+
+The strategy pivoted to **TikTok-first with a YouTube quality gate**:
+
+- TikTok: EVERY video uploaded (discovery + monetization frontline)
+- Instagram: EVERY video uploaded (brand layer)
+- YouTube: GATED — only uploaded if `tiktok_gate == "open"` (≥30% TikTok 48h watch-through). Default for non-legacy case_ids is `pending`.
+
+Revenue paths reordered around what actually fits AI-narrative content:
+
+1. **TikTok Creator Rewards** (10K followers + 100K views/30d → 30-60 days, $30-170/mo)
+2. **YouTube YPP Early Access** (500 subs + 3M views/90d → 90+ days, $30-100/mo)
+3. **YouTube YPP Full** (1K subs + 10M views/90d → 90-180+ days, $60-300+/mo)
+4. **Brand deals** (5K+ followers → 60-120 days, $50-500 variable)
+5. **Patreon/Ko-fi** (500+ fans → 60-90 days, $5-20/supporter)
+
+**Dropped from earlier exploration:** TikTok Shop affiliate, Amazon Associates, per-vertical product CTAs. AI-narrative content doesn't fit click-driven affiliate monetization. Every video's CTA now drives FOLLOWS (per `~/.claude/scheduled-tasks/.../SKILL.md` STEP 3 CTA table).
+
+**Costs:** ~$67/mo (EL $22 + Replicate ~$45). Realistic break-even = 60-90 days. Channel in "research budget" mode until Phase 4.
+
+See `docs/RELEASE_SCHEDULE.md` for the full phase structure, `docs/MONETIZATION.md` for unlocked revenue paths.
+
+---
+
 ## What's working (verified end-to-end as of 12:11 PM ET, May 18)
 
 - ✅ Cron firing 4×/day, enabled

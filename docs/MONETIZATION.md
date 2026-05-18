@@ -1,140 +1,85 @@
-# Monetization Playbook
+# Monetization (v2 — May 18 2026)
 
-The single-page reference for getting this channel sustainably profitable. Read top-to-bottom once, then check the weekly + monthly action sections regularly.
+> **Honest current state:** $0 revenue, ~$67/mo costs (EL $22 + Replicate ~$45). Realistic break-even = 60-90 days. Channel is in pre-revenue "research budget" mode until Phase 4.
 
----
+## Why no affiliate links
 
-## YouTube Partner Program thresholds (2026)
+We explored TikTok Shop affiliate + Amazon Associates in earlier iterations. **Confirmed bad fit for AI-narrative shorts.** The videos are 40-50s narrative stories (POV survival, Reddit dramatizations, horror). They don't naturally feature products. Forcing "🔗 my survival kit on Amazon" into a survival POV breaks immersion and signals "this is an ad" — which tanks the retention we're trying to build.
 
-YouTube splits YPP into two tiers:
+Affiliate-led monetization works for product-demo content (unboxings, "I bought this on TikTok"), not narrative content. We dropped that path.
 
-| Tier | Subscribers | Watch hours OR Shorts views | Unlocks |
+## What we DO monetize on (in priority order)
+
+| Path | Threshold to unlock | Realistic timeline | Expected $/month at threshold |
 |---|---|---|---|
-| **Early Access (fan funding)** | 500 | 3,000 watch hrs **OR** 3M Shorts views in 90d | Super Thanks, Super Chat, channel memberships |
-| **Full YPP (ad revenue)** | 1,000 | 4,000 watch hrs **OR** 10M Shorts views in 90d | Ad revenue + everything above |
+| **TikTok Creator Rewards Program** | 10K followers + 100K views/30d | 30-60 days | $30-170 |
+| **YouTube Shorts AdSense (YPP)** | 1K subs + 10M Shorts views/90d | 90-180+ days | $60-300+ |
+| **YouTube YPP Early Access** | 500 subs + 3M Shorts views/90d | 90+ days | $30-100 |
+| **Brand sponsorships (DM-driven)** | 5K+ followers in clear niche | 60-120 days | $50-500/deal, variable |
+| **Patreon / Ko-fi** | 500-1K engaged fans | 60-90 days | $5-20/supporter × N |
+| **Compilation channel revenue share** | Standout individual videos | 90+ days | Variable |
 
-Channel must also have 2-step verification, advanced features, and an AdSense account.
+All paths are **follower-driven**, not click-driven. That's why every video's CTA in v2 explicitly drives FOLLOWS:
 
-**Shorts ad revenue share:** Creator pool gets ~45% of attributed Shorts ad revenue, then split by share of engaged views. Music licensing eats 50% per track used (use ≤1 track and pick royalty-free).
+> Survival: "Day N+1 drops tomorrow — **follow so you don't miss it.**"
+> Horror: "Don't [verb] [object]. **Follow if you want more.**"
+> Reddit: "AITA? **Comment your verdict. Follow for daily AITAs.**"
 
----
+## Tracking
 
-## Reuse policy compliance (the demonetization landmine)
+Daily cost is auto-tracked by `output/elevenlabs_usage.json` + `output/replicate_usage.json`.
 
-YouTube renamed "Repetitious Content" → **"Inauthentic Content"** in July 2025 with enhanced detection. AI is fine; mass-produced templates aren't.
+Manual revenue entry once monetization unlocks:
+```bash
+# Once Creator Rewards starts paying out:
+python3 scripts/revenue_tracker.py --add tiktok_creator_rewards 12.50
+python3 scripts/revenue_tracker.py --add youtube_adsense 5.00
+python3 scripts/revenue_tracker.py --add brand_deal 250.00 --note "Audible sponsorship"
 
-### What's allowed
-- AI narration (ElevenLabs TTS) reading **original** scripts
-- AI-generated visuals
-- Trailers / clips from sources we have license to use (publisher-released game trailers, movie trailers from studio channels)
-- Stock images + Ken Burns motion
-- "Top X" lists where each item gets original commentary
+# Monthly summary:
+python3 scripts/revenue_tracker.py --monthly
 
-### What's NOT allowed (demonetization risk)
-- Raw uploads of someone else's video with TTS slapped over it
-- Identical-template videos churned at high volume (e.g., 50 videos using the same beat structure, same intro/outro, same visual style with only the topic swapped)
-- AI-generated voices impersonating specific real people
-- Copyright-claimed footage used beyond fair-use thresholds (typically <30s with substantial transformative commentary)
+# Cost vs revenue break-even check:
+python3 scripts/revenue_tracker.py --break-even-check
+```
 
-### Compliance levers we ship with
-| Lever | Where |
-|---|---|
-| Synthetic-content disclosure | `upload_to_youtube.py` sets this on every upload |
-| Original 4-beat scripts | Each video has its own hook/setup/standout/CTA — not template-filled |
-| Multiple verticals | Diversity protects against "this looks like a content farm" flags |
-| Per-vertical voice + visual style | Different ElevenLabs voices per niche reduce template signature |
+## YouTube AdSense compliance (still applies under v2)
 
-### Periodic compliance check (run weekly)
-1. Open YouTube Studio → Monetization
-2. Check for "Yellow $" icons (limited monetization) — investigate per video
-3. Check Copyright tab for any new claims
-4. Confirm the "Made for kids: False" flag is still set on every upload
-5. Check Channel violations under Settings → Channel → Advanced
+- ✅ AI-narration disclosure ("⚠ Narration in this video is AI-generated (ElevenLabs)") in every YouTube description
+- ✅ Music attribution ("🎵 Music: Kevin MacLeod — CC-BY 4.0") in every description
+- ✅ No reused content from other channels (all our scripts + visuals are original)
+- ✅ Original prose on Reddit dramatizations (no verbatim copying — see `docs/AI_STORIES_PLAYBOOK.md` § anti-plagiarism)
+- ✅ AI-content toggle enabled in YouTube Studio uploads (set per-video via API)
 
----
+Under YouTube's January 2026 "inauthentic content" enforcement: we're protected because (1) original scripts per video, (2) production variation across sub-genres, (3) reasonable cadence (8/day max, well below the 12+/day bot threshold), (4) human editorial review at phase transitions.
 
-## Affiliate program enrollment
+## TikTok AI-content compliance
 
-Week 1 priority — apply for all of these. Most approve in 7-14 days.
+TikTok requires the "AI-generated content" toggle on AI-narrated videos (since 2024). Set this manually per upload from the mobile app: More options → toggle "AI-generated content" ON. Skipping it can result in shadow-banning.
 
-| Program | Niches | Typical payout | Apply |
-|---|---|---|---|
-| Amazon Associates | Books, products mentioned in any vertical | 1-10% commission | [amazon.com/associates](https://affiliate-program.amazon.com/) |
-| Steam Curator Partner | Games | Wishlist credit only (no direct $) | [partner.steamgames.com](https://partner.steamgames.com/) |
-| Skillshare | Self-improvement, psychology, AI tools | $7/free trial + 30% recurring | [skillshare.com/affiliate](https://www.skillshare.com/affiliate) |
-| Brilliant | Psychology, science, math content | $30/sign-up | brilliant.org affiliate page |
-| ShareASale (master account) | Software, finance | Varies $30-$300 CPA | [shareasale.com](https://shareasale.com) |
-| Impact.com | Software, SaaS, fashion | Varies | [impact.com](https://impact.com) |
+## Cost ceiling (auto-guard)
 
-### Higher-tier programs (apply after 1k subs)
-- **NordVPN / Surfshark / ProtonVPN** — $30-100 CPA for tech/AI vertical
-- **Webull / Public / Robinhood** — $50-150 CPL for finance vertical
-- **Coursera / MasterClass** — recurring revenue share
+- ElevenLabs Creator tier: $22/mo (90k char soft-cap in `.channel_phase.json`)
+- Replicate: ~$45/mo projected at 8/day cadence (no hard cap; user-set $40 limit in Replicate dashboard recommended)
+- **Combined target: ≤$100/mo until break-even**
 
-### Description-template for monetized videos
-After hitting affiliates, every video description should include:
-- 1-2 contextual affiliate links (the product/book/service mentioned in the video)
-- Channel social links
-- Hashtags
-- Synthetic-content disclosure note
+If costs trend past $100/mo without proportional revenue, reduce production to 6/day (drop one fire) or trim Phase 1 vertical pool. Both are reversible.
 
----
+## When monetization unlocks — what to do
 
-## Revenue projection (Conservative path)
+**Day 30-60 (TikTok Creator Rewards eligibility):**
+1. Check follower + 30d view count via TikTok Studio
+2. Apply at https://www.tiktok.com/creator-academy/en/creator-rewards-program if eligible
+3. Approval typically within 7 days
+4. First payout ~30 days after approval
 
-Assumes Tier 1 niche expansion (Finance, Top X, Mythology, Mysteries) ships in May-June 2026 and adds 4 new videos/day on average to existing game + case output.
+**Day 90+ (YouTube YPP eligibility):**
+1. Check sub count + 90d Shorts views in YouTube Studio
+2. Apply via Studio → Monetization
+3. Review can take 1-30 days
+4. First AdSense payment when account reaches $100 threshold
 
-| Phase | Month | Subs | 90d Shorts views | Monthly ad rev | Affiliate | Sponsor | Monthly total |
-|---|---|---|---|---|---|---|---|
-| Phase 0 | May 2026 | 0-100 | 0-200k | $0 | $0 | $0 | $0 |
-| Phase 1 (Early YPP) | Jun 2026 | 500-1k | 1-3M | $0 (under full YPP) | $20-50 | $0 | ~$30 |
-| Phase 2 (Full YPP) | Jul 2026 | 1k-3k | 5-10M | $200-600 | $50-200 | $0 | ~$500 |
-| Phase 3 (Growth) | Aug 2026 | 3k-10k | 10-15M | $500-2,000 | $200-500 | $0-500 | ~$2,000 |
-| Phase 4 (Sponsorship) | Oct 2026 | 25k-50k | 15-30M | $2k-5k | $500-2k | $500-3k | ~$8,000 |
-| Phase 5 (Sustainability) | Q1 2027 | 100k+ | 30M+ | $5k-15k | $2k-5k | $3k-15k | ~$20,000+ |
-
-**Worst-case:** subtract 60% across the board if niches don't hit retention targets.
-
----
-
-## Sponsorship outreach (Week 4 onward)
-
-### Rate card per subscriber tier
-| Subs | Per-Shorts segment | Caveats |
-|---|---|---|
-| 10k | $500-2,000 | Sponsors typical discount 20-30% for faceless channels |
-| 100k | $1,000-5,000 | |
-| 1M+ | $10,000-50,000+ | |
-
-### Outreach email template (to be drafted Week 4)
-Pitch should include:
-- Channel link + niche fit
-- Top 3 video views/retention metrics
-- Audience demographics (when YouTube Studio surfaces it post-1k subs)
-- Proposed video integration format
-- Pricing tier (start mid-range, leave room to negotiate)
-
----
-
-## Monthly review checklist (run on the 1st of each month)
-
-- [ ] YPP eligibility tracker — distance from 500/3M (early) or 1k/10M (full)
-- [ ] Per-vertical RPM table — which is highest? Which is lowest?
-- [ ] Voice leaderboard — Adam vs Brian vs Daniel etc. — clear winner?
-- [ ] Niche commitment decisions — any niche that hit <50% of G2 targets after 10 videos should be cut
-- [ ] Affiliate revenue per program — any underperformers to drop?
-- [ ] New affiliate programs to apply to (based on top-performing niche)
-- [ ] Sponsor outreach queue (post-10k subs)
-- [ ] Compliance check — any new copyright claims or limited-monetization icons?
-
----
-
-## Quick-reference revenue math
-
-- **Shorts RPM benchmarks:** Finance $5-15, Psychology $7-13, AI Tools $3-9, Mythology $4-8, Mysteries $3-6, Top X $2-5, Movies $2-4, Games/Crime $0.03-0.12
-- **1M Shorts views at $0.10 RPM** = $100
-- **1M Shorts views at $5 RPM** = $5,000
-- **One $200 affiliate sale** = equivalent to ~2M Shorts views at the average gaming/crime RPM
-- **One $1k sponsorship** = equivalent to ~10M Shorts views at gaming RPM
-
-The math is brutal for gaming/crime alone. Affiliates and sponsors are how the channel becomes profitable below 1M monthly views.
+**Day 60+ (Brand deals, if niche traction):**
+1. Add "📧 [email] for brand inquiries" to TikTok + IG bios
+2. Maintain a one-pager media kit (channel niche, follower count, avg views, demographics)
+3. Respond to inbound DMs within 24h to maintain seriousness signal

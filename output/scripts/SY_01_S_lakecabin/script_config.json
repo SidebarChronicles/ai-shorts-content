@@ -1,0 +1,115 @@
+{
+  "_doc": "AI Story script (survival). This file scaffolds the 7-beat structure. The daily-shorts-pipeline routine fills in 'text', 'keywords', 'title', 'description' fields at production time, then runs check_script_structure.py to lint, then make_audio_elevenlabs.py + build_visuals_track.py.",
+  "audio_file": "assets/audio/narration_SY_01_S_lakecabin.mp3",
+  "beats": [
+    {
+      "keywords": [
+        "snowy cabin night",
+        "remote cabin blizzard"
+      ],
+      "label": "hook",
+      "max_seconds": 2.5,
+      "purpose_hint": "Hit Day N + escalation in \u226412 words",
+      "target_seconds": 0,
+      "text": "Day 1 of being snowed in. I'm not alone out here.",
+      "visual_style_hint": "wide establishing shot, urgency"
+    },
+    {
+      "keywords": [
+        "wood stove fire cabin",
+        "snowy cabin window storm"
+      ],
+      "label": "setup",
+      "max_seconds": 12,
+      "purpose_hint": "Frame what's happening at this moment",
+      "target_seconds": 3,
+      "text": "The storm hit Tuesday. By dawn the road was buried, the cell tower was dead, and the wood stove was my only heat.",
+      "visual_style_hint": "subject mid-action, environmental context"
+    },
+    {
+      "keywords": [
+        "splitting firewood ax winter",
+        "rural snow forest evergreen"
+      ],
+      "label": "build",
+      "max_seconds": 13,
+      "purpose_hint": "Add stakes \u2014 what makes today different",
+      "target_seconds": 15,
+      "text": "I rationed coffee. Split firewood. Three days, I thought. Wait it out. Then I went outside for more wood.",
+      "visual_style_hint": "tension shot, dutch angle, close detail"
+    },
+    {
+      "keywords": [
+        "fresh boot prints snow forest",
+        "footprints leading away cabin"
+      ],
+      "label": "mid_anchor",
+      "max_seconds": 5,
+      "purpose_hint": "Discovery, threat reveal, or escalation moment",
+      "target_seconds": 28,
+      "text": "And I saw them. Fresh boot prints in the snow. They weren't mine.",
+      "visual_style_hint": "HERO SHOT \u2014 Pika clip preferred, dramatic reveal"
+    },
+    {
+      "keywords": [
+        "large boot print snow detail",
+        "tracks in snow forest evergreen"
+      ],
+      "label": "expand",
+      "max_seconds": 12,
+      "purpose_hint": "What does this mean for tomorrow / survival",
+      "target_seconds": 33,
+      "text": "Size thirteen. I'm an eleven. And they led away from the cabin, which means at some point, someone was inside while I slept.",
+      "visual_style_hint": "subject reaction, planning, gear close-up"
+    },
+    {
+      "keywords": [
+        "man checking window cabin worried",
+        "interior cabin door lock"
+      ],
+      "label": "payoff",
+      "max_seconds": 10,
+      "purpose_hint": "Resolution beat OR cliffhanger for Day N+1",
+      "target_seconds": 45,
+      "text": "I'm checking every window, every lock, every closet. Nothing's missing. Nothing's been moved. They just wanted me to know.",
+      "visual_style_hint": "wide environmental shot, change of light"
+    },
+    {
+      "keywords": [
+        "snowed in cabin night dark",
+        "single light cabin storm"
+      ],
+      "label": "cta",
+      "max_seconds": 5,
+      "purpose_hint": "'Day N+1 tomorrow' \u2014 explicit numbered cliffhanger",
+      "target_seconds": 55,
+      "text": "Day 2 tomorrow. If I make it.",
+      "visual_style_hint": "fade-to-loop frame, same composition as hook"
+    }
+  ],
+  "case_id": "SY_01_S_lakecabin",
+  "case_title": "Day 1: I'm not alone out here",
+  "character_continuity_hint": "[Same protagonist across episodes. Default description: tall man late 30s, weathered face, dark hair, faded blue jacket, dirt-smudged. Include in every Flux prompt to maintain visual continuity. Override per-character in the queue entry's 'Protagonist:' field.]",
+  "clips_manifest": "output/scripts/SY_01_S_lakecabin/clips_manifest.json",
+  "color_grade_vertical": "story",
+  "description_lead": "Day 1 of being trapped at a remote cabin during a blizzard. Then he found the footprints.",
+  "game_id": "SY_01_S_lakecabin",
+  "hook_anti_patterns": [
+    "Hey guys",
+    "What's up",
+    "Today we're",
+    "So I",
+    "Imagine if"
+  ],
+  "hook_formula": "numbered_escalation",
+  "hook_template": "Day [N] of [scenario]. Today I [escalation in 5-7 words].",
+  "model_id": "eleven_turbo_v2",
+  "spoken_text": "Day 1 of being snowed in. I'm not alone out here. The storm hit Tuesday. By dawn the road was buried, the cell tower was dead, and the wood stove was my only heat. I rationed coffee. Split firewood. Three days, I thought. Wait it out. Then I went outside for more wood. And I saw them. Fresh boot prints in the snow. They weren't mine. Size thirteen. I'm an eleven. And they led away from the cabin, which means at some point, someone was inside while I slept. I'm checking every window, every lock, every closet. Nothing's missing. Nothing's been moved. They just wanted me to know. Day 2 tomorrow. If I make it.",
+  "subgenre": "survival",
+  "title": "Day 1: I'm not alone out here",
+  "vertical": "story",
+  "visual_palette": "muted earth tones, high contrast, slightly desaturated, single light source",
+  "voice_id": "IKne3meq5aSn9XLyUdCD",
+  "voice_name": "Charlie",
+  "voice_speed": 0.95
+}

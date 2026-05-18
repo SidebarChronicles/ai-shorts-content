@@ -100,11 +100,33 @@ def _now_iso() -> str:
 # ---------------------------------------------------------------------------
 
 def refresh_from_posted_ledgers(state: dict[str, dict]) -> int:
-    """Scan each videos_dir's _posted.json and ensure every YouTube-posted case
-    has a state entry. Returns count of newly-added cases."""
+    """Scan each videos_dir for (a) local MP4s ready for cross-posting + (b)
+    `_posted.json` for YouTube-confirmed uploads. Ensures every locally-rendered
+    case has a state entry with `tiktok_gate` defaulted appropriately.
+    Returns count of newly-added cases."""
     added = 0
     for rel in VIDEOS_DIRS:
         videos_dir = PROJECT_ROOT / rel
+        if not videos_dir.exists():
+            continue
+
+        # Pass 1: local MP4s (videos that exist on disk, regardless of upload state)
+        for mp4 in sorted(videos_dir.glob("*.mp4")):
+            case_id = mp4.stem
+            if case_id in state:
+                continue  # already tracked
+            gate_initial = "exempt" if not needs_gate(case_id) else TIKTOK_GATE_DEFAULT
+            state[case_id] = {
+                "videos_dir": rel,
+                "youtube":    None,   # filled in by pass 2 if uploaded
+                "instagram":  None,
+                "tiktok":     None,
+                "tiktok_retention_pct": None,
+                "tiktok_gate": gate_initial,
+            }
+            added += 1
+
+        # Pass 2: _posted.json (back-fills YouTube upload timestamps)
         posted_path = videos_dir / "_posted.json"
         if not posted_path.exists():
             continue
@@ -112,22 +134,34 @@ def refresh_from_posted_ledgers(state: dict[str, dict]) -> int:
             posted = json.loads(posted_path.read_text())
         except json.JSONDecodeError:
             continue
-        # _posted.json shape varies slightly per vertical; both common shapes:
-        #   {"cases": {"SY_01": {...}}, ...}  OR  {"SY_01": {"video_id": ...}, ...}
         cases = posted.get("cases") if isinstance(posted, dict) and "cases" in posted else posted
         if not isinstance(cases, dict):
             continue
         for case_id, info in cases.items():
-            if case_id in state:
-                # Already tracked; keep IG/TT timestamps intact
+            # If we already added the case in Pass 1, just back-fill the YouTube timestamp
+            if case_id in state and not state[case_id].get("youtube"):
+                state[case_id]["youtube"] = (
+                    info.get("uploaded_at") or info.get("published_at") or info.get("posted_at") or _now_iso()
+                )
                 continue
+            if case_id in state:
+                continue  # already complete
+            # Edge case: _posted.json mentions a case whose MP4 has been deleted locally
+            gate_initial = "exempt" if not needs_gate(case_id) else TIKTOK_GATE_DEFAULT
             state[case_id] = {
                 "videos_dir": rel,
                 "youtube":    info.get("uploaded_at") or info.get("published_at") or info.get("posted_at") or _now_iso(),
                 "instagram":  None,
                 "tiktok":     None,
+                "tiktok_retention_pct": None,
+                "tiktok_gate": gate_initial,
             }
             added += 1
+    # Back-fill: any existing entries that predate the gate fields
+    for case_id, info in state.items():
+        if "tiktok_gate" not in info:
+            info["tiktok_gate"] = "exempt" if not needs_gate(case_id) else TIKTOK_GATE_DEFAULT
+            info["tiktok_retention_pct"] = None
     return added
 
 
@@ -162,6 +196,22 @@ def cmd_list(state: dict[str, dict]) -> None:
 
 SKIPPED_MARKER = "__skipped__"  # special value in a platform field meaning "intentionally not cross-posting"
 
+# TikTok-first gate (v2 strategy, May 18 2026):
+# A non-legacy video is "gated" on YouTube until it shows ≥30% watch-through on
+# TikTok after 48h. Cases get tiktok_gate="pending" by default on first track,
+# user manually sets to "open" or "closed" via --gate after eyeballing TT analytics.
+TIKTOK_GATE_DEFAULT = "pending"
+TIKTOK_GATE_THRESHOLD_PCT = 30.0
+# Legacy case_id prefixes that DON'T need the gate (uploaded pre-v2 strategy)
+LEGACY_GATE_EXEMPT_PREFIXES = ()  # numeric-prefix cases ("01_...") covered by .isdigit() check below
+
+
+def needs_gate(case_id: str) -> bool:
+    """Non-legacy cases (any non-numeric prefix) need the TikTok gate before YouTube upload."""
+    # Numeric prefix = legacy true-crime case ("01_gothferrari" etc.)
+    first_part = case_id.split("_", 1)[0]
+    return not first_part.isdigit()
+
 
 def cmd_pending(state: dict[str, dict], platform_filter: str | None = None) -> None:
     """Show all cases pending on IG or TT (or both). Skipped cases excluded."""
@@ -180,6 +230,79 @@ def cmd_pending(state: dict[str, dict], platform_filter: str | None = None) -> N
     print(f"  {'-'*40}  -----------")
     for case_id, missing in pending:
         print(f"  {case_id:<40}  {', '.join(missing)}")
+
+
+def cmd_gate(state: dict[str, dict], case_id: str, decision: str,
+             retention_pct: float | None = None) -> None:
+    """Set the TikTok gate state after the 48h retention eyeball check.
+
+    decision: "open" (≥30% watch-through → safe to upload to YouTube)
+              "closed" (<30% → don't upload to YouTube)
+              "pending" (revert to default)
+    retention_pct: optional, stores the actual TT watch-through % you observed
+    """
+    if case_id not in state:
+        sys.exit(f"ERROR: case '{case_id}' not in tracker. Run --refresh.")
+    if decision not in ("open", "closed", "pending"):
+        sys.exit(f"ERROR: gate decision must be open|closed|pending (got {decision!r})")
+    info = state[case_id]
+    info["tiktok_gate"] = decision
+    if retention_pct is not None:
+        info["tiktok_retention_pct"] = retention_pct
+    save_status(state)
+    pct_str = f" ({retention_pct:.1f}% retention)" if retention_pct is not None else ""
+    print(f"  ✓ {case_id} → gate={decision}{pct_str}")
+    if decision == "open" and not info.get("youtube"):
+        print(f"    Next: python3 scripts/upload_to_youtube.py --case {case_id} --videos-dir {info['videos_dir']} --require-gate")
+    elif decision == "closed":
+        print(f"    YouTube upload blocked for {case_id} (TikTok retention below threshold)")
+
+
+def cmd_ready_for_youtube(state: dict[str, dict]) -> None:
+    """List cases where the TikTok gate is OPEN but YouTube hasn't been uploaded yet.
+    These are the videos to push to YouTube next."""
+    ready: list[str] = []
+    for case_id, info in sorted(state.items()):
+        if info.get("tiktok_gate") == "open" and not info.get("youtube"):
+            ready.append(case_id)
+    if not ready:
+        print("  ✓ No cases waiting for YouTube upload (all gate-open cases already on YT).")
+        return
+    print(f"  {'case_id':<40}  retention")
+    print(f"  {'-'*40}  ---------")
+    for case_id in ready:
+        info = state[case_id]
+        pct = info.get("tiktok_retention_pct")
+        pct_str = f"{pct:.1f}%" if pct is not None else "(not recorded)"
+        print(f"  {case_id:<40}  {pct_str}")
+    print(f"\n  Upload next:")
+    for case_id in ready:
+        info = state[case_id]
+        print(f"    python3 scripts/upload_to_youtube.py --case {case_id} --videos-dir {info['videos_dir']} --require-gate")
+
+
+def cmd_gate_status(state: dict[str, dict]) -> None:
+    """Show all cases by their TikTok gate state."""
+    by_gate: dict[str, list[str]] = {}
+    for case_id, info in sorted(state.items()):
+        gate = info.get("tiktok_gate", "pending")
+        by_gate.setdefault(gate, []).append(case_id)
+    legend = {
+        "pending":  "⏳ pending (awaiting 48h retention check)",
+        "open":     "✓ open (≥30% TT retention; safe for YouTube)",
+        "closed":   "✗ closed (<30% TT retention; stays TT+IG only)",
+        "exempt":   "— exempt (legacy case, pre-v2 strategy)",
+    }
+    for gate in ("open", "pending", "closed", "exempt"):
+        cases = by_gate.get(gate, [])
+        if not cases:
+            continue
+        print(f"\n{legend.get(gate, gate)}  ({len(cases)})")
+        for case_id in cases:
+            pct = state[case_id].get("tiktok_retention_pct")
+            pct_str = f"  [{pct:.1f}% TT]" if pct is not None else ""
+            on_yt = "  📺 on YT" if state[case_id].get("youtube") else ""
+            print(f"    {case_id}{pct_str}{on_yt}")
 
 
 def cmd_mark(state: dict[str, dict], case_id: str, platform: str) -> None:
@@ -292,6 +415,12 @@ def main() -> int:
                    help="Print bundle paths (MP4 + captions) for quick AirDrop")
     g.add_argument("--refresh", action="store_true",
                    help="Scan _posted.json files and import any new YouTube uploads")
+    g.add_argument("--gate", nargs="+", metavar=("CASE_ID", "DECISION"),
+                   help="Set TikTok gate after 48h check: --gate <case_id> open|closed|pending [retention_pct]")
+    g.add_argument("--ready-for-youtube", action="store_true",
+                   help="List cases where TikTok gate is OPEN but YouTube hasn't been uploaded yet")
+    g.add_argument("--gate-status", action="store_true",
+                   help="Show all cases grouped by TikTok gate state (pending/open/closed/exempt)")
     args = parser.parse_args()
 
     state = load_status()
@@ -310,6 +439,15 @@ def main() -> int:
         cmd_skip(state, args.skip, ["instagram", "tiktok"])
     elif args.skip_all_pending:
         cmd_skip_all_old(state)
+    elif args.gate:
+        case_id = args.gate[0]
+        decision = args.gate[1] if len(args.gate) > 1 else "pending"
+        retention_pct = float(args.gate[2]) if len(args.gate) > 2 else None
+        cmd_gate(state, case_id, decision, retention_pct)
+    elif args.ready_for_youtube:
+        cmd_ready_for_youtube(state)
+    elif args.gate_status:
+        cmd_gate_status(state)
     elif args.airdrop:
         cmd_airdrop(state, args.airdrop)
     elif args.refresh:

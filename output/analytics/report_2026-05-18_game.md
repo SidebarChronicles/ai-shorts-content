@@ -1,6 +1,6 @@
 # Analytics Report — 2026-05-18 (game)
 
-Window: **2026-05-17 → 2026-05-18** (1 days)
+Window: **2026-05-16 → 2026-05-18** (2 days)
 
 ## YouTube Partner Program eligibility
 
@@ -29,61 +29,61 @@ _No channel-level data yet._
 ## Per-video
 
 ### GG_01_subnautica2
-- **Watch:** https://www.youtube.com/watch?v=c_xjg34NVMM
-- **-1 day(s) live (published 2026-05-19)**
+- **Watch:** https://www.youtube.com/watch?v=8UqH-CBoYd0
+- **published: immediate**
 
 _No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
 
 ### GG_02_007firstlight
-- **Watch:** https://www.youtube.com/watch?v=MaehfObzJxs
+- **Watch:** https://www.youtube.com/watch?v=TC-aHPISygQ
 - **published: immediate**
 
 _No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
 
 ### GG_03_forzahorizon6
-- **Watch:** https://www.youtube.com/watch?v=zYa2akxwY3o
+- **Watch:** https://www.youtube.com/watch?v=gEbtZuGoym0
 - **published: immediate**
 
 _No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
 
 ### GG_04_crimsondesert
-- **Watch:** https://www.youtube.com/watch?v=WshoealNZkA
+- **Watch:** https://www.youtube.com/watch?v=zKxpTQka5mc
 - **published: immediate**
 
 _No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
 
 ### GG_05_directive8020
-- **Watch:** https://www.youtube.com/watch?v=EQRCSnFpKD4
+- **Watch:** https://www.youtube.com/watch?v=ubA0tWm3zmg
 - **published: immediate**
 
 _No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
 
 ### GG_06_legobatmanlegacy
-- **Watch:** https://www.youtube.com/watch?v=_qcEm-Xh-B8
+- **Watch:** https://www.youtube.com/watch?v=95U5uxkq6dM
 - **published: immediate**
 
 _No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
 
 ### GG_07_marathon
-- **Watch:** https://www.youtube.com/watch?v=uqrQPKECFoc
+- **Watch:** https://www.youtube.com/watch?v=nT5QISoUVwo
 - **published: immediate**
 
 _No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
 
 ### GG_08_godofwarsonsofsparta
-- **Watch:** https://www.youtube.com/watch?v=aLXsnPU0Dlg
+- **Watch:** https://www.youtube.com/watch?v=Ew4Ts4RgLr0
 - **published: immediate**
 
 _No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
 
 ### GG_09_southofmidnight
-- **Watch:** https://www.youtube.com/watch?v=O2xvTjACaMc
+- **Watch:** https://www.youtube.com/watch?v=ajKDCYmXpV4
 - **published: immediate**
 
 _No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._
 
 ### GG_10_ufc6
-- **Watch:** https://www.youtube.com/watch?v=XXtFxuaiQdc
+- **Watch:** https://www.youtube.com/watch?v=412lHYkO_C4
 - **published: immediate**
 
 _No analytics data yet — YouTube needs ~48-72h after publish for numbers to stabilize._

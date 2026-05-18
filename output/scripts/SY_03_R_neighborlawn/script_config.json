@@ -1,0 +1,116 @@
+{
+  "_doc": "AI Story script (reddit). This file scaffolds the 7-beat structure. The daily-shorts-pipeline routine fills in 'text', 'keywords', 'title', 'description' fields at production time, then runs check_script_structure.py to lint, then make_audio_elevenlabs.py + build_visuals_track.py.",
+  "anti_plagiarism_rule": "Reddit posts ARE copyrighted by their authors. The script must REWRITE the story in original prose: different word choices, restructured narrative, anonymized names + locations, paraphrased dialogue. Use the source Reddit post as inspiration only. Verbatim reproduction risks YouTube strike.",
+  "audio_file": "assets/audio/narration_SY_03_R_neighborlawn.mp3",
+  "beats": [
+    {
+      "keywords": [
+        "suburban yard fence",
+        "neighbor house residential"
+      ],
+      "label": "hook",
+      "max_seconds": 2.5,
+      "purpose_hint": "AITA question + the outrage in \u226412 words",
+      "target_seconds": 0,
+      "text": "AITA for putting up a fence after my neighbor mowed my lawn?",
+      "visual_style_hint": "character expression close-up, eye contact"
+    },
+    {
+      "keywords": [
+        "suburban home porch",
+        "couple talking porch fence"
+      ],
+      "label": "setup",
+      "max_seconds": 12,
+      "purpose_hint": "Who the people are + the relationship",
+      "target_seconds": 3,
+      "text": "I was on vacation for ten days. My retired neighbor across the street decided to do me a favor.",
+      "visual_style_hint": "two-shot or environmental setup"
+    },
+    {
+      "keywords": [
+        "lawn mower grass",
+        "freshly mowed lawn yard"
+      ],
+      "label": "build",
+      "max_seconds": 13,
+      "purpose_hint": "What led up to the incident",
+      "target_seconds": 15,
+      "text": "He mowed my entire backyard. Down to the dirt. Said it looked overgrown.",
+      "visual_style_hint": "scene reconstruction, naturalistic"
+    },
+    {
+      "keywords": [
+        "wildflowers butterflies garden",
+        "girl child gardening flowers"
+      ],
+      "label": "mid_anchor",
+      "max_seconds": 5,
+      "purpose_hint": "The twist or escalation that flips audience loyalty",
+      "target_seconds": 28,
+      "text": "Except that wildflower patch was for my daughter's school pollinator project. Three months of growth. Gone.",
+      "visual_style_hint": "HERO SHOT \u2014 reaction face, the moment everything changes"
+    },
+    {
+      "keywords": [
+        "wooden privacy fence construction",
+        "tense neighborhood street"
+      ],
+      "label": "expand",
+      "max_seconds": 12,
+      "purpose_hint": "The fallout / consequences",
+      "target_seconds": 33,
+      "text": "I put up a privacy fence the next weekend. My wife thinks I overreacted. My neighbor hasn't spoken to me since.",
+      "visual_style_hint": "aftermath shots, body language"
+    },
+    {
+      "keywords": [
+        "girl looking out window sad",
+        "wooden fence backyard sunset"
+      ],
+      "label": "payoff",
+      "max_seconds": 10,
+      "purpose_hint": "What I did about it / what the other person did",
+      "target_seconds": 45,
+      "text": "My daughter cried for two days. She wanted to know why a stranger got to decide what was a weed.",
+      "visual_style_hint": "resolution scene, lighting shift"
+    },
+    {
+      "keywords": [
+        "man looking at camera serious",
+        "for camera question face"
+      ],
+      "label": "cta",
+      "max_seconds": 5,
+      "purpose_hint": "'AITA?' direct comment-bait, no answer given",
+      "target_seconds": 55,
+      "text": "So. AITA?",
+      "visual_style_hint": "freeze-frame on protagonist, looking at camera"
+    }
+  ],
+  "case_id": "SY_03_R_neighborlawn",
+  "case_title": "AITA for fencing my yard?",
+  "character_continuity_hint": "[Characters rotate per video; no cross-video continuity needed. Use generic, anonymized physical descriptions in Flux prompts \u2014 do not invoke real Reddit usernames or specific story details.]",
+  "clips_manifest": "output/scripts/SY_03_R_neighborlawn/clips_manifest.json",
+  "color_grade_vertical": "story",
+  "description_lead": "My neighbor mowed my lawn 'as a favor' and destroyed something he didn't know about.",
+  "game_id": "SY_03_R_neighborlawn",
+  "hook_anti_patterns": [
+    "So I'm posting",
+    "Hey Reddit",
+    "Long time lurker",
+    "Strap in",
+    "verbatim Reddit quote \u2014 paraphrase ALWAYS"
+  ],
+  "hook_formula": "outrage_question",
+  "hook_template": "AITA for [inflammatory action]? My [relation] [outrageous thing in 5 words].",
+  "model_id": "eleven_multilingual_v2",
+  "spoken_text": "AITA for putting up a fence after my neighbor mowed my lawn? I was on vacation for ten days. My retired neighbor across the street decided to do me a favor. He mowed my entire backyard. Down to the dirt. Said it looked overgrown. Except that wildflower patch was for my daughter's school pollinator project. Three months of growth. Gone. I put up a privacy fence the next weekend. My wife thinks I overreacted. My neighbor hasn't spoken to me since. My daughter cried for two days. She wanted to know why a stranger got to decide what was a weed. So. AITA?",
+  "subgenre": "reddit",
+  "title": "AITA for fencing my yard?",
+  "vertical": "story",
+  "visual_palette": "warm domestic tones, naturalistic lighting, contemporary setting",
+  "voice_id": "nPczCjzI2devNBz1zQrb",
+  "voice_name": "Brian",
+  "voice_speed": 0.92
+}

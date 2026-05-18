@@ -76,7 +76,7 @@ SURVIVAL_TEMPLATE = {
         {"label": "mid_anchor", "purpose": "Discovery, threat reveal, or escalation moment", "target_seconds": 28, "max_seconds": 5, "visual_style": "HERO SHOT — Pika clip preferred, dramatic reveal"},
         {"label": "expand", "purpose": "What does this mean for tomorrow / survival", "target_seconds": 33, "max_seconds": 12, "visual_style": "subject reaction, planning, gear close-up"},
         {"label": "payoff", "purpose": "Resolution beat OR cliffhanger for Day N+1", "target_seconds": 45, "max_seconds": 10, "visual_style": "wide environmental shot, change of light"},
-        {"label": "cta", "purpose": "'Day N+1 tomorrow' — explicit numbered cliffhanger", "target_seconds": 55, "max_seconds": 5, "visual_style": "fade-to-loop frame, same composition as hook"},
+        {"label": "cta", "purpose": "FOLLOW-DRIVER (v2): 'Day N+1 drops tomorrow — follow so you don't miss it.' Drives follower growth (Creator Rewards + YPP unlock)", "target_seconds": 55, "max_seconds": 5, "visual_style": "fade-to-loop frame, same composition as hook"},
     ],
     "character_continuity_prompt": (
         "[Same protagonist across episodes. Default description: tall man late 30s, "
@@ -113,7 +113,7 @@ REDDIT_TEMPLATE = {
         {"label": "mid_anchor", "purpose": "The twist or escalation that flips audience loyalty", "target_seconds": 28, "max_seconds": 5, "visual_style": "HERO SHOT — reaction face, the moment everything changes"},
         {"label": "expand", "purpose": "The fallout / consequences", "target_seconds": 33, "max_seconds": 12, "visual_style": "aftermath shots, body language"},
         {"label": "payoff", "purpose": "What I did about it / what the other person did", "target_seconds": 45, "max_seconds": 10, "visual_style": "resolution scene, lighting shift"},
-        {"label": "cta", "purpose": "'AITA?' direct comment-bait, no answer given", "target_seconds": 55, "max_seconds": 5, "visual_style": "freeze-frame on protagonist, looking at camera"},
+        {"label": "cta", "purpose": "FOLLOW-DRIVER (v2): 'AITA? Comment your verdict. Follow for daily AITAs.' Drives follows + comments (algorithm + monetization)", "target_seconds": 55, "max_seconds": 5, "visual_style": "freeze-frame on protagonist, looking at camera"},
     ],
     "character_continuity_prompt": (
         "[Characters rotate per video; no cross-video continuity needed. "
@@ -155,7 +155,7 @@ HORROR_TEMPLATE = {
         {"label": "mid_anchor", "purpose": "Realization — the wrongness is intentional, not coincidence", "target_seconds": 28, "max_seconds": 5, "visual_style": "HERO SHOT — first proper look at the threat, partial reveal"},
         {"label": "expand", "purpose": "Protagonist's reaction / failed escape", "target_seconds": 33, "max_seconds": 12, "visual_style": "POV unsteady, breath sound, oppressive shadows"},
         {"label": "payoff", "purpose": "Final confrontation or surrender", "target_seconds": 45, "max_seconds": 10, "visual_style": "single decisive composition, threat now fully visible"},
-        {"label": "cta", "purpose": "Single-line warning to viewer — 'Don't [verb] [object]'", "target_seconds": 55, "max_seconds": 5, "visual_style": "match-cut to the hook composition (loop trigger)"},
+        {"label": "cta", "purpose": "FOLLOW-DRIVER (v2): 'Don't [verb] [object]. Follow if you want more.' Warning hook + follow ask in one line", "target_seconds": 55, "max_seconds": 5, "visual_style": "match-cut to the hook composition (loop trigger)"},
     ],
     "character_continuity_prompt": (
         "[First-person POV by default. The 'protagonist' is the camera. Brief "
