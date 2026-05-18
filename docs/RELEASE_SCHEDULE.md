@@ -116,6 +116,39 @@ For each sub-genre/vertical:
 - Add tip-jar link to TikTok + Instagram bios
 - Don't push hard; let fans discover it
 
+## Day-2 batch-production decision (May 19 morning)
+
+After 24h of TikTok retention data on SY_05 + SY_04 (the first batch with the TikTok-first hook overhaul + visual hook overlay):
+
+```
+SY_05 TikTok avg watch time
+│
+├─ ≥10s (≥25% retention) ─→ The hook overhaul is working.
+│                            BATCH-PRODUCE Day 3-7 of the lakecabin
+│                            survival arc (SY_07-SY_11 in story_queue/).
+│                            ~$7-10 in production cost. Routine drips
+│                            them out over the next 3-5 days at the
+│                            existing 4-fires-a-day cadence.
+│
+├─ 6-10s (15-25%) ────────→ Borderline. Produce ONE more lakecabin
+│                            episode (Day 3, SY_07) as a single test.
+│                            Don't commit the full arc yet. Check
+│                            retention on it after another 48h.
+│
+└─ <6s (<15%) ─────────────→ Hook overhaul didn't fix it. Don't pursue
+                             survival series. Diagnose deeper: music?
+                             voice? visual cadence? Or pivot to a
+                             different sub-genre (try Reddit / horror
+                             first instead).
+```
+
+**Arc outline for the lakecabin series** (already implied by SY_01 + SY_02):
+- Day 1 (live): Footprints around cabin. Someone was inside while he slept.
+- Day 2 (queued): Followed prints → radio catches a child's voice.
+- Day 3-7: continuing escalation. Specific premises TBD when we batch-produce based on Day 2 data direction.
+
+The decision lives here so tomorrow's morning ritual includes the batch-produce trigger without having to re-derive it.
+
 ## Daily morning ritual (~5 min/day)
 
 ```bash
