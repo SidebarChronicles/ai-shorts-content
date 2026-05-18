@@ -1,0 +1,30 @@
+[
+  {
+    "file": "output/scripts/GG_05_directive8020/clips/clip_01.mp4",
+    "start": 28.37,
+    "end": 39.37,
+    "duration": 11.0,
+    "label": "hook"
+  },
+  {
+    "file": "output/scripts/GG_05_directive8020/clips/clip_02.mp4",
+    "start": 63.08,
+    "end": 74.08,
+    "duration": 11.0,
+    "label": "gameplay"
+  },
+  {
+    "file": "output/scripts/GG_05_directive8020/clips/clip_03.mp4",
+    "start": 79.1,
+    "end": 90.1,
+    "duration": 11.0,
+    "label": "standout"
+  },
+  {
+    "file": "output/scripts/GG_05_directive8020/clips/clip_04.mp4",
+    "start": 112.4,
+    "end": 123.4,
+    "duration": 11.0,
+    "label": "cta"
+  }
+]

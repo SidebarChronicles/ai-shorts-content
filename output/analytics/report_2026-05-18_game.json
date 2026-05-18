@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-05-18T05:08:12.808937+00:00",
+  "window": {
+    "start": "2026-04-18",
+    "end": "2026-05-18"
+  },
+  "channel_rollup": {
+    "views": 0,
+    "estimatedMinutesWatched": 0,
+    "averageViewDuration": 0,
+    "averageViewPercentage": 0,
+    "subscribersGained": 0,
+    "subscribersLost": 0,
+    "likes": 0,
+    "dislikes": 0,
+    "shares": 0,
+    "comments": 0
+  },
+  "videos": {
+    "GG_01_subnautica2": {
+      "metrics": {
+        "views": 0,
+        "estimatedMinutesWatched": 0,
+        "averageViewDuration": 0,
+        "averageViewPercentage": 0,
+        "subscribersGained": 0,
+        "subscribersLost": 0,
+        "likes": 0,
+        "dislikes": 0,
+        "shares": 0,
+        "comments": 0
+      },
+      "retention_curve": [],
+      "scheduled_publish": "2026-05-19T22:00:00+00:00",
+      "uploaded_at": "2026-05-18T03:55:11.364877+00:00",
+      "video_id": "c_xjg34NVMM",
+      "watch_url": "https://www.youtube.com/watch?v=c_xjg34NVMM"
+    },
+    "GG_02_007firstlight": {
+      "metrics": {
+        "views": 0,
+        "estimatedMinutesWatched": 0,
+        "averageViewDuration": 0,
+        "averageViewPercentage": 0,
+        "subscribersGained": 0,
+        "subscribersLost": 0,
+        "likes": 0,
+        "dislikes": 0,
+        "shares": 0,
+        "comments": 0
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T04:43:18.680198+00:00",
+      "video_id": "MaehfObzJxs",
+      "watch_url": "https://www.youtube.com/watch?v=MaehfObzJxs"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "file": "output/scripts/GG_03_forzahorizon6/clips/clip_01.mp4",
+    "start": 19.42,
+    "end": 30.42,
+    "duration": 11.0,
+    "label": "hook"
+  },
+  {
+    "file": "output/scripts/GG_03_forzahorizon6/clips/clip_02.mp4",
+    "start": 39.91,
+    "end": 50.91,
+    "duration": 11.0,
+    "label": "gameplay"
+  },
+  {
+    "file": "output/scripts/GG_03_forzahorizon6/clips/clip_03.mp4",
+    "start": 57.36,
+    "end": 68.36,
+    "duration": 11.0,
+    "label": "standout"
+  },
+  {
+    "file": "output/scripts/GG_03_forzahorizon6/clips/clip_04.mp4",
+    "start": 81.11,
+    "end": 92.11,
+    "duration": 11.0,
+    "label": "cta"
+  }
+]

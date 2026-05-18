@@ -1,0 +1,30 @@
+[
+  {
+    "file": "output/scripts/GG_08_godofwarsonsofsparta/clips/clip_01.mp4",
+    "start": 18.65,
+    "end": 29.65,
+    "duration": 11.0,
+    "label": "hook"
+  },
+  {
+    "file": "output/scripts/GG_08_godofwarsonsofsparta/clips/clip_02.mp4",
+    "start": 40.54,
+    "end": 51.54,
+    "duration": 11.0,
+    "label": "gameplay"
+  },
+  {
+    "file": "output/scripts/GG_08_godofwarsonsofsparta/clips/clip_03.mp4",
+    "start": 63.08,
+    "end": 74.08,
+    "duration": 11.0,
+    "label": "standout"
+  },
+  {
+    "file": "output/scripts/GG_08_godofwarsonsofsparta/clips/clip_04.mp4",
+    "start": 80.08,
+    "end": 91.08,
+    "duration": 11.0,
+    "label": "cta"
+  }
+]

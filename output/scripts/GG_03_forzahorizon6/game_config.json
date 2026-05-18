@@ -1,0 +1,17 @@
+{
+  "game_id": "GG_03_forzahorizon6",
+  "audio_file": "assets/audio/narration_GG_03_forzahorizon6.mp3",
+  "clips_manifest": "output/scripts/GG_03_forzahorizon6/clips_manifest.json",
+  "game_title": "FORZA HORIZON 6",
+  "platform": "PC / Xbox Series X|S",
+  "release_label": "RELEASES MAY 19",
+  "voice_id": "pNInz6obpgDQGcFmaJgB",
+  "voice_name": "Adam",
+  "beats": [
+    {"label": "hook", "text": "Racing franchises have gone to Mexico, Australia, France, and the UK. Forza Horizon 6 goes to Japan — and it's the biggest map the series has ever built."},
+    {"label": "gameplay", "text": "550 licensed cars, from a 1967 Toyota 2000GT to a 2026 Nissan GT-R concept. Ranked races earn you a standing in the Horizon leaderboard — and the top performers unlock a gold wristband that opens Legend Island, an exclusive section of the map no casual player ever sees."},
+    {"label": "standout", "text": "Playground Games rebuilt the open world from scratch for Japan's geography — mountain passes, neon city circuits, coastal routes, and off-road terrain that shifts every season. It's not just the biggest Forza. It's the most complete one."},
+    {"label": "cta", "text": "Releases May 19 on PC and Xbox Series X|S. Premium Edition owners are already in — wishlist now on Steam."}
+  ],
+  "spoken_text": "Racing franchises have gone to Mexico, Australia, France, and the UK. Forza Horizon 6 goes to Japan — and it's the biggest map the series has ever built. 550 licensed cars, from a 1967 Toyota 2000GT to a 2026 Nissan GT-R concept. Ranked races earn you a standing in the Horizon leaderboard — and the top performers unlock a gold wristband that opens Legend Island, an exclusive section of the map no casual player ever sees. Playground Games rebuilt the open world from scratch for Japan's geography — mountain passes, neon city circuits, coastal routes, and off-road terrain that shifts every season. It's not just the biggest Forza. It's the most complete one. Releases May 19 on PC and Xbox Series X|S. Premium Edition owners are already in — wishlist now on Steam."
+}

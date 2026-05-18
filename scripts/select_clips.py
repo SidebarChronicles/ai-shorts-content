@@ -63,7 +63,7 @@ def detect_scene_changes(trailer: Path, threshold: float = 0.35) -> list[float]:
             "-vf", f"select=gt(scene\\,{threshold}),showinfo",
             "-f", "null", "-",
         ],
-        capture_output=True, text=True, timeout=120,
+        capture_output=True, text=True, timeout=600,
     )
     # Parse pts_time values from stderr
     timestamps = []

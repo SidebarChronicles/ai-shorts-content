@@ -1,0 +1,30 @@
+[
+  {
+    "file": "output/scripts/GG_04_crimsondesert/clips/clip_01.mp4",
+    "start": 2.58,
+    "end": 13.58,
+    "duration": 11.0,
+    "label": "hook"
+  },
+  {
+    "file": "output/scripts/GG_04_crimsondesert/clips/clip_02.mp4",
+    "start": 51.38,
+    "end": 62.38,
+    "duration": 11.0,
+    "label": "gameplay"
+  },
+  {
+    "file": "output/scripts/GG_04_crimsondesert/clips/clip_03.mp4",
+    "start": 58.4,
+    "end": 69.4,
+    "duration": 11.0,
+    "label": "standout"
+  },
+  {
+    "file": "output/scripts/GG_04_crimsondesert/clips/clip_04.mp4",
+    "start": 58.4,
+    "end": 69.4,
+    "duration": 11.0,
+    "label": "cta"
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "file": "output/scripts/GG_09_southofmidnight/clips/clip_01.mp4",
+    "start": 28.53,
+    "end": 39.53,
+    "duration": 11.0,
+    "label": "hook"
+  },
+  {
+    "file": "output/scripts/GG_09_southofmidnight/clips/clip_02.mp4",
+    "start": 59.03,
+    "end": 70.03,
+    "duration": 11.0,
+    "label": "gameplay"
+  },
+  {
+    "file": "output/scripts/GG_09_southofmidnight/clips/clip_03.mp4",
+    "start": 85.63,
+    "end": 96.63,
+    "duration": 11.0,
+    "label": "standout"
+  },
+  {
+    "file": "output/scripts/GG_09_southofmidnight/clips/clip_04.mp4",
+    "start": 120.07,
+    "end": 131.07,
+    "duration": 11.0,
+    "label": "cta"
+  }
+]

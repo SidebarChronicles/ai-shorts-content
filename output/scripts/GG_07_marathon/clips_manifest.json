@@ -1,0 +1,30 @@
+[
+  {
+    "file": "output/scripts/GG_07_marathon/clips/clip_01.mp4",
+    "start": 28.45,
+    "end": 39.45,
+    "duration": 11.0,
+    "label": "hook"
+  },
+  {
+    "file": "output/scripts/GG_07_marathon/clips/clip_02.mp4",
+    "start": 56.38,
+    "end": 67.38,
+    "duration": 11.0,
+    "label": "gameplay"
+  },
+  {
+    "file": "output/scripts/GG_07_marathon/clips/clip_03.mp4",
+    "start": 86.8,
+    "end": 97.8,
+    "duration": 11.0,
+    "label": "standout"
+  },
+  {
+    "file": "output/scripts/GG_07_marathon/clips/clip_04.mp4",
+    "start": 119.45,
+    "end": 130.45,
+    "duration": 11.0,
+    "label": "cta"
+  }
+]

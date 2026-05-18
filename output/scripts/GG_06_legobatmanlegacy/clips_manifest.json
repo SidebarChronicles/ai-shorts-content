@@ -1,0 +1,30 @@
+[
+  {
+    "file": "output/scripts/GG_06_legobatmanlegacy/clips/clip_01.mp4",
+    "start": 32.35,
+    "end": 43.35,
+    "duration": 11.0,
+    "label": "hook"
+  },
+  {
+    "file": "output/scripts/GG_06_legobatmanlegacy/clips/clip_02.mp4",
+    "start": 63.95,
+    "end": 74.95,
+    "duration": 11.0,
+    "label": "gameplay"
+  },
+  {
+    "file": "output/scripts/GG_06_legobatmanlegacy/clips/clip_03.mp4",
+    "start": 93.34,
+    "end": 104.34,
+    "duration": 11.0,
+    "label": "standout"
+  },
+  {
+    "file": "output/scripts/GG_06_legobatmanlegacy/clips/clip_04.mp4",
+    "start": 129.18,
+    "end": 140.18,
+    "duration": 11.0,
+    "label": "cta"
+  }
+]

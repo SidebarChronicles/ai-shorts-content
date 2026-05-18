@@ -1,0 +1,17 @@
+{
+  "game_id": "GG_06_legobatmanlegacy",
+  "audio_file": "assets/audio/narration_GG_06_legobatmanlegacy.mp3",
+  "clips_manifest": "output/scripts/GG_06_legobatmanlegacy/clips_manifest.json",
+  "game_title": "LEGO BATMAN: LEGACY OF THE DARK KNIGHT",
+  "platform": "PC (Steam, Epic) / PS5 / Xbox Series X|S",
+  "release_label": "RELEASES MAY 22",
+  "voice_id": "pNInz6obpgDQGcFmaJgB",
+  "voice_name": "Adam",
+  "beats": [
+    {"label": "hook", "text": "TT Games built Batman's full origin story across 6 eras of his career — and launched the whole thing to Kiss from a Rose."},
+    {"label": "gameplay", "text": "Start as Bruce Wayne training with the League of Shadows. Unlock new Batman suits for each era — each with its own mechanics, allies, and a slice of Gotham's open world. Team up with Robin, Nightwing, and Batgirl as the story advances."},
+    {"label": "standout", "text": "From the makers of LEGO Star Wars: The Skywalker Saga — this is TT Games' most cinematic project, built around one hero's complete arc across 6 distinct gameplay chapters, not a rotating roster."},
+    {"label": "cta", "text": "Releases May 22 on PC, PS5, and Xbox Series X|S. Wishlist now on Steam."}
+  ],
+  "spoken_text": "TT Games built Batman's full origin story across 6 eras of his career — and launched the whole thing to Kiss from a Rose. Start as Bruce Wayne training with the League of Shadows. Unlock new Batman suits for each era — each with its own mechanics, allies, and a slice of Gotham's open world. Team up with Robin, Nightwing, and Batgirl as the story advances. From the makers of LEGO Star Wars: The Skywalker Saga — this is TT Games' most cinematic project, built around one hero's complete arc across 6 distinct gameplay chapters, not a rotating roster. Releases May 22 on PC, PS5, and Xbox Series X|S. Wishlist now on Steam."
+}

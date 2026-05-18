@@ -1,0 +1,17 @@
+{
+  "game_id": "GG_05_directive8020",
+  "audio_file": "assets/audio/narration_GG_05_directive8020.mp3",
+  "clips_manifest": "output/scripts/GG_05_directive8020/clips_manifest.json",
+  "game_title": "DIRECTIVE 8020",
+  "platform": "PC (Steam) / PS5 / Xbox Series X|S",
+  "release_label": "OUT NOW",
+  "voice_id": "N2lVS1w4EtoT3dr4eOWO",
+  "voice_name": "Callum",
+  "beats": [
+    {"label": "hook", "text": "You're 12 light years from Earth, the alien can perfectly copy your crewmates, and you have no gun. Only stealth, trust, and time."},
+    {"label": "gameplay", "text": "Colony ship Cassiopeia crash-lands on Tau Ceti f. Navigate the wreck using stealth — the alien mimics your crew in real time. Every branching decision is mapped in a visible story tree. Rewind using Turning Points, or lock in with Survival Mode and live with what you choose."},
+    {"label": "standout", "text": "From the makers of Until Dawn and The Quarry — built on Unreal Engine 5, with the first real-time alien mimicry system in the Dark Pictures series. The enemy doesn't hunt you. It becomes someone you trust."},
+    {"label": "cta", "text": "Directive 8020 is out now on PC, PS5, and Xbox — $49.99 on Steam."}
+  ],
+  "spoken_text": "You're 12 light years from Earth, the alien can perfectly copy your crewmates, and you have no gun. Only stealth, trust, and time. Colony ship Cassiopeia crash-lands on Tau Ceti f. Navigate the wreck using stealth — the alien mimics your crew in real time. Every branching decision is mapped in a visible story tree. Rewind using Turning Points, or lock in with Survival Mode and live with what you choose. From the makers of Until Dawn and The Quarry — built on Unreal Engine 5, with the first real-time alien mimicry system in the Dark Pictures series. The enemy doesn't hunt you. It becomes someone you trust. Directive 8020 is out now on PC, PS5, and Xbox — $49.99 on Steam."
+}

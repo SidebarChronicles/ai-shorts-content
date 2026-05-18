@@ -1,0 +1,17 @@
+{
+  "game_id": "GG_08_godofwarsonsofsparta",
+  "audio_file": "assets/audio/narration_GG_08_godofwarsonsofsparta.mp3",
+  "clips_manifest": "output/scripts/GG_08_godofwarsonsofsparta/clips_manifest.json",
+  "game_title": "GOD OF WAR: SONS OF SPARTA",
+  "platform": "PS5",
+  "release_label": "OUT NOW",
+  "voice_id": "N2lVS1w4EtoT3dr4eOWO",
+  "voice_name": "Callum",
+  "beats": [
+    {"label": "hook", "text": "Santa Monica shadow-dropped a 2D Metroidvania God of War at State of Play — a prequel set before Kratos ever left Greece, before the legend, before the rage."},
+    {"label": "gameplay", "text": "Play as a young Kratos alongside his brother Deimos — two Spartan warriors in ancient Greece before everything went wrong. Classic 2D action meets Metroidvania progression: unlock new combat abilities and movement skills, revisit earlier areas, and piece together the origins of Kratos's rage."},
+    {"label": "standout", "text": "Chronologically the first God of War story ever told — developed by Mega Cat Studios with Santa Monica Studio. A bold 2D art style and original Greek mythology storyline fills in the franchise's biggest gap. This is where Kratos begins."},
+    {"label": "cta", "text": "God of War: Sons of Sparta is out now exclusively on PS5 — shadow-dropped at PlayStation State of Play."}
+  ],
+  "spoken_text": "Santa Monica shadow-dropped a 2D Metroidvania God of War at State of Play — a prequel set before Kratos ever left Greece, before the legend, before the rage. Play as a young Kratos alongside his brother Deimos — two Spartan warriors in ancient Greece before everything went wrong. Classic 2D action meets Metroidvania progression: unlock new combat abilities and movement skills, revisit earlier areas, and piece together the origins of Kratos's rage. Chronologically the first God of War story ever told — developed by Mega Cat Studios with Santa Monica Studio. A bold 2D art style and original Greek mythology storyline fills in the franchise's biggest gap. This is where Kratos begins. God of War: Sons of Sparta is out now exclusively on PS5 — shadow-dropped at PlayStation State of Play."
+}

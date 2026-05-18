@@ -1,0 +1,30 @@
+[
+  {
+    "file": "output/scripts/GG_10_ufc6/clips/clip_01.mp4",
+    "start": 61.09,
+    "end": 72.09,
+    "duration": 11.0,
+    "label": "hook"
+  },
+  {
+    "file": "output/scripts/GG_10_ufc6/clips/clip_02.mp4",
+    "start": 125.76,
+    "end": 136.76,
+    "duration": 11.0,
+    "label": "gameplay"
+  },
+  {
+    "file": "output/scripts/GG_10_ufc6/clips/clip_03.mp4",
+    "start": 192.56,
+    "end": 203.56,
+    "duration": 11.0,
+    "label": "standout"
+  },
+  {
+    "file": "output/scripts/GG_10_ufc6/clips/clip_04.mp4",
+    "start": 262.23,
+    "end": 273.23,
+    "duration": 11.0,
+    "label": "cta"
+  }
+]
