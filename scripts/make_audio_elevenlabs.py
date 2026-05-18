@@ -35,13 +35,12 @@ import requests
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-# Auto-load .env into os.environ
-_env_path = PROJECT_ROOT / ".env"
-if _env_path.exists():
-    for _line in _env_path.read_text().splitlines():
-        if "=" in _line and not _line.startswith("#"):
-            _k, _v = _line.split("=", 1)
-            os.environ.setdefault(_k.strip(), _v.strip())
+# Shared helpers (hardened .env loader, atomic writes)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _env import load_dotenv  # noqa: E402
+from _atomic import atomic_write_json  # noqa: E402
+
+load_dotenv(PROJECT_ROOT / ".env")
 
 AUDIO_DIR = PROJECT_ROOT / "assets" / "audio"
 SCRIPTS_DIR = PROJECT_ROOT / "output" / "scripts"
@@ -70,8 +69,7 @@ def load_usage() -> dict:
 
 
 def save_usage(data: dict) -> None:
-    USAGE_FILE.parent.mkdir(parents=True, exist_ok=True)
-    USAGE_FILE.write_text(json.dumps(data, indent=2))
+    atomic_write_json(USAGE_FILE, data, sort_keys=False)
 
 
 def check_budget(chars_needed: int, budget: float) -> None:
@@ -180,6 +178,10 @@ def synthesize(
         },
     }
 
+    # Stream into a .part file, atomic-replace on success — prevents the
+    # next pipeline run from skipping a truncated narration MP3.
+    part_mp3 = out_mp3.with_suffix(out_mp3.suffix + ".part")
+
     if use_alignment:
         url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/with-timestamps"
         resp = requests.post(url, headers=headers, json=body, timeout=120)
@@ -188,19 +190,21 @@ def synthesize(
 
         # Decode base64 audio
         audio_bytes = base64.b64decode(payload["audio_base64"])
-        out_mp3.write_bytes(audio_bytes)
+        part_mp3.write_bytes(audio_bytes)
+        os.replace(part_mp3, out_mp3)
 
-        # Save alignment sidecar
+        # Save alignment sidecar (atomic via shared helper)
         if out_alignment:
-            out_alignment.write_text(json.dumps(payload.get("alignment", {}), indent=2))
+            atomic_write_json(out_alignment, payload.get("alignment", {}), sort_keys=False)
             print(f"  Alignment: {out_alignment.relative_to(PROJECT_ROOT)}")
     else:
         url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
         resp = requests.post(url, headers=headers, json=body, timeout=120, stream=True)
         resp.raise_for_status()
-        with open(out_mp3, "wb") as f:
+        with open(part_mp3, "wb") as f:
             for chunk in resp.iter_content(chunk_size=4096):
                 f.write(chunk)
+        os.replace(part_mp3, out_mp3)
 
 
 # ---------------------------------------------------------------------------

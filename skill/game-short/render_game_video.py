@@ -207,6 +207,10 @@ def main() -> None:
     cfg = json.loads(config_path.read_text())
 
     game_id = cfg["game_id"]
+    # Game IDs feed into FFmpeg filtergraph args (subtitles=, file '...').
+    # Reject anything that could break the parser (quotes, colons, etc.).
+    if not re.match(r"^[A-Za-z0-9_]+$", game_id):
+        sys.exit(f"ERROR: Unsafe game_id '{game_id}' — must match [A-Za-z0-9_]+")
     audio_file = PROJECT_ROOT / cfg["audio_file"]
     clips_manifest_path = PROJECT_ROOT / cfg["clips_manifest"]
     game_title = cfg.get("game_title", "").upper()

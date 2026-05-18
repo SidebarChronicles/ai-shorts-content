@@ -12,5 +12,9 @@ requests>=2.31.0
 # YouTube trailer fetcher fallback (fetch_trailer.py)
 yt-dlp>=2024.1.0
 
-# Claude API analytics suggestions (suggest_improvements.py)
-anthropic>=0.28.0
+# Claude API analytics suggestions (suggest_improvements.py, game_script_writer.py)
+# Need >=0.40 for cache_control on system blocks (the writer-prompt caching pattern)
+anthropic>=0.40.0
+
+# Smoke tests (pure helpers — no API mocks)
+pytest>=7.0.0

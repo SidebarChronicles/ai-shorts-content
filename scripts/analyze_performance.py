@@ -28,10 +28,14 @@ import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _atomic import atomic_write_text  # noqa: E402
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 TOKEN_PATH = PROJECT_ROOT / "token.json"
@@ -60,9 +64,20 @@ def load_credentials() -> Credentials:
             "        Re-run: python scripts/youtube_oauth_setup.py\n"
             "        (and make sure YouTube Analytics API is enabled in Google Cloud)"
         )
-    if creds.expired and creds.refresh_token:
-        creds.refresh(Request())
-        TOKEN_PATH.write_text(creds.to_json())
+    if not creds.valid:
+        if not creds.refresh_token:
+            sys.exit(
+                "[FATAL] token.json has no refresh_token.\n"
+                "        Re-run: python scripts/youtube_oauth_setup.py"
+            )
+        try:
+            creds.refresh(Request())
+        except RefreshError as e:
+            sys.exit(
+                f"[FATAL] OAuth refresh failed: {e}\n"
+                "        Re-run: python scripts/youtube_oauth_setup.py"
+            )
+        atomic_write_text(TOKEN_PATH, creds.to_json())
     return creds
 
 

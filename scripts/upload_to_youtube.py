@@ -40,11 +40,16 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
+
+# Repo-local helpers
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _atomic import atomic_write_json, atomic_write_text  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Paths / constants
@@ -70,9 +75,21 @@ def load_credentials() -> Credentials:
             f"        Run: python scripts/youtube_oauth_setup.py"
         )
     creds = Credentials.from_authorized_user_file(str(TOKEN_PATH), SCOPES)
-    if creds.expired and creds.refresh_token:
-        creds.refresh(Request())
-        TOKEN_PATH.write_text(creds.to_json())
+    if not creds.valid:
+        if not creds.refresh_token:
+            sys.exit(
+                "[FATAL] token.json has no refresh_token (offline access missing).\n"
+                "        Re-run: python scripts/youtube_oauth_setup.py"
+            )
+        try:
+            creds.refresh(Request())
+        except RefreshError as e:
+            sys.exit(
+                f"[FATAL] OAuth refresh failed: {e}\n"
+                "        Token may be revoked or expired (Google's 7-day testing-app grace).\n"
+                "        Re-run: python scripts/youtube_oauth_setup.py"
+            )
+        atomic_write_text(TOKEN_PATH, creds.to_json())
         print("  (refreshed access token)")
     return creds
 
@@ -110,11 +127,18 @@ def parse_description(md_path: Path) -> dict:
 def load_posted(posted_path: Path) -> dict:
     if not posted_path.exists():
         return {}
-    return json.loads(posted_path.read_text())
+    try:
+        return json.loads(posted_path.read_text())
+    except json.JSONDecodeError as e:
+        sys.exit(
+            f"[FATAL] {posted_path} is corrupt: {e}\n"
+            "        Refusing to proceed — would risk duplicate uploads.\n"
+            "        Inspect the file manually and either repair or delete it."
+        )
 
 
 def save_posted(state: dict, posted_path: Path) -> None:
-    posted_path.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n")
+    atomic_write_json(posted_path, state)
 
 
 def mark_posted(case_id: str, video_id: str, scheduled_for: str, posted_path: Path) -> None:
@@ -205,6 +229,33 @@ def build_body(meta: dict, publish_at: datetime | None, category_id: str) -> dic
     }
 
 
+def _marker_path(videos_dir: Path, case_id: str) -> Path:
+    """Per-case in-flight upload marker."""
+    return videos_dir / f"_uploading.{case_id}.json"
+
+
+def _check_orphan_marker(videos_dir: Path, case_id: str) -> None:
+    """If a previous run crashed mid-upload, refuse to start until human checks.
+
+    Prevents the classic 'video is live on YouTube but _posted.json missed it →
+    next cron uploads a duplicate public copy' failure.
+    """
+    marker = _marker_path(videos_dir, case_id)
+    if marker.exists():
+        try:
+            info = json.loads(marker.read_text())
+        except json.JSONDecodeError:
+            info = {}
+        sys.exit(
+            f"[FATAL] Orphan upload marker found: {marker.relative_to(PROJECT_ROOT)}\n"
+            f"        A previous upload of '{case_id}' was interrupted.\n"
+            f"        Marker contents: {info}\n"
+            f"        Check YouTube Studio. If the video is live, manually add\n"
+            f"        the entry to _posted.json and delete the marker. If not,\n"
+            f"        just delete the marker file."
+        )
+
+
 def upload_one(case_id: str, publish_at: datetime | None, dry_run: bool,
                videos_dir: Path, posted_path: Path, category_id: str) -> None:
     mp4 = videos_dir / f"{case_id}.mp4"
@@ -213,6 +264,8 @@ def upload_one(case_id: str, publish_at: datetime | None, dry_run: bool,
         sys.exit(f"[FATAL] Missing mp4: {mp4}")
     if not desc_md.exists():
         sys.exit(f"[FATAL] Missing description sidecar: {desc_md}")
+
+    _check_orphan_marker(videos_dir, case_id)
 
     meta = parse_description(desc_md)
     body = build_body(meta, publish_at, category_id)
@@ -234,6 +287,17 @@ def upload_one(case_id: str, publish_at: datetime | None, dry_run: bool,
     creds = load_credentials()
     youtube = build("youtube", "v3", credentials=creds, cache_discovery=False)
 
+    # Drop an upload-in-flight marker BEFORE the API call. If we crash between
+    # here and mark_posted, the next run will refuse to upload and force a
+    # human check rather than silently duplicating.
+    marker = _marker_path(videos_dir, case_id)
+    atomic_write_json(marker, {
+        "case_id": case_id,
+        "started_at": datetime.now(timezone.utc).isoformat(),
+        "publish_at": publish_at.isoformat() if publish_at else "immediate",
+        "title": meta["title"],
+    })
+
     media = MediaFileUpload(str(mp4), chunksize=1024 * 1024 * 4,
                             resumable=True, mimetype="video/mp4")
     request = youtube.videos().insert(
@@ -246,12 +310,20 @@ def upload_one(case_id: str, publish_at: datetime | None, dry_run: bool,
     print("  Uploading…")
     response = None
     last_pct = -1
+    retry_count = 0
     while response is None:
         try:
             status, response = request.next_chunk()
         except HttpError as e:
             if e.resp.status in (500, 502, 503, 504):
-                print(f"  Transient {e.resp.status}, retrying…")
+                retry_count += 1
+                if retry_count > 5:
+                    raise RuntimeError(f"Upload failed after 5 transient retries (last: {e.resp.status})") from e
+                # Exponential backoff: 1s, 2s, 4s, 8s, 16s
+                import time
+                wait = 2 ** (retry_count - 1)
+                print(f"  Transient {e.resp.status}, retry {retry_count}/5 in {wait}s…")
+                time.sleep(wait)
                 continue
             raise
         if status:
@@ -270,6 +342,12 @@ def upload_one(case_id: str, publish_at: datetime | None, dry_run: bool,
 
     mark_posted(case_id, video_id, (publish_at.isoformat() if publish_at else "immediate"), posted_path)
     print(f"  ✓ Marked posted in {posted_path.relative_to(PROJECT_ROOT)}")
+
+    # _posted.json is now durable — safe to remove the in-flight marker.
+    try:
+        marker.unlink()
+    except FileNotFoundError:
+        pass
 
 
 # ---------------------------------------------------------------------------

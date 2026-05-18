@@ -50,33 +50,51 @@ HEADERS = {"Accept-Language": "en-US,en;q=0.9"}
 # Steam data fetching
 # ---------------------------------------------------------------------------
 
+def _get_with_retry(url: str, *, params: dict | None = None, timeout: int = 15,
+                    max_attempts: int = 3) -> requests.Response | None:
+    """GET with exponential backoff on 5xx / connection errors. Returns None if all retries fail."""
+    last_err: str = ""
+    for attempt in range(max_attempts):
+        try:
+            resp = requests.get(url, headers=HEADERS, params=params, timeout=timeout)
+            if resp.status_code < 500:
+                resp.raise_for_status()
+                return resp
+            last_err = f"HTTP {resp.status_code}"
+        except (requests.ConnectionError, requests.Timeout, requests.HTTPError) as e:
+            last_err = f"{type(e).__name__}: {e}"
+        if attempt < max_attempts - 1:
+            wait = 2 ** attempt
+            print(f"  ⚠  Steam {url[:50]}… attempt {attempt+1} failed ({last_err}); retry in {wait}s", file=sys.stderr)
+            time.sleep(wait)
+    print(f"  ⚠  Steam giving up after {max_attempts} attempts: {last_err}", file=sys.stderr)
+    return None
+
+
 def fetch_steam_list(url: str) -> list[dict]:
     """Fetch a list of games from a Steam storefront search endpoint."""
+    resp = _get_with_retry(url)
+    if resp is None:
+        return []
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=15)
-        resp.raise_for_status()
-        data = resp.json()
-        return data.get("items", [])
-    except Exception as e:
-        print(f"  ⚠  Steam fetch failed: {e}", file=sys.stderr)
+        return resp.json().get("items", [])
+    except json.JSONDecodeError as e:
+        print(f"  ⚠  Steam list JSON parse failed: {e}", file=sys.stderr)
         return []
 
 
 def fetch_app_details(appid: int) -> dict:
     """Fetch full app details for a single Steam App ID."""
+    resp = _get_with_retry(STEAM_APPDETAILS_URL, params={"appids": appid, "cc": "us", "l": "en"}, timeout=10)
+    if resp is None:
+        return {}
     try:
-        resp = requests.get(
-            STEAM_APPDETAILS_URL,
-            params={"appids": appid, "cc": "us", "l": "en"},
-            timeout=10,
-        )
-        resp.raise_for_status()
         data = resp.json()
-        entry = data.get(str(appid), {})
-        if entry.get("success"):
-            return entry.get("data", {})
-    except Exception:
-        pass
+    except json.JSONDecodeError:
+        return {}
+    entry = data.get(str(appid), {})
+    if entry.get("success"):
+        return entry.get("data", {})
     return {}
 
 

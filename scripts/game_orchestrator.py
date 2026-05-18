@@ -37,15 +37,27 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _env import load_dotenv  # noqa: E402
+from _atomic import atomic_write_text  # noqa: E402
+
+# Game IDs must be safe for FFmpeg filtergraph syntax (no quotes/colons/etc.)
+GAME_ID_RE = re.compile(r"^[A-Za-z0-9_]+$")
+
 GAME_QUEUE_DIR = PROJECT_ROOT / "game_queue"
 SCRIPTS_DIR = PROJECT_ROOT / "output" / "scripts"
 GAME_VIDEOS_DIR = PROJECT_ROOT / "output" / "game_videos"
+
+# Load .env once at startup; child subprocesses inherit via the default env.
+load_dotenv(PROJECT_ROOT / ".env")
 LOG_PATH = PROJECT_ROOT / "output" / "game_pipeline.log"
 
 
@@ -67,13 +79,16 @@ def log(msg: str) -> None:
 # ---------------------------------------------------------------------------
 
 def load_queue_status() -> dict[str, str]:
-    """Return {game_id: status} from all queue files."""
+    """Return {game_id: status} from all queue files (only safe game_ids)."""
     statuses = {}
     for p in sorted(GAME_QUEUE_DIR.glob("GG_*.md")):
         if p.name.startswith("GG_TEMPLATE"):
             continue
+        if not GAME_ID_RE.match(p.stem):
+            log(f"  [queue] skipping {p.name}: unsafe game_id for FFmpeg paths")
+            continue
         content = p.read_text()
-        m = re.search(r"\*\*Status:\*\*\s*(\w+)", content)
+        m = re.search(r"\*\*Status:\*\*\s*([A-Z_]+)", content)
         status = m.group(1) if m else "UNKNOWN"
         statuses[p.stem] = status
     return statuses
@@ -87,12 +102,19 @@ def next_queued_game() -> str | None:
 
 
 def mark_queue_status(game_id: str, status: str) -> None:
+    """Atomically rewrite the first `**Status:** X` line in the queue file.
+
+    Uses count=1 so any later occurrence of the same pattern inside prose
+    is untouched. atomic_write_text guarantees no partial-write corruption.
+    """
     path = GAME_QUEUE_DIR / f"{game_id}.md"
     if not path.exists():
         return
     content = path.read_text()
-    content = re.sub(r"\*\*Status:\*\*\s*\w+", f"**Status:** {status}", content)
-    path.write_text(content)
+    new_content = re.sub(
+        r"\*\*Status:\*\*\s*[A-Z_]+", f"**Status:** {status}", content, count=1
+    )
+    atomic_write_text(path, new_content)
 
 
 def get_youtube_trailer_url(game_id: str) -> str | None:
@@ -204,17 +226,8 @@ def step_generate_audio(game_id: str, dry_run: bool) -> bool:
     if dry_run:
         cmd.append("--dry-run")
 
-    # Load .env for API key if not already set
-    env = os.environ.copy()
-    env_path = PROJECT_ROOT / ".env"
-    if env_path.exists() and not env.get("ELEVENLABS_API_KEY"):
-        for line in env_path.read_text().splitlines():
-            if "=" in line and not line.startswith("#"):
-                k, v = line.split("=", 1)
-                env[k.strip()] = v.strip()
-
     result = subprocess.run(cmd, cwd=PROJECT_ROOT, capture_output=True, text=True,
-                            timeout=120, env=env)
+                            timeout=120)
     if result.returncode != 0:
         log(f"  [tts] ERROR: {result.stderr[-500:]}\n{result.stdout[-200:]}")
         return False
@@ -417,17 +430,12 @@ def step_upload(game_id: str, dry_run: bool) -> bool:
     if dry_run:
         cmd.append("--dry-run")
 
-    env = os.environ.copy()
-    env_path = PROJECT_ROOT / ".env"
-    if env_path.exists():
-        for line in env_path.read_text().splitlines():
-            if "=" in line and not line.startswith("#"):
-                k, v = line.split("=", 1)
-                env[k.strip()] = v.strip()
-
     result = subprocess.run(cmd, cwd=PROJECT_ROOT, capture_output=True, text=True,
-                            timeout=600, env=env)
-    log(result.stdout)
+                            timeout=600)
+    # Avoid logging full subprocess stdout — keep only the last 500 chars
+    # in case any child ever logs a secret. Errors keep more detail.
+    if result.stdout:
+        log(result.stdout[-500:].rstrip())
     if result.returncode != 0:
         log(f"  [upload] ERROR: {result.stderr[-500:]}")
         return False
@@ -440,10 +448,53 @@ def step_upload(game_id: str, dry_run: bool) -> bool:
 # Main orchestrator
 # ---------------------------------------------------------------------------
 
+MAX_RETRIES = 3
+
+
+def _read_retry_count(game_id: str) -> int:
+    path = GAME_QUEUE_DIR / f"{game_id}.md"
+    if not path.exists():
+        return 0
+    m = re.search(r"\*\*Retries:\*\*\s*(\d+)", path.read_text())
+    return int(m.group(1)) if m else 0
+
+
+def _bump_retry_count(game_id: str, value: int) -> None:
+    """Append or update **Retries:** N in the queue file (atomic)."""
+    path = GAME_QUEUE_DIR / f"{game_id}.md"
+    if not path.exists():
+        return
+    content = path.read_text()
+    if re.search(r"\*\*Retries:\*\*", content):
+        new_content = re.sub(
+            r"\*\*Retries:\*\*\s*\d+", f"**Retries:** {value}", content, count=1
+        )
+    else:
+        # Insert after the Status line
+        new_content = re.sub(
+            r"(\*\*Status:\*\*[^\n]*\n)",
+            rf"\1**Retries:** {value}\n",
+            content,
+            count=1,
+        )
+    atomic_write_text(path, new_content)
+
+
 def run_pipeline(game_id: str, dry_run: bool, skip_upload: bool = False) -> bool:
     log(f"\n{'='*50}")
     log(f"Starting pipeline: {game_id}")
     log(f"{'='*50}")
+
+    if not GAME_ID_RE.match(game_id):
+        log(f"✗ Refusing to run: '{game_id}' contains chars unsafe for FFmpeg paths")
+        return False
+
+    # Block runaway retries on a permanently broken queue entry
+    retries = _read_retry_count(game_id)
+    if retries >= MAX_RETRIES:
+        log(f"✗ {game_id} has failed {retries} times — marking BLOCKED for review")
+        mark_queue_status(game_id, "BLOCKED")
+        return False
 
     mark_queue_status(game_id, "ACTIVE")
 
@@ -459,18 +510,30 @@ def run_pipeline(game_id: str, dry_run: bool, skip_upload: bool = False) -> bool
     if not skip_upload:
         steps.append(("Upload", lambda: step_upload(game_id, dry_run)))
 
-    for name, fn in steps:
-        log(f"\n── {name} ──")
-        try:
-            ok = fn()
-        except Exception as e:
-            log(f"  ERROR: {e}")
-            ok = False
+    failed_step = None
+    try:
+        for name, fn in steps:
+            log(f"\n── {name} ──")
+            try:
+                ok = fn()
+            except Exception as e:
+                log(f"  ERROR: {e}")
+                ok = False
 
-        if not ok:
-            log(f"\n✗ Pipeline failed at: {name}")
-            mark_queue_status(game_id, "QUEUED")  # reset so it can be retried
-            return False
+            if not ok:
+                failed_step = name
+                log(f"\n✗ Pipeline failed at: {name}")
+                break
+    finally:
+        # ALWAYS update queue status — even on KeyboardInterrupt or unhandled raise.
+        if failed_step is not None:
+            new_retries = retries + 1
+            _bump_retry_count(game_id, new_retries)
+            mark_queue_status(game_id, "QUEUED")
+            log(f"  Retry count: {new_retries}/{MAX_RETRIES}")
+
+    if failed_step is not None:
+        return False
 
     mark_queue_status(game_id, "DELIVERED")
     log(f"\n✓ Pipeline complete: {game_id}")
@@ -481,21 +544,13 @@ def run_auto(dry_run: bool) -> None:
     """Full autonomous mode: research → pick top game → run pipeline."""
     log("── Auto mode: researching new games ──")
 
-    env = os.environ.copy()
-    env_path = PROJECT_ROOT / ".env"
-    if env_path.exists():
-        for line in env_path.read_text().splitlines():
-            if "=" in line and not line.startswith("#"):
-                k, v = line.split("=", 1)
-                env[k.strip()] = v.strip()
-
     cmd = ["python3", "scripts/research_games.py", "--count", "20", "--top", "1"]
     if dry_run:
         cmd.append("--dry-run")
 
     result = subprocess.run(cmd, cwd=PROJECT_ROOT, capture_output=True, text=True,
-                            timeout=120, env=env)
-    log(result.stdout)
+                            timeout=120)
+    log(result.stdout[-500:].rstrip() if result.stdout else "")
     if result.returncode != 0:
         log(f"Research failed: {result.stderr[-500:]}")
         return

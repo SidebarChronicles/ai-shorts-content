@@ -18,8 +18,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 import requests
@@ -35,22 +37,36 @@ STEAM_CDN_TIMEOUT = 120  # seconds for large trailer download
 # Steam fetcher
 # ---------------------------------------------------------------------------
 
+def _get_with_retry(url: str, *, params: dict | None = None, timeout: int = 15,
+                    max_attempts: int = 3) -> requests.Response:
+    """GET with exponential backoff on 5xx. Re-raises non-transient errors immediately."""
+    last_exc: Exception | None = None
+    for attempt in range(max_attempts):
+        try:
+            resp = requests.get(url, params=params, timeout=timeout)
+            if resp.status_code < 500:
+                resp.raise_for_status()
+                return resp
+            last_exc = requests.HTTPError(f"{resp.status_code} from {url}")
+        except (requests.ConnectionError, requests.Timeout) as e:
+            last_exc = e
+        wait = 2 ** attempt
+        print(f"  Steam API attempt {attempt+1}/{max_attempts} failed; retrying in {wait}s…", file=sys.stderr)
+        time.sleep(wait)
+    raise last_exc if last_exc else RuntimeError("Steam API retry exhausted")
+
+
 def fetch_steam_trailer(appid: str, game_id: str, dry_run: bool = False) -> Path:
     """Download the highest-quality MP4 trailer from Steam CDN."""
     print(f"  Querying Steam API for appid={appid}…")
-    resp = requests.get(
-        STEAM_API,
-        params={"appids": appid, "cc": "us", "l": "en"},
-        timeout=15,
-    )
-    resp.raise_for_status()
+    resp = _get_with_retry(STEAM_API, params={"appids": appid, "cc": "us", "l": "en"}, timeout=15)
     data = resp.json()
 
     app_data = data.get(str(appid), {})
     if not app_data.get("success"):
         raise ValueError(
             f"Steam API returned success=false for appid={appid}.\n"
-            "Check the app ID at store.steampowered.com/app/{appid}/"
+            f"Check the app ID at store.steampowered.com/app/{appid}/"
         )
 
     details = app_data.get("data", {})
@@ -98,18 +114,34 @@ def fetch_steam_trailer(appid: str, game_id: str, dry_run: bool = False) -> Path
 
 
 def _download_with_progress(url: str, dest: Path) -> None:
-    with requests.get(url, stream=True, timeout=STEAM_CDN_TIMEOUT) as r:
-        r.raise_for_status()
-        total = int(r.headers.get("content-length", 0))
-        downloaded = 0
-        with open(dest, "wb") as f:
-            for chunk in r.iter_content(chunk_size=65536):
-                f.write(chunk)
-                downloaded += len(chunk)
-                if total:
-                    pct = int(downloaded / total * 100)
-                    print(f"\r    {pct}% ({downloaded // (1024*1024)} MB / {total // (1024*1024)} MB)", end="", flush=True)
-    print()  # newline after progress
+    """Stream-download to dest.part, then os.replace to dest on success.
+
+    Prevents the failure mode where a network drop leaves a truncated
+    trailer_raw.mp4 — on next run the existence check skips re-download
+    and the pipeline produces broken clips.
+    """
+    part = dest.with_suffix(dest.suffix + ".part")
+    try:
+        with requests.get(url, stream=True, timeout=STEAM_CDN_TIMEOUT) as r:
+            r.raise_for_status()
+            total = int(r.headers.get("content-length", 0))
+            downloaded = 0
+            with open(part, "wb") as f:
+                for chunk in r.iter_content(chunk_size=65536):
+                    f.write(chunk)
+                    downloaded += len(chunk)
+                    if total:
+                        pct = int(downloaded / total * 100)
+                        print(f"\r    {pct}% ({downloaded // (1024*1024)} MB / {total // (1024*1024)} MB)", end="", flush=True)
+        print()  # newline after progress
+
+        # Verify expected length if content-length was provided
+        if total and downloaded < total:
+            raise RuntimeError(f"Truncated download: {downloaded} of {total} bytes")
+        os.replace(part, dest)
+    except Exception:
+        # Leave the .part behind for debugging but don't promote
+        raise
 
 
 # ---------------------------------------------------------------------------

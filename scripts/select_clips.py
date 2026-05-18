@@ -158,10 +158,23 @@ def main() -> None:
     total_duration = get_duration(trailer_path)
     print(f"  Trailer duration: {total_duration:.1f}s")
 
+    if total_duration < 20:
+        sys.exit(
+            f"ERROR: Trailer is only {total_duration:.1f}s long — need at least 20s "
+            f"to extract 4 portrait clips. The trailer file may be corrupt or truncated."
+        )
+
     if args.auto:
         print(f"  Running scene detection (threshold={args.threshold})…")
         changes = detect_scene_changes(trailer_path, args.threshold)
         print(f"  Found {len(changes)} scene changes")
+        # Sanity: an empty/corrupt trailer produces zero detections; we'd then
+        # extract four near-identical clips and silently ship a useless video.
+        if len(set(changes)) < 2:
+            sys.exit(
+                "ERROR: Scene detection found fewer than 2 distinct timestamps. "
+                "Trailer likely corrupt — delete trailer_raw.mp4 and re-fetch."
+            )
         clip_specs = auto_select_clips(changes, total_duration)
         print("  Auto-selected clips:")
         for spec in clip_specs:

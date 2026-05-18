@@ -30,6 +30,9 @@ from pathlib import Path
 
 from google_auth_oauthlib.flow import InstalledAppFlow
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _atomic import atomic_write_text  # noqa: E402
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 CLIENT_SECRET = PROJECT_ROOT / "client_secret.json"
 TOKEN_PATH = PROJECT_ROOT / "token.json"
@@ -75,7 +78,7 @@ def main() -> None:
         success_message="OAuth complete. You can close this browser tab.",
     )
 
-    TOKEN_PATH.write_text(creds.to_json())
+    atomic_write_text(TOKEN_PATH, creds.to_json())
     print(f"\n✓ Saved {TOKEN_PATH}")
     print("  This file contains a long-lived refresh token. Do NOT commit it.")
     print("  Verify with: python scripts/upload_to_youtube.py --list")
