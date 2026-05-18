@@ -28,12 +28,19 @@ Y_POSITION = "h*0.72"  # above YouTube UI safe zone (bottom ~25%)
 
 
 def extract_words(alignment: dict) -> list[tuple[str, float, float]]:
-    """Group alignment characters into (word, start, end) tuples on whitespace."""
+    """Group alignment characters into (word, start, end) tuples on whitespace.
+
+    Post-processes to clamp each word's end time to the next word's start
+    time (minus a small gap). Without this, words ending in sentence
+    punctuation (e.g. "smiled.") whose `end` includes the period's duration
+    overlap visually with the next word that begins before the period
+    finishes — viewer sees two captions stacked.
+    """
     chars = alignment["characters"]
     starts = alignment["character_start_times_seconds"]
     ends = alignment["character_end_times_seconds"]
 
-    words = []
+    raw_words: list[tuple[str, float, float]] = []
     cur_chars: list[str] = []
     cur_start: float | None = None
     cur_end: float | None = None
@@ -41,7 +48,7 @@ def extract_words(alignment: dict) -> list[tuple[str, float, float]]:
     for i, ch in enumerate(chars):
         if ch.isspace():
             if cur_chars:
-                words.append(("".join(cur_chars), cur_start, cur_end))
+                raw_words.append(("".join(cur_chars), cur_start, cur_end))
                 cur_chars = []
                 cur_start = None
                 cur_end = None
@@ -52,9 +59,18 @@ def extract_words(alignment: dict) -> list[tuple[str, float, float]]:
             cur_end = ends[i]
 
     if cur_chars:
-        words.append(("".join(cur_chars), cur_start, cur_end))
+        raw_words.append(("".join(cur_chars), cur_start, cur_end))
 
-    return words
+    # Clamp each word's end to the next word's start with a 40ms safety gap
+    # so two captions are never on screen simultaneously.
+    CAPTION_GAP_SEC = 0.04
+    clamped: list[tuple[str, float, float]] = []
+    for idx, (w, s, e) in enumerate(raw_words):
+        if idx + 1 < len(raw_words):
+            next_start = raw_words[idx + 1][1]
+            e = min(e, max(s, next_start - CAPTION_GAP_SEC))
+        clamped.append((w, s, e))
+    return clamped
 
 
 def normalize_word(word: str) -> str:

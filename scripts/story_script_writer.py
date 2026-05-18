@@ -43,6 +43,36 @@ VOICE_IDS = {
     "Charlie": "IKne3meq5aSn9XLyUdCD",
     "Brian":   "nPczCjzI2devNBz1zQrb",
     "Daniel":  "onwK4e9ZLuTAKqWW03F9",
+    "Rachel":  "21m00Tcm4TlvDq8ikWAM",
+    "Bella":   "EXAVITQu4vr4xnSDxMaL",
+    "Domi":    "AZnzlk1XvdvUeBnXmlld",
+    "Elli":    "MF3mGyEYCl7XYWbV9V6O",
+    "Nicole":  "piTKgcLEGmPE4e6mEKli",
+}
+
+# Per-sub-genre voice menu by protagonist gender. The DEFAULT (first entry)
+# applies when the queue doesn't specify. Writer/queueing-human can override
+# in two ways:
+#   1) Queue file: add "Voice: <name>" line to override per video
+#   2) script_config.json: set voice_id directly (post-scaffold edit)
+#
+# Pick by POV gender first, then by tone match. Rule of thumb:
+#   - First-person female narrator → use a female voice. Always.
+#   - First-person male narrator   → use a male voice. Always.
+#   - Third-person/omniscient      → use the sub-genre's default tone voice.
+VOICE_MENU = {
+    "survival": {
+        "M": ["Charlie", "Adam", "Callum"],
+        "F": ["Domi",    "Rachel", "Elli"],
+    },
+    "reddit": {
+        "M": ["Brian",  "Charlie", "Daniel"],
+        "F": ["Rachel", "Domi",    "Elli"],
+    },
+    "horror": {
+        "M": ["Daniel", "Brian",  "Adam"],
+        "F": ["Nicole", "Bella",  "Rachel"],
+    },
 }
 
 
@@ -244,19 +274,61 @@ def extract_subgenre_letter(case_id: str) -> str:
     return m.group(1)
 
 
+def read_queue_overrides(case_id: str) -> dict:
+    """Pull voice + narrator-gender overrides from the queue file if present.
+
+    Looks for these patterns in story_queue/<case_id>.md:
+      **Voice:** <name>           → exact voice override (Rachel, Daniel, etc.)
+      **Narrator gender:** F      → picks default voice for sub-genre + gender
+
+    Voice override (if a valid library name) takes precedence over gender.
+    """
+    queue_file = QUEUE_DIR / f"{case_id}.md"
+    overrides: dict = {}
+    if not queue_file.exists():
+        return overrides
+    text = queue_file.read_text()
+    voice_m = re.search(r"\*\*Voice:\*\*\s*([A-Za-z]+)", text)
+    gender_m = re.search(r"\*\*Narrator gender:\*\*\s*([MFmf])", text)
+    if voice_m:
+        name = voice_m.group(1).strip()
+        if name in VOICE_IDS:
+            overrides["voice_name"] = name
+            overrides["voice_id"] = VOICE_IDS[name]
+    if gender_m:
+        overrides["narrator_gender"] = gender_m.group(1).upper()
+    return overrides
+
+
 def scaffold_script_config(case_id: str, out_path: Path | None = None) -> Path:
     """Write a starter script_config.json with empty beat texts the routine will fill in.
 
     Pre-populates: voice, model, speed, color grade, beat labels + purpose hints.
+    Voice can be overridden in the queue file via "**Voice:** <name>" or
+    "**Narrator gender:** M|F" — see VOICE_MENU for per-sub-genre options.
     Leaves: hook_text, beat texts, title, keywords (Claude fills these in).
     """
     letter = extract_subgenre_letter(case_id)
     template = get_template(letter)
+    overrides = read_queue_overrides(case_id)
 
     case_dir = SCRIPTS_DIR / case_id
     case_dir.mkdir(parents=True, exist_ok=True)
     if out_path is None:
         out_path = case_dir / "script_config.json"
+
+    # Resolve voice: explicit Voice: override > gender-default from VOICE_MENU > template default
+    voice_name = template["voice_name"]
+    voice_id = template["voice_id"]
+    if "voice_name" in overrides:
+        voice_name = overrides["voice_name"]
+        voice_id = overrides["voice_id"]
+    elif "narrator_gender" in overrides:
+        gender = overrides["narrator_gender"]
+        menu = VOICE_MENU.get(template["subgenre"], {}).get(gender, [])
+        if menu:
+            voice_name = menu[0]
+            voice_id = VOICE_IDS[voice_name]
 
     vb_defaults = template.get("visual_brief_defaults", {})
     sb_defaults = template.get("sound_brief_defaults", {})
@@ -273,8 +345,8 @@ def scaffold_script_config(case_id: str, out_path: Path | None = None) -> Path:
         "case_id": case_id,
         "vertical": "story",
         "subgenre": template["subgenre"],
-        "voice_id": template["voice_id"],
-        "voice_name": template["voice_name"],
+        "voice_id": voice_id,
+        "voice_name": voice_name,
         "voice_speed": template["voice_speed"],
         "model_id": template["model_id"],
         "color_grade_vertical": template["color_grade_vertical"],

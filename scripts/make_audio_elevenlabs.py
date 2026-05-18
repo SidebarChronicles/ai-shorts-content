@@ -97,15 +97,25 @@ def map_vocal_mood(mood: str) -> dict:
 # Voice library reference — voice picks per vertical (used by orchestrators
 # to populate game_config.json with the appropriate voice_id).
 #
-#   Slot         Voice ID                              Best for
-#   -----------  -----------------------------------   ----------------------------------
+#   Slot         Voice ID                              Gender Best for
+#   -----------  -----------------------------------   ------ -----------------------------
 VOICE_LIBRARY = {
-    "Adam":    "pNInz6obpgDQGcFmaJgB",  # deep, serious documentary — games hype, action
-    "Charlie": "IKne3meq5aSn9XLyUdCD",  # natural conversational — top-X, casual explainers
-    "Callum":  "N2lVS1w4EtoT3dr4eOWO",  # energetic punchy — sports, gaming hype
-    "Brian":   "nPczCjzI2devNBz1zQrb",  # narrator authoritative — cases, mysteries, history
-    "Rachel":  "21m00Tcm4TlvDq8ikWAM",  # warm authoritative — psychology, self-improvement
-    "Daniel":  "onwK4e9ZLuTAKqWW03F9",  # British formal — finance, news
+    "Adam":    "pNInz6obpgDQGcFmaJgB",  # M  deep, serious documentary — games hype, action
+    "Charlie": "IKne3meq5aSn9XLyUdCD",  # M  natural conversational — top-X, casual explainers
+    "Callum":  "N2lVS1w4EtoT3dr4eOWO",  # M  energetic punchy — sports, gaming hype
+    "Brian":   "nPczCjzI2devNBz1zQrb",  # M  narrator authoritative — cases, mysteries, history
+    "Daniel":  "onwK4e9ZLuTAKqWW03F9",  # M  British formal — finance, news
+    "Rachel":  "21m00Tcm4TlvDq8ikWAM",  # F  warm authoritative — psychology, confessional horror
+    "Bella":   "EXAVITQu4vr4xnSDxMaL",  # F  soft, intimate — first-person whisper horror, fragile narrator
+    "Domi":    "AZnzlk1XvdvUeBnXmlld",  # F  strong, confident — AITA narrators, indignant POV
+    "Elli":    "MF3mGyEYCl7XYWbV9V6O",  # F  young, emotive — teen/twenties protagonist, raw emotion
+    "Nicole":  "piTKgcLEGmPE4e6mEKli",  # F  intimate whisper — horror reveals, breathy survival
+}
+
+# Gender lookup (string match against VOICE_LIBRARY keys)
+VOICE_GENDER = {
+    "Adam": "M", "Charlie": "M", "Callum": "M", "Brian": "M", "Daniel": "M",
+    "Rachel": "F", "Bella": "F", "Domi": "F", "Elli": "F", "Nicole": "F",
 }
 
 # Model picks per content type:
@@ -396,13 +406,16 @@ def synthesize_per_beat(
         else:
             time_offset += beat_duration
 
-    # Concat all beat MP3s into final out_mp3 via ffmpeg concat demuxer
+    # Concat all beat MP3s into final out_mp3 via ffmpeg concat demuxer.
+    # Pass -f mp3 explicitly because ffmpeg can't infer the output format
+    # from the .part suffix on the temp file.
     list_file = tmp_dir / "concat.txt"
     list_file.write_text("\n".join(f"file '{p.resolve()}'" for p in beat_mp3s))
     part_mp3 = out_mp3.with_suffix(out_mp3.suffix + ".part")
+    out_mp3.parent.mkdir(parents=True, exist_ok=True)
     subprocess.run(
         ["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(list_file),
-         "-c:a", "libmp3lame", "-q:a", "2", str(part_mp3)],
+         "-c:a", "libmp3lame", "-q:a", "2", "-f", "mp3", str(part_mp3)],
         check=True, capture_output=True,
     )
     os.replace(part_mp3, out_mp3)

@@ -2,8 +2,18 @@
 
 **Status:** QUEUED
 **Subgenre:** survival | reddit | horror
-**Voice:** Charlie | Brian | Daniel
+**Voice:** Charlie | Brian | Daniel | Rachel | Bella | Domi | Elli | Nicole
+**Narrator gender:** M | F
 **Model:** eleven_turbo_v2 | eleven_multilingual_v2
+
+> Voice / Narrator-gender notes:
+> - First-person female narrator (e.g. "my husband", "my wife noticed") → set `Narrator gender: F`
+> - First-person male narrator → set `Narrator gender: M`
+> - The scaffold reads these in priority order: explicit `Voice:` > `Narrator gender:` default > sub-genre template default
+> - Per-sub-genre menu by gender lives in `scripts/story_script_writer.py:VOICE_MENU`
+> - Horror+F default = Nicole (intimate whisper); Horror+M default = Daniel (British formal)
+> - Reddit+F default = Rachel; Reddit+M default = Brian
+> - Survival+F default = Domi; Survival+M default = Charlie
 
 ## Premise
 [1-2 sentences. The core story idea — not the script. Claude writes the script at production time using story_script_writer.py templates AND fills in per-beat `visual_brief` + `sound_brief` per scripts/story_writer_prompt.md.]

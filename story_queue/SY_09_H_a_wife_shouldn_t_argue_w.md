@@ -1,8 +1,9 @@
 # SY_09_H_a_wife_shouldn_t_argue_w — [WRITER: choose a 4-6 word working title]
 
-**Status:** QUEUED
+**Status:** RENDERED
 **Subgenre:** horror
-**Voice:** Daniel
+**Voice:** Rachel
+**Narrator gender:** F
 **Model:** eleven_multilingual_v2
 
 ## Premise

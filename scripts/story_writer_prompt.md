@@ -17,6 +17,7 @@ field tells you which template's rules apply.
 3. **7 beats. ~50s total spoken.** Per-beat `target_seconds` and `max_seconds` are in the scaffold. Don't blow past them.
 4. **Every beat gets a `visual_brief` AND a `sound_brief`.** Empty briefs fail validation and stall the render. See schemas below.
 5. **Horror = original micro-fiction only.** No Slenderman, SCP, Backrooms, Mr. Wisepuff, etc. Tropes are fine (haunted house, doppelganger); specific IP is not.
+6. **Voice must match POV gender.** If the protagonist/narrator is female (first-person, e.g. "my husband", "my wife noticed"), set `Narrator gender: F` in the queue file BEFORE scaffolding — or override directly with `Voice: <name>`. The scaffold picks the sub-genre-appropriate female voice from `VOICE_MENU` (Nicole for horror, Rachel for reddit, Domi for survival). The default for every sub-genre is a male voice, so silence here = male narrator. Mismatched-gender narration is the single biggest immersion-killer in AI shorts.
 
 ---
 
