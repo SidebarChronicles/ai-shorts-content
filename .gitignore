@@ -57,7 +57,6 @@ assets/sfx/**/*.mp3
 
 # Runtime logs (tracked elsewhere or regeneratable)
 output/game_pipeline.log
-output/elevenlabs_usage.json
 
 # Claude Code session state
 .claude/scheduled_tasks.lock

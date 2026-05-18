@@ -1,0 +1,97 @@
+{
+  "generated_at": "2026-05-18T02:41:06.594847+00:00",
+  "window": {
+    "start": "2026-04-17",
+    "end": "2026-05-17"
+  },
+  "channel_rollup": {
+    "views": 0,
+    "estimatedMinutesWatched": 0,
+    "averageViewDuration": 0,
+    "averageViewPercentage": 0,
+    "subscribersGained": 0,
+    "subscribersLost": 0,
+    "likes": 0,
+    "dislikes": 0,
+    "shares": 0,
+    "comments": 0
+  },
+  "videos": {
+    "01_gothferrari": {
+      "metrics": {
+        "views": 0,
+        "estimatedMinutesWatched": 0,
+        "averageViewDuration": 0,
+        "averageViewPercentage": 0,
+        "subscribersGained": 0,
+        "subscribersLost": 0,
+        "likes": 0,
+        "dislikes": 0,
+        "shares": 0,
+        "comments": 0
+      },
+      "retention_curve": [],
+      "scheduled_publish": "manual",
+      "uploaded_at": "2026-05-17T20:00:00+00:00",
+      "video_id": "sq7_aC9eFjU",
+      "watch_url": "https://www.youtube.com/watch?v=sq7_aC9eFjU"
+    },
+    "02_ransomware_negotiator": {
+      "metrics": {
+        "views": 0,
+        "estimatedMinutesWatched": 0,
+        "averageViewDuration": 0,
+        "averageViewPercentage": 0,
+        "subscribersGained": 0,
+        "subscribersLost": 0,
+        "likes": 0,
+        "dislikes": 0,
+        "shares": 0,
+        "comments": 0
+      },
+      "retention_curve": [],
+      "scheduled_publish": "manual",
+      "uploaded_at": "2026-05-17T21:00:00+00:00",
+      "video_id": "PtcQH4FJ5uE",
+      "watch_url": "https://www.youtube.com/watch?v=PtcQH4FJ5uE"
+    },
+    "03_fugitive_crypto_scam": {
+      "metrics": {
+        "views": 0,
+        "estimatedMinutesWatched": 0,
+        "averageViewDuration": 0,
+        "averageViewPercentage": 0,
+        "subscribersGained": 0,
+        "subscribersLost": 0,
+        "likes": 0,
+        "dislikes": 0,
+        "shares": 0,
+        "comments": 0
+      },
+      "retention_curve": [],
+      "scheduled_publish": "manual",
+      "uploaded_at": "2026-05-17T21:00:00+00:00",
+      "video_id": "MRdgHP5DJ4c",
+      "watch_url": "https://www.youtube.com/watch?v=MRdgHP5DJ4c"
+    },
+    "04_cargo_heist": {
+      "metrics": {
+        "views": 0,
+        "estimatedMinutesWatched": 0,
+        "averageViewDuration": 0,
+        "averageViewPercentage": 0,
+        "subscribersGained": 0,
+        "subscribersLost": 0,
+        "likes": 0,
+        "dislikes": 0,
+        "shares": 0,
+        "comments": 0
+      },
+      "retention_curve": [],
+      "scheduled_publish": "2026-05-19T22:00:00+00:00",
+      "uploaded_at": "2026-05-18T02:30:19.712570+00:00",
+      "video_id": "hTttFkjJED4",
+      "watch_url": "https://www.youtube.com/watch?v=hTttFkjJED4"
+    }
+  }
+}

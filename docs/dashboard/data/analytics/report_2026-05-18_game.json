@@ -1,0 +1,129 @@
+{
+  "generated_at": "2026-05-18T11:58:02.315879+00:00",
+  "window": {
+    "start": "2026-05-16",
+    "end": "2026-05-18"
+  },
+  "ypp": {
+    "subscribers": 0,
+    "shorts_views_90d": 0,
+    "watch_hours_90d": 0,
+    "thresholds": {
+      "early": {
+        "subs": 500,
+        "shorts_views_90d": 3000000,
+        "watch_hours": 3000
+      },
+      "full": {
+        "subs": 1000,
+        "shorts_views_90d": 10000000,
+        "watch_hours": 4000
+      }
+    }
+  },
+  "channel_rollup": {
+    "_no_data": true
+  },
+  "videos": {
+    "GG_01_subnautica2": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T11:10:30.753152+00:00",
+      "video_id": "8UqH-CBoYd0",
+      "watch_url": "https://www.youtube.com/watch?v=8UqH-CBoYd0"
+    },
+    "GG_02_007firstlight": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T11:10:34.734063+00:00",
+      "video_id": "TC-aHPISygQ",
+      "watch_url": "https://www.youtube.com/watch?v=TC-aHPISygQ"
+    },
+    "GG_03_forzahorizon6": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T11:10:38.226076+00:00",
+      "video_id": "gEbtZuGoym0",
+      "watch_url": "https://www.youtube.com/watch?v=gEbtZuGoym0"
+    },
+    "GG_04_crimsondesert": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T11:10:42.417465+00:00",
+      "video_id": "zKxpTQka5mc",
+      "watch_url": "https://www.youtube.com/watch?v=zKxpTQka5mc"
+    },
+    "GG_05_directive8020": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T11:10:45.037074+00:00",
+      "video_id": "ubA0tWm3zmg",
+      "watch_url": "https://www.youtube.com/watch?v=ubA0tWm3zmg"
+    },
+    "GG_06_legobatmanlegacy": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T11:10:49.349587+00:00",
+      "video_id": "95U5uxkq6dM",
+      "watch_url": "https://www.youtube.com/watch?v=95U5uxkq6dM"
+    },
+    "GG_07_marathon": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T11:10:52.561965+00:00",
+      "video_id": "nT5QISoUVwo",
+      "watch_url": "https://www.youtube.com/watch?v=nT5QISoUVwo"
+    },
+    "GG_08_godofwarsonsofsparta": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T11:10:55.281399+00:00",
+      "video_id": "Ew4Ts4RgLr0",
+      "watch_url": "https://www.youtube.com/watch?v=Ew4Ts4RgLr0"
+    },
+    "GG_09_southofmidnight": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T11:10:58.594806+00:00",
+      "video_id": "ajKDCYmXpV4",
+      "watch_url": "https://www.youtube.com/watch?v=ajKDCYmXpV4"
+    },
+    "GG_10_ufc6": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T11:11:04.395000+00:00",
+      "video_id": "412lHYkO_C4",
+      "watch_url": "https://www.youtube.com/watch?v=412lHYkO_C4"
+    }
+  }
+}
