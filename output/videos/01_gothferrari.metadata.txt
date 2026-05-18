@@ -1,0 +1,84 @@
+================================================================================
+YOUTUBE SHORTS UPLOAD METADATA — 01 GothFerrari
+Generated 2026-05-17 from case_queue/01_gothferrari.md
+================================================================================
+
+FILE:    output/videos/01_gothferrari.mp4
+FORMAT:  H.264 (yuv420p) 720x1280 + AAC 96kbps
+DURATION: 62.3s (audio) / 63.4s (video — trailing freeze on the outcome card)
+SIZE:    5.2 MB
+
+--------------------------------------------------------------------------------
+TITLE
+--------------------------------------------------------------------------------
+When Hackers Couldn't Steal Your Crypto, They Sent Him #shorts
+
+--------------------------------------------------------------------------------
+DESCRIPTION (paste verbatim)
+--------------------------------------------------------------------------------
+GothFerrari: 20-year-old Marlon Ferro was sentenced this month to 78 months in
+federal prison for his role in a sprawling $250 million cryptocurrency heist.
+When hackers couldn't trick victims into handing over their crypto, the
+enterprise sent Ferro to break into their homes and steal the hardware wallets
+outright.
+
+Source: U.S. Department of Justice press release, May 6, 2026
+https://www.justice.gov/usao-dc/pr/gothferrari-sentenced-78-months-prison-role-massive-cryptocurrency-heist
+
+⚠ This video uses synthetic narration generated with AI tools. All facts are
+sourced from the linked public court records.
+
+#shorts #truecrime #cryptoheist #cybercrime #publicrecords #DOJ
+
+--------------------------------------------------------------------------------
+TAGS (comma-separated)
+--------------------------------------------------------------------------------
+true crime, cryptocurrency, crypto heist, cybercrime, DOJ, public records,
+heist, GothFerrari, BlackCat, ransomware
+
+--------------------------------------------------------------------------------
+UPLOAD SETTINGS (MUST GET THESE RIGHT)
+--------------------------------------------------------------------------------
+Category:                     Entertainment (24)
+Made for kids:                NO
+Audience:                     No, not made for kids
+Contains paid promotion:      No
+► Altered or synthetic content: YES  ← REQUIRED, do not skip
+   When YouTube Studio asks "Does your video contain altered or synthetic
+   content that looks realistic?", answer YES and check the box for "Synthetic
+   voice or sound." Failing to disclose AI narration risks channel suspension
+   under the May 2025 policy.
+Visibility:                   Public (or Schedule for off-peak)
+License:                      Standard YouTube License
+Comments:                     Allow all (consider Hold for review)
+Recommended publish window:   Tue–Thu, 4–6 PM local time
+
+--------------------------------------------------------------------------------
+ATTRIBUTION CHECK (for your own records)
+--------------------------------------------------------------------------------
+Defendant:    Marlon Ferro, 20, Santa Ana, CA (aka "GothFerrari")
+Court:        U.S. District Court, District of Columbia
+Judge:        Hon. Colleen Kollar-Kotelly
+Case number:  24cr417
+Conviction:   Guilty plea (Oct 17, 2025) — conspiracy to participate in a
+              racketeer influenced and corrupt organization
+Sentence:     78 months prison + 3 yr supervised release + $2.5M restitution
+              (sentenced May 6, 2026)
+
+All 20 factual claims in the script were verified against the source quotes
+in `output/scripts/01_gothferrari/sources.json`. Verifier log and safety
+classifier scores are in `output/scripts/01_gothferrari/script.md`.
+
+--------------------------------------------------------------------------------
+PRODUCTION NOTES (for the autonomous build / future revisions)
+--------------------------------------------------------------------------------
+- Voice: macOS `say` voice "Daniel" at 180 wpm (generated locally on Justin's
+  Mac via scripts/make_audio.sh — Linux sandbox had no TTS available)
+- Resolution: 720x1280 (YouTube accepts; native 1080x1920 in a future build
+  when sandbox can sustain longer encodes)
+- Captions: 60 pre-baked PNG frames with text rendered via PIL + 8-direction
+  black outline; bypasses libass at encode time for speed
+- Scenes: 6 stylized cards (case header + scene-specific layout + footer),
+  rendered by `scripts/render_video.py`
+- No third-party assets used — every pixel is rendered programmatically.
+  Future versions can add Pexels b-roll + the public DOJ surveillance still.

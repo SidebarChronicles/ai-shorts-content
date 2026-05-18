@@ -1,0 +1,30 @@
+[
+  {
+    "file": "output/scripts/MV_01_avatarfireandash/clips/clip_01.mp4",
+    "start": 33.2,
+    "end": 44.2,
+    "duration": 11.0,
+    "label": "hook"
+  },
+  {
+    "file": "output/scripts/MV_01_avatarfireandash/clips/clip_02.mp4",
+    "start": 58.81,
+    "end": 69.81,
+    "duration": 11.0,
+    "label": "gameplay"
+  },
+  {
+    "file": "output/scripts/MV_01_avatarfireandash/clips/clip_03.mp4",
+    "start": 93.72,
+    "end": 104.72,
+    "duration": 11.0,
+    "label": "standout"
+  },
+  {
+    "file": "output/scripts/MV_01_avatarfireandash/clips/clip_04.mp4",
+    "start": 125.63,
+    "end": 136.63,
+    "duration": 11.0,
+    "label": "cta"
+  }
+]
