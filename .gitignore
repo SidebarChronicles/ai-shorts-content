@@ -15,6 +15,7 @@ output/scripts/*/clips/
 output/scripts/*/clips_portrait/
 output/scripts/*/bg_clips_concat.txt
 output/scripts/*/captions.ass
+output/scripts/*/karaoke.filter
 output/videos/
 output/game_videos/*.mp4
 output/game_videos/*.mp4.part

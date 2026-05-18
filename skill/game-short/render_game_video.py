@@ -5,7 +5,7 @@ Input:  output/scripts/<game_id>/game_config.json
 Output:
   output/scripts/<game_id>/clips_portrait/<clip>.mp4   (1080x1920, darkened)
   output/scripts/<game_id>/bg_clips_concat.txt         (FFmpeg concat list)
-  output/scripts/<game_id>/captions.ass                (ASS subtitle file)
+  output/scripts/<game_id>/karaoke.filter              (FFmpeg drawtext chain — word-by-word captions)
 
 Then run FFmpeg to compose the final video (command shown at end of this script's output).
 
@@ -25,25 +25,15 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
+# Make scripts/ importable for build_karaoke_filter
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from build_karaoke_filter import build_chain as build_karaoke_chain  # noqa: E402
+
 # Portrait canvas dimensions
 W, H = 1080, 1920
 
-# Caption style constants (matches visual_style_guide.md)
-FONT_NAME = "Poppins Bold"
-CAPTION_FONT_SIZE = 72
-CAPTION_COLOR = "&H00FFFFFF"    # white
-CAPTION_OUTLINE = "&H00000000"  # black
-CAPTION_MARGIN_V = 240          # pixels from bottom
-
-# Text overlay colors
-ACCENT_PRIMARY = "0x8B5CF6"   # electric purple
-ACCENT_SECONDARY = "0x06B6D4" # neon cyan
-
 # How dark to make the overlay (colorchannelmixer multiplier)
 OVERLAY_DARKNESS = 0.55   # 0.55 = ~45% darker (reads text well over most footage)
-
-# Words per caption flash (2-3 words per chunk)
-WORDS_PER_FLASH = 3
 
 
 # ---------------------------------------------------------------------------
@@ -105,58 +95,19 @@ def process_clip_to_portrait(clip_path: Path, out_path: Path,
 
 
 # ---------------------------------------------------------------------------
-# ASS caption builder
+# Karaoke caption builder
 # ---------------------------------------------------------------------------
 
-def build_ass(text: str, audio_duration: float) -> str:
-    """Generate ASS subtitle file from narration text + audio duration.
+def build_karaoke(audio_file: Path) -> str:
+    """Generate FFmpeg drawtext filter chain from the audio's alignment.json sidecar.
 
-    Uses proportional word-count timing (same approach as truecrime renderer).
+    Returns empty string if alignment file is missing or has too few words —
+    caller should treat that as "skip captions, log warning".
     """
-    words = text.split()
-    total_words = len(words)
-    if total_words == 0:
+    alignment_path = audio_file.parent / f"{audio_file.stem}.alignment.json"
+    if not alignment_path.exists():
         return ""
-
-    # Chunk words into WORDS_PER_FLASH groups
-    chunks = []
-    for i in range(0, total_words, WORDS_PER_FLASH):
-        chunks.append(words[i:i + WORDS_PER_FLASH])
-
-    # Proportional timing: each chunk gets time proportional to its word count
-    chunk_durations = []
-    for chunk in chunks:
-        proportion = len(chunk) / total_words
-        chunk_durations.append(proportion * audio_duration)
-
-    ass_header = f"""[Script Info]
-ScriptType: v4.00+
-PlayResX: {W}
-PlayResY: {H}
-ScaledBorderAndShadow: yes
-
-[V4+ Styles]
-Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Default,{FONT_NAME},{CAPTION_FONT_SIZE},{CAPTION_COLOR},&H000000FF,{CAPTION_OUTLINE},&H00000000,-1,0,0,0,100,100,0,0,1,4,0,2,0,0,{CAPTION_MARGIN_V},1
-
-[Events]
-Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-"""
-
-    def ts(seconds: float) -> str:
-        h = int(seconds // 3600)
-        m = int((seconds % 3600) // 60)
-        s = seconds % 60
-        return f"{h}:{m:02d}:{s:05.2f}"
-
-    events = []
-    t = 0.0
-    for chunk, dur in zip(chunks, chunk_durations):
-        text_line = " ".join(chunk).upper()
-        events.append(f"Dialogue: 0,{ts(t)},{ts(t + dur)},Default,,0,0,0,,{text_line}")
-        t += dur
-
-    return ass_header + "\n".join(events) + "\n"
+    return build_karaoke_chain(alignment_path)
 
 
 # ---------------------------------------------------------------------------
@@ -216,10 +167,6 @@ def main() -> None:
     game_title = cfg.get("game_title", "").upper()
     platform_label = cfg.get("platform", "") + ("  •  " + cfg.get("release_label", "") if cfg.get("release_label") else "")
 
-    # Reconstruct spoken text from beats for ASS captions
-    beats = cfg.get("beats", [])
-    spoken_text = " ".join(b["text"] for b in beats if b.get("text"))
-
     game_dir = PROJECT_ROOT / "output" / "scripts" / game_id
     portrait_dir = game_dir / "clips_portrait"
     portrait_dir.mkdir(parents=True, exist_ok=True)
@@ -270,26 +217,32 @@ def main() -> None:
         concat_path.write_text(concat_content)
         print(f"  ✓ {concat_path.relative_to(PROJECT_ROOT)}")
 
-    # Step 3: Build ASS captions
-    print("  Building ASS captions…")
-    if not spoken_text:
-        print("  ⚠  No spoken text in game_config.json beats — captions will be empty")
-    ass_content = build_ass(spoken_text, audio_duration)
-    ass_path = game_dir / "captions.ass"
-    if not args.dry_run:
-        ass_path.write_text(ass_content)
-        chunks = len([l for l in ass_content.splitlines() if l.startswith("Dialogue:")])
-        print(f"  ✓ {ass_path.relative_to(PROJECT_ROOT)} ({chunks} caption chunks)")
+    # Step 3: Build karaoke captions (word-by-word drawtext chain)
+    print("  Building karaoke caption chain…")
+    karaoke_chain = build_karaoke(audio_file)
+    karaoke_path = game_dir / "karaoke.filter"
+    if karaoke_chain:
+        if not args.dry_run:
+            karaoke_path.write_text(karaoke_chain)
+            word_count = karaoke_chain.count("drawtext=")
+            print(f"  ✓ {karaoke_path.relative_to(PROJECT_ROOT)} ({word_count} words)")
+    else:
+        print(f"  ⚠  No alignment data — captions will be skipped for this render")
 
     # Step 4: Print the FFmpeg encode command
     out_mp4 = PROJECT_ROOT / "output" / "game_videos" / f"{game_id}.mp4"
     out_mp4.parent.mkdir(parents=True, exist_ok=True)
 
+    if karaoke_chain:
+        vf_line = f"  -vf \"$(cat {karaoke_path.relative_to(PROJECT_ROOT)})\" \\\n"
+    else:
+        vf_line = ""
+
     ffmpeg_cmd = (
         f"ffmpeg -y \\\n"
         f"  -f concat -safe 0 -i {concat_path.relative_to(PROJECT_ROOT)} \\\n"
         f"  -i {audio_file.relative_to(PROJECT_ROOT)} \\\n"
-        f"  -vf \"subtitles={ass_path.relative_to(PROJECT_ROOT)}\" \\\n"
+        f"{vf_line}"
         f"  -map 0:v -map 1:a \\\n"
         f"  -c:v libx264 -preset fast -crf 22 \\\n"
         f"  -c:a aac -b:a 128k -shortest -movflags +faststart \\\n"
