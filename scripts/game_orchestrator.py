@@ -407,6 +407,8 @@ def step_write_description(game_id: str) -> bool:
         f"🖥  Available on: {platform}",
         "",
         "⚠ Narration in this video is AI-generated (ElevenLabs).",
+        "🎵 Music: Kevin MacLeod (incompetech.com) — Licensed under CC-BY 4.0",
+        "    https://creativecommons.org/licenses/by/4.0/",
         "",
         hashtag_line,
     ]
