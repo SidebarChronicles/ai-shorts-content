@@ -1,8 +1,8 @@
 # Morning Handoff — May 19, 2026
 
-> **TL;DR** — Tier 1 and Tier 2 of the Retention Playbook are fully shipped, tested, and committed. Tier 3 is gated on your inputs (Replicate budget, voice recording, dep approval). The pipeline now produces shorts that should retain materially better than the 18 live videos — but the 18 live videos themselves will NOT be re-rendered (per the plan's explicit non-goal). You measure the lift by shipping NEW videos.
+> **TL;DR** — Tier 1, Tier 2, **and Tier 3.3 (YOLOv8 smart-crop)** of the Retention Playbook are shipped. Flux/Replicate (Tier 3.1) is deferred per your call; voice cloning (Tier 3.2) you decided to skip for now. The pipeline now produces shorts that should retain materially better than the 18 live videos — but the 18 live videos themselves will NOT be re-rendered (per the plan's explicit non-goal). You measure the lift by shipping NEW videos.
 >
-> **One housekeeping note:** the final commit of the night (`09bd46b` — linter + this handoff doc) is **local-only**. Auto-mode classifier blocked the push to main. Run `git push origin main` from the project root when you start your day to get it onto GitHub.
+> All commits are pushed to `origin/main` — nothing pending locally.
 
 ---
 
@@ -74,15 +74,26 @@ b1ec114  Tier 1 audio
 
 ---
 
-## What is NOT done (Tier 3 — your gates)
+## Tier 3 status
 
-| Item | What's needed from you | Approx time / cost |
+| Item | Status | Notes |
 |---|---|---|
-| **3.1 Flux 2 Pro AI image fallback** | Approve ~$30/mo Replicate budget + provide `REPLICATE_API_TOKEN` | $30/mo soft cap, ~3 hours code |
-| **3.2 Voice cloning ("the DROP voice")** | Record 30 min clean audio (or commission a voice actor), upload to ElevenLabs Voice Cloning | $10-50 one-time + ElevenLabs Pro |
-| **3.3 YOLOv8 smart-crop trailers** | OK on installing ~2GB Python deps (`ultralytics` + `opencv-python`), accept 20-40% slower renders | 0 USD, ~3 hours code |
+| **3.1 Flux 2 Pro AI image fallback** | **Deferred** | Revisit after 72h of Tier 1+2 retention data |
+| **3.2 Voice cloning ("the DROP voice")** | **Skipped for now** | You'll defer the audio recording until 1k subs in sight |
+| **3.3 YOLOv8 smart-crop trailers** | **✓ Shipped** | `--crop smart_crop` flag is now opt-in alongside pillarbox_blur (default) and center_crop; falls back gracefully if YOLO deps unavailable |
 
-All three are documented in detail in `~/.claude/plans/ok-a-few-things-vast-sedgewick.md`.
+### Tier 3.3 details (what's new today)
+
+- `scripts/smart_crop_yolo.py` — Standalone OpenCV + YOLOv8n module. Detects the dominant subject (person, vehicle, animal) every 5 frames, interpolates per-frame x-center, smooths with a 1s moving-average window, writes a 1080×1920 pre-cropped intermediate.
+- `render_game_video.py --crop smart_crop` — Two-stage path: smart_crop_yolo writes the intermediate; FFmpeg thin-pass re-encodes (libx264 CRF 22) with the per-vertical color grade. Falls back to pillarbox if anything goes wrong (deps missing, no detections, etc.).
+- `requirements_full.txt` — `ultralytics>=8.1.0` + `opencv-python>=4.9.0`. Installed into `.venv-upload/` tonight (~2GB on disk).
+- `assets/models/yolov8n.pt` — Model weights cached here (~6MB, gitignored). First-run downloads automatically.
+
+**Smoke-tested on GG_07 Marathon clip_01 + clip_02** (1920×1080 @ 60fps). Output is valid H.264 portrait at the right duration with games color grade applied.
+
+**When to use it:** dynamic gameplay trailers where the action drifts (chases, panning shots, fast-moving subjects). Pillarbox blur is still the default for everything else — smart_crop is ~20-40% slower per render.
+
+**Recommended A/B once retention baseline lands:** re-render GG_03 Forza Horizon 6 with `--crop smart_crop` and compare retention vs. pillarbox.
 
 ---
 
@@ -106,19 +117,11 @@ The placeholder music I synthesized tonight via FFmpeg works for the pipeline, b
 
 This is the single biggest perception upgrade you can do without writing code.
 
-### 3. Approve / defer Tier 3 items
+### 3. Re-enable the scheduled task
 
-Decide one at a time:
+`daily-shorts-pipeline` is disabled (you disabled it last night before sleep). You confirmed you want to wait until **both** (a) you replace placeholder music with curated tracks AND (b) the 72h CTR window after applying title rewrites closes. After both, re-enable it.
 
-- **Replicate Flux budget?** If yes, fund $30 and add `REPLICATE_API_TOKEN` to `.env`; I'll wire it as the third-tier image fallback in `build_visuals_track.py`. Useful for mythology/mysteries where Pexels is generic.
-- **Voice cloning?** If you want a "DROP narrator" brand voice, record 30 min of yourself reading clean copy (or pick a single ElevenLabs library voice and just commit to it without paying for PVC).
-- **YOLOv8 install?** Only worth it if you want trailers to feel more "native" with subject-tracking crops. The pillarbox blur we have now is good — this is a polish-tier upgrade.
-
-### 4. Re-enable the scheduled task
-
-`daily-shorts-pipeline` is disabled (you disabled it last night before sleep). When you're ready for the routine to start producing under the new rules, re-enable it.
-
-### 5. Watch retention on the NEW videos
+### 4. Watch retention on the NEW videos
 
 The 18 live videos are the old baseline. The next batch the routine produces will run under:
 - Hook ≤12 words
@@ -149,18 +152,32 @@ NEW:
   scripts/build_audio_track.py         (~360 lines)
   scripts/seed_audio_assets.py         (~190 lines)
   scripts/check_script_structure.py    (~210 lines)
+  scripts/smart_crop_yolo.py           (~220 lines)  ← Tier 3.3
   assets/music/{games,movies,cases,mysteries,mythology,finance}/ambient_*.mp3
   assets/sfx/whoosh_01.wav, whoosh_02.wav, sting_short.wav
+  assets/models/yolov8n.pt              ← downloaded by smart_crop on first run (gitignored)
   docs/MORNING_HANDOFF_2026-05-19.md   (this file)
 
 MODIFIED:
   scripts/make_audio_elevenlabs.py     (voice_speed param)
   scripts/build_visuals_track.py       (4s cap + loop tail)
-  skill/game-short/render_game_video.py (audio mix + color grade + loop)
+  skill/game-short/render_game_video.py (audio mix + color grade + loop + smart_crop)
   ~/.claude/scheduled-tasks/daily-shorts-pipeline/SKILL.md  (writing rules)
-  .gitignore                            (audio_mixed + assets/music + assets/sfx)
+  requirements_full.txt                 (ultralytics + opencv-python)
+  .gitignore                            (audio_mixed + music + sfx + yolo weights)
 
 UNCHANGED (still on disk, just for reference):
   docs/RETENTION_PLAYBOOK.md            (the research source of truth)
   docs/TITLE_REWRITES_2026-05-18.md     (your manual action)
+```
+
+### Final commit graph (all pushed to origin/main)
+
+```
+30b85f4  feat: Tier 3.3 — YOLOv8 subject-tracking smart crop
+44ea876  docs: handoff note — final commit is local-only, needs git push
+09bd46b  feat: script-structure linter + Tier 1+2 morning handoff
+580847b  feat: Tier 2 retention upgrades — loop, per-vertical grade, 4s clip cap
+b1ec114  feat(audio): Tier 1 retention upgrade — music + transition SFX + voice speed
+53190d9  docs: retention playbook + title rewrites for 18 live videos
 ```
