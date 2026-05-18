@@ -1,0 +1,31 @@
+{
+  "game_id": "UM_01_dbcooper",
+  "audio_file": "assets/audio/narration_UM_01_dbcooper.mp3",
+  "case_title": "THE D.B. COOPER HIJACKING",
+  "voice_id": "nPczCjzI2devNBz1zQrb",
+  "voice_name": "Brian",
+  "model_id": "eleven_multilingual_v2",
+  "beats": [
+    {
+      "label": "hook",
+      "text": "A man in a suit hijacked a passenger jet, collected 200,000 dollars in cash, and jumped out the back with a parachute. He's never been identified.",
+      "keywords": ["man silhouette fedora dark", "passenger jet airplane vintage"]
+    },
+    {
+      "label": "setup",
+      "text": "November 24, 1971. A man calling himself Dan Cooper bought a one-way ticket from Portland to Seattle. He told a flight attendant he had a bomb. He demanded 200,000 dollars in cash and four parachutes.",
+      "keywords": ["vintage airline ticket 1970s", "old paper bills cash stack"]
+    },
+    {
+      "label": "standout",
+      "text": "After the plane refueled in Seattle and the FBI released the passengers, Cooper had the pilots fly south at low altitude with the rear staircase lowered. Somewhere over southwest Washington, in the rain and dark, he jumped. The FBI never found him.",
+      "keywords": ["parachute night sky dark forest", "rain forest pacific northwest"]
+    },
+    {
+      "label": "cta",
+      "text": "Forty-five years of investigation. Eight hundred suspects. Fifty-eight hundred dollars in decaying bills recovered along the Columbia River in 1980. The FBI officially closed the case in 2016. Cooper's identity remains unknown.",
+      "keywords": ["fbi file folder evidence", "river bank columbia forest"]
+    }
+  ],
+  "spoken_text": "A man in a suit hijacked a passenger jet, collected 200,000 dollars in cash, and jumped out the back with a parachute. He's never been identified. November 24, 1971. A man calling himself Dan Cooper bought a one-way ticket from Portland to Seattle. He told a flight attendant he had a bomb. He demanded 200,000 dollars in cash and four parachutes. After the plane refueled in Seattle and the FBI released the passengers, Cooper had the pilots fly south at low altitude with the rear staircase lowered. Somewhere over southwest Washington, in the rain and dark, he jumped. The FBI never found him. Forty-five years of investigation. Eight hundred suspects. Fifty-eight hundred dollars in decaying bills recovered along the Columbia River in 1980. The FBI officially closed the case in 2016. Cooper's identity remains unknown."
+}

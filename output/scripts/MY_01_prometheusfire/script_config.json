@@ -1,0 +1,31 @@
+{
+  "game_id": "MY_01_prometheusfire",
+  "audio_file": "assets/audio/narration_MY_01_prometheusfire.mp3",
+  "case_title": "PROMETHEUS STOLE FIRE FROM THE GODS",
+  "voice_id": "nPczCjzI2devNBz1zQrb",
+  "voice_name": "Brian",
+  "model_id": "eleven_multilingual_v2",
+  "beats": [
+    {
+      "label": "hook",
+      "text": "Prometheus stole fire from the gods. His punishment was an eagle eating his liver every single day, for eternity.",
+      "keywords": ["greek statue classical", "fire flame burning"]
+    },
+    {
+      "label": "setup",
+      "text": "In Greek mythology, Zeus had withheld fire from humans, keeping them weak and animalistic. But Prometheus, a Titan, sided with mortals over the gods.",
+      "keywords": ["greek temple ruins", "ancient marble sculpture man"]
+    },
+    {
+      "label": "standout",
+      "text": "Prometheus hid burning embers inside a hollow fennel stalk and smuggled them down from Mount Olympus. Humanity could now cook food, forge metal, and survive winter. Civilization was born.",
+      "keywords": ["ancient forge fire blacksmith", "hands holding torch ember"]
+    },
+    {
+      "label": "cta",
+      "text": "Zeus chained Prometheus to a rock in the Caucasus mountains. Every single day, an eagle ate his liver, which regenerated overnight. The torment was eternal, until Hercules eventually freed him centuries later.",
+      "keywords": ["eagle bird of prey wings", "rocky mountain cliff dramatic"]
+    }
+  ],
+  "spoken_text": "Prometheus stole fire from the gods. His punishment was an eagle eating his liver every single day, for eternity. In Greek mythology, Zeus had withheld fire from humans, keeping them weak and animalistic. But Prometheus, a Titan, sided with mortals over the gods. Prometheus hid burning embers inside a hollow fennel stalk and smuggled them down from Mount Olympus. Humanity could now cook food, forge metal, and survive winter. Civilization was born. Zeus chained Prometheus to a rock in the Caucasus mountains. Every single day, an eagle ate his liver, which regenerated overnight. The torment was eternal, until Hercules eventually freed him centuries later."
+}
