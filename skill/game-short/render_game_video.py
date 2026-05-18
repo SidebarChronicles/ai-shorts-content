@@ -454,6 +454,39 @@ def main() -> None:
     except Exception as e:
         print(f"  ⚠  Top title generation failed: {e}")
 
+    # Step 3b2: Build hook text overlay (centered, first 2.5s, fade in/out)
+    # Designed to fix the TikTok "4-sec avg watch time" problem from SY_01/SY_03:
+    # muted-autoplay viewers couldn't read what the video was about before
+    # swiping. A large centered hook overlay in the first 2.5 seconds gives
+    # them a readable scroll-stopper even with sound off.
+    print("  Building hook overlay…")
+    hook_overlay_path = game_dir / "hook_overlay.filter"
+    hook_chain = ""
+    try:
+        # Lazy import to keep the renderer self-contained if the script is missing
+        proj_root = Path(__file__).resolve().parent.parent.parent
+        hook_script = proj_root / "scripts" / "build_hook_overlay.py"
+        if hook_script.exists():
+            python_exe = sys.executable
+            venv_py = proj_root / ".venv-upload" / "bin" / "python"
+            if venv_py.exists():
+                python_exe = str(venv_py)
+            result = subprocess.run(
+                [python_exe, str(hook_script),
+                 "--config", str(config_path),
+                 "--output", str(hook_overlay_path)],
+                capture_output=True, text=True, timeout=15,
+            )
+            if result.returncode == 0 and hook_overlay_path.exists():
+                hook_chain = hook_overlay_path.read_text().strip()
+                print(f"  ✓ {hook_overlay_path.relative_to(PROJECT_ROOT)}")
+            else:
+                print(f"  ⚠  Hook overlay generation returned {result.returncode}: {result.stderr[-200:] if result.stderr else 'no stderr'}")
+        else:
+            print(f"  ⚠  Hook overlay: {hook_script} not found — skipping")
+    except Exception as e:
+        print(f"  ⚠  Hook overlay generation failed: {e}")
+
     # Step 3c: Build mixed audio track (narration + music + transition SFX)
     # Falls back to plain narration if build_audio_track.py fails or no music/SFX
     # assets exist. The mixer is self-contained; runs as a subprocess.
@@ -487,6 +520,8 @@ def main() -> None:
         vf_parts.append(f"$(cat {karaoke_path.relative_to(PROJECT_ROOT)})")
     if top_chain:
         vf_parts.append(f"$(cat {top_title_path.relative_to(PROJECT_ROOT)})")
+    if hook_chain:
+        vf_parts.append(f"$(cat {hook_overlay_path.relative_to(PROJECT_ROOT)})")
     if vf_parts:
         vf_line = f"  -vf \"{','.join(vf_parts)}\" \\\n"
     else:
