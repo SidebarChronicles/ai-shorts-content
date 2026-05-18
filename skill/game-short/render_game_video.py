@@ -83,28 +83,8 @@ def process_clip_to_portrait(clip_path: Path, out_path: Path,
         f"colorchannelmixer=rr={OVERLAY_DARKNESS}:gg={OVERLAY_DARKNESS}:bb={OVERLAY_DARKNESS}"
     )
 
-    if show_title and game_title:
-        # Escape special characters for drawtext
-        title_escaped = game_title.replace("'", "\\'").replace(":", "\\:")
-        platform_escaped = platform_label.replace("'", "\\'")
-
-        # Game title text — centered, near top
-        title_filter = (
-            f"drawtext=text='{title_escaped}'"
-            f":fontsize=68:fontcolor={ACCENT_PRIMARY}"
-            f":x=(w-text_w)/2:y=200"
-            f":box=1:boxcolor=black@0.75:boxborderw=20"
-        )
-        vf += f",{title_filter}"
-
-        if platform_label:
-            platform_filter = (
-                f"drawtext=text='{platform_escaped}'"
-                f":fontsize=42:fontcolor={ACCENT_SECONDARY}"
-                f":x=(w-text_w)/2:y=295"
-                f":box=1:boxcolor=black@0.75:boxborderw=14"
-            )
-            vf += f",{platform_filter}"
+    # Title overlay via drawtext requires ffmpeg built with --enable-libfreetype.
+    # Skipped here — game title is displayed via ASS captions in the final encode.
 
     cmd = [
         "ffmpeg", "-y",

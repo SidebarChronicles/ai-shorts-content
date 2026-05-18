@@ -1,0 +1,15 @@
+{
+  "game_id": "GG_01_subnautica2",
+  "audio_file": "assets/audio/narration_GG_01_subnautica2.mp3",
+  "clips_manifest": "output/scripts/GG_01_subnautica2/clips_manifest.json",
+  "game_title": "SUBNAUTICA 2",
+  "platform": "PC / Xbox Series X|S",
+  "release_label": "IN EARLY ACCESS",
+  "beats": [
+    {"label": "hook", "text": "467,000 players jumped in on day one — and the ship AI stranded every single one of them on an alien ocean planet."},
+    {"label": "gameplay", "text": "You dive into bioluminescent alien biomes, harvest resources from the deep, build underwater bases, and crew submarines — all while something below keeps getting bigger."},
+    {"label": "standout", "text": "Subnautica 2 is the first in the series with 4-player co-op, built on Unreal Engine 5 — the ocean has never looked this terrifyingly alive."},
+    {"label": "cta", "text": "Early Access is live right now — $29.99 on Steam and Xbox Series X|S. Wishlist or dive in today."}
+  ],
+  "spoken_text": "467,000 players jumped in on day one — and the ship AI stranded every single one of them on an alien ocean planet. You dive into bioluminescent alien biomes, harvest resources from the deep, build underwater bases, and crew submarines — all while something below keeps getting bigger. Subnautica 2 is the first in the series with 4-player co-op, built on Unreal Engine 5 — the ocean has never looked this terrifyingly alive. Early Access is live right now — $29.99 on Steam and Xbox Series X|S. Wishlist or dive in today."
+}

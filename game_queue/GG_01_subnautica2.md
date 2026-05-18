@@ -1,6 +1,6 @@
 # GG_01_subnautica2 — Subnautica 2
 
-**Status:** QUEUED
+**Status:** DELIVERED
 **Score:** 9/10
 **Platform(s):** PC (Steam, Epic) / Xbox Series X|S
 **Steam App ID:** 1962700

@@ -34,6 +34,15 @@ from pathlib import Path
 import requests
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+# Auto-load .env into os.environ
+_env_path = PROJECT_ROOT / ".env"
+if _env_path.exists():
+    for _line in _env_path.read_text().splitlines():
+        if "=" in _line and not _line.startswith("#"):
+            _k, _v = _line.split("=", 1)
+            os.environ.setdefault(_k.strip(), _v.strip())
+
 AUDIO_DIR = PROJECT_ROOT / "assets" / "audio"
 SCRIPTS_DIR = PROJECT_ROOT / "output" / "scripts"
 USAGE_FILE = PROJECT_ROOT / "output" / "elevenlabs_usage.json"
@@ -91,8 +100,16 @@ def record_usage(chars: int) -> None:
 # ---------------------------------------------------------------------------
 
 def extract_spoken_text(case_id: str) -> str:
-    """Find and extract the spoken narration from output/scripts/<case_id>/script.md."""
-    # Resolve partial case IDs like "07" to full slugs
+    """Find and extract the spoken narration from game_config.json or script.md."""
+    # Game pipeline: check game_config.json for spoken_text first
+    config_path = SCRIPTS_DIR / case_id / "game_config.json"
+    if config_path.exists():
+        cfg = json.loads(config_path.read_text())
+        text = cfg.get("spoken_text", "").strip()
+        if text:
+            return text
+
+    # Truecrime pipeline: resolve partial case IDs like "07" to full slugs
     candidates = list(SCRIPTS_DIR.glob(f"{case_id}_*/script.md")) + \
                  list(SCRIPTS_DIR.glob(f"*{case_id}*/script.md")) + \
                  [SCRIPTS_DIR / case_id / "script.md"]
@@ -105,7 +122,7 @@ def extract_spoken_text(case_id: str) -> str:
 
     if script_path is None:
         sys.exit(
-            f"ERROR: Could not find script.md for case '{case_id}'.\n"
+            f"ERROR: Could not find script.md or game_config.json for case '{case_id}'.\n"
             f"Checked under: {SCRIPTS_DIR}\n"
             f"Run the truecrime-short skill to generate a script first, or use --text-file."
         )
