@@ -127,17 +127,40 @@ def process_clip_to_portrait(clip_path: Path, out_path: Path,
                               game_title: str = "", platform_label: str = "",
                               show_title: bool = False, dry_run: bool = False,
                               crop_strategy: str = DEFAULT_CROP_STRATEGY,
-                              color_grade: str = "") -> None:
+                              color_grade: str = "",
+                              already_portrait: bool = False) -> None:
     """Convert source clip to 1080x1920 portrait. Strategy controls how 16:9 fits 9:16.
 
     - pillarbox_blur: full source frame centered in middle band, blurred copy fills top/bottom
     - center_crop:    scale to fill height, center-crop (loses ~33% left + ~33% right of frame)
     - smart_crop:     YOLOv8 subject-tracking crop; falls back to pillarbox if deps unavailable
+    - already_portrait=True: skip crop entirely (build_visuals_track.py already emitted
+      1080x1920 clips for non-trailer verticals like story/mythology). Still applies
+      color grade and locks fps to 30 for clean concat.
     """
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Optional final color-grade tail applied to the combined frame
     grade_tail = f",{color_grade}" if color_grade else ""
+
+    if already_portrait:
+        vf = f"fps=30,format=yuv420p{grade_tail}" if grade_tail else "fps=30,format=yuv420p"
+        cmd = [
+            "ffmpeg", "-y",
+            "-i", str(clip_path),
+            "-vf", vf,
+            "-vsync", "cfr",
+            "-c:v", "libx264", "-preset", "fast", "-crf", "22",
+            "-an",
+            str(out_path),
+        ]
+        if dry_run:
+            print(f"  [dry-run] already-portrait re-encode: {clip_path.name}")
+            return
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+        if result.returncode != 0:
+            sys.exit(f"ERROR: already_portrait re-encode failed for {clip_path.name}:\n{result.stderr[-500:]}")
+        return
 
     if crop_strategy == "smart_crop":
         # Two-stage: smart_crop_yolo.py writes a 1080x1920 pre-cropped intermediate,
@@ -375,6 +398,7 @@ def main() -> None:
             dry_run=args.dry_run,
             crop_strategy=args.crop,
             color_grade=color_grade,
+            already_portrait=entry.get("already_portrait", False),
         )
         if not args.dry_run:
             print("✓")

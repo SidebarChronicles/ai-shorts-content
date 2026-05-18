@@ -57,6 +57,15 @@ VERTICAL_MUSIC_MAP = {
 }
 DEFAULT_MUSIC_VERTICAL = "cases"  # numeric prefixes (01_, 02_, ...) = cases
 
+# Story sub-genre → music vertical override. Story IDs are SY_NN_<S|R|H>_<slug>.
+# Survival + horror need menacing/tension music; Reddit dramatizations sit
+# closer to neutral suspense (cases folder).
+STORY_SUBGENRE_MUSIC = {
+    "S": "mysteries",  # survival — atmospheric dread
+    "H": "mysteries",  # horror — same, swap to a dedicated horror/ folder once seeded
+    "R": "cases",      # Reddit dramatization — neutral suspense
+}
+
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -64,6 +73,13 @@ DEFAULT_MUSIC_VERTICAL = "cases"  # numeric prefixes (01_, 02_, ...) = cases
 
 def detect_vertical(case_id: str) -> str:
     """Map case_id prefix to music subfolder name."""
+    # Story vertical first: sub-genre letter determines tonal palette
+    if case_id.startswith("SY_"):
+        # SY_NN_<S|R|H>_<slug>
+        parts = case_id.split("_")
+        if len(parts) >= 3 and parts[2] in STORY_SUBGENRE_MUSIC:
+            return STORY_SUBGENRE_MUSIC[parts[2]]
+        return "mysteries"  # fallback if parse fails
     for prefix, vertical in VERTICAL_MUSIC_MAP.items():
         if case_id.startswith(prefix):
             return vertical
@@ -328,7 +344,12 @@ def main() -> None:
     if mid_anchor is not None and music is not None:
         print(f"  Silence:    {mid_anchor:.1f}s → {mid_anchor+0.5:.1f}s (mid-anchor dropout)")
 
-    # SFX at cut timestamps
+    # SFX at cut timestamps — capped to MAX_SFX_PER_VIDEO and spaced ≥4s apart
+    # so we get punchy emphasis, not a relentless whoosh-every-cut soundtrack.
+    # The concat list often has 12+ sub-clip boundaries due to pattern-interrupt
+    # splitting; we want SFX only at major beat transitions, not every sub-clip.
+    MAX_SFX_PER_VIDEO = 5
+    MIN_SFX_SPACING_SECONDS = 4.0
     sfx_cuts: list[tuple[float, Path]] = []
     if not args.no_sfx:
         concat = case_dir / "bg_clips_concat.txt"
@@ -336,10 +357,20 @@ def main() -> None:
         sfx_pool = list((SFX_DIR.glob("whoosh*.wav") if SFX_DIR.exists() else []))
         sfx_pool += list((SFX_DIR.glob("whoosh*.mp3") if SFX_DIR.exists() else []))
         if sfx_pool and cut_times:
+            # Filter to a sparse subset: keep cuts ≥4s apart, cap at 5 total
+            sparse_cuts: list[float] = []
+            last_t = -MIN_SFX_SPACING_SECONDS  # ensures first cut is always allowed
             for t in cut_times:
+                if t - last_t >= MIN_SFX_SPACING_SECONDS:
+                    sparse_cuts.append(t)
+                    last_t = t
+                if len(sparse_cuts) >= MAX_SFX_PER_VIDEO:
+                    break
+            for t in sparse_cuts:
                 sfx_cuts.append((t, random.choice(sfx_pool)))
-            print(f"  SFX:        {len(sfx_cuts)} whooshes @ {SFX_DB}dB  (at cuts: "
-                  f"{', '.join(f'{t:.1f}s' for t in cut_times[:4])}{'...' if len(cut_times)>4 else ''})")
+            print(f"  SFX:        {len(sfx_cuts)}/{len(cut_times)} whooshes @ {SFX_DB}dB "
+                  f"(spaced ≥{MIN_SFX_SPACING_SECONDS}s, cap {MAX_SFX_PER_VIDEO})  "
+                  f"at: {', '.join(f'{t:.1f}s' for t in sparse_cuts)}")
         else:
             why = "no concat list" if not cut_times else "no SFX files in assets/sfx/"
             print(f"  SFX:        ✗ {why} — skipping")

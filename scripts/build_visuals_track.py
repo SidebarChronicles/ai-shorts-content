@@ -656,7 +656,8 @@ def main() -> None:
             for s in range(n_sub):
                 clip_seq += 1
                 out_clip = clips_dir / f"clip_{clip_seq:02d}_portrait.mp4"
-                zoom_in = (clip_seq % 2 == 1)
+                # Story vertical: always zoom-in (narrative urgency). Others: alternate by beat.
+                zoom_in = True if is_story else (beat_idx % 2 == 1)
                 print(f"  clip_{clip_seq:02d} (beat{beat_idx} tail {s+1}/{n_sub}, "
                       f"{sub_dur:.1f}s)… ", end="", flush=True)
                 render_ken_burns(img, out_clip, sub_dur, zoom_in=zoom_in, dry_run=args.dry_run)
@@ -671,7 +672,11 @@ def main() -> None:
         for s in range(n_sub):
             clip_seq += 1
             out_clip = clips_dir / f"clip_{clip_seq:02d}_portrait.mp4"
-            zoom_in = (clip_seq % 2 == 1)
+            # Zoom direction policy:
+            #   Story vertical: always zoom-in (consistent narrative push toward viewer)
+            #   Others: alternate per BEAT (not per sub-clip) to avoid jumpy zoom toggles
+            #           within a single beat
+            zoom_in = True if is_story else (beat_idx % 2 == 1)
             label = (f"beat{beat_idx}" if n_sub == 1
                      else f"beat{beat_idx}/{s+1}of{n_sub}")
             print(f"  clip_{clip_seq:02d} ({label}, {sub_dur:.1f}s, "

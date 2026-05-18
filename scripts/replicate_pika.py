@@ -124,6 +124,11 @@ def generate_pika_clip(prompt: str,
     # (prompt, aspect_ratio, quality, duration, image, negative_prompt)
     pixverse_input = {
         "prompt": prompt,
+        "negative_prompt": (
+            "cartoon, anime, pokemon, disney, pixar, video game character, "
+            "plush toy, mascot, chibi, children's illustration, lowres, "
+            "watermark, text overlay, low quality, deformed, extra limbs"
+        ),
         "aspect_ratio": DEFAULT_ASPECT,
         "quality": DEFAULT_QUALITY,
         "duration": seconds,

@@ -102,16 +102,27 @@ def generate_flux_image(prompt: str,
             out_path.write_bytes(cached.read_bytes())
             return out_path
 
+    # Default negative prompt — blocks cartoon/anime/game-character hallucinations
+    # that ruin photo-real narrative shorts. Pokemon, Disney, plush, anime aesthetic
+    # were all explicitly hallucinating in early smoke tests.
+    negative = (
+        "cartoon, anime, pokemon, disney, pixar, video game character, "
+        "plush toy, mascot, chibi, children's illustration, mascot, lowres, "
+        "watermark, text overlay, low quality, oversaturated, deformed, "
+        "extra limbs, bad anatomy, blurry, jpeg artifacts"
+    )
+
     # Build the input payload — Flux 2 Pro on Replicate accepts these fields
     flux_input = {
         "prompt": prompt,
+        "negative_prompt": negative,
         "aspect_ratio": DEFAULT_ASPECT,
         "width": width,
         "height": height,
         "num_inference_steps": steps,
         "guidance_scale": guidance,
         "output_format": DEFAULT_OUTPUT_FORMAT,
-        "safety_tolerance": 2,  # default; 1=strict, 6=lax
+        "safety_tolerance": 1,  # strict — block AI-character hallucinations
     }
     if seed is not None:
         flux_input["seed"] = seed
