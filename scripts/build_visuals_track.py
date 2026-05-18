@@ -56,6 +56,10 @@ W, H = 1080, 1920
 # Default duration per beat clip when no audio alignment is available
 DEFAULT_BEAT_DURATION = 12.0  # seconds
 
+# Pattern-interrupt cap: no single visual should hold longer than this.
+# Long beats get split into N sub-clips with alternating Ken Burns motion.
+MAX_CLIP_SECONDS = 4.0
+
 # Ken Burns motion parameters
 KB_ZOOM_RATE = 0.0008   # zoom increment per frame (gentle: 0.0008, dramatic: 0.002)
 KB_FPS = 30
@@ -283,17 +287,62 @@ def beat_durations_from_alignment(case_id: str, beats: list[dict]) -> Optional[l
 # Concat list
 # ---------------------------------------------------------------------------
 
-def write_concat_list(clip_paths: list[Path], concat_path: Path, dry_run: bool = False) -> None:
-    """FFmpeg concat demuxer file (same format the render pipeline expects)."""
-    lines = []
-    for clip in clip_paths:
-        lines.append(f"file '{clip}'")
-    content = "\n".join(lines) + "\n"
+LOOP_TAIL_SECONDS = 0.5  # final tail = clip 1 → seamless replay
 
-    if dry_run:
-        print(f"  [dry-run] concat list: {len(clip_paths)} clips")
+
+def write_concat_list(clip_paths: list[Path], concat_path: Path,
+                      dry_run: bool = False, loop_back: bool = True) -> None:
+    """FFmpeg concat demuxer file with optional loop-back tail.
+
+    Without loop_back (legacy behavior): just lists each clip.
+
+    With loop_back: shortens the final clip by LOOP_TAIL_SECONDS, then
+    appends a 0.5s slice of clip 1 so the last frame matches the first
+    frame. Boosts replay rate when YouTube auto-loops the Short.
+    """
+    if not loop_back or len(clip_paths) < 2:
+        lines = [f"file '{c}'" for c in clip_paths]
+        content = "\n".join(lines) + "\n"
+        if dry_run:
+            print(f"  [dry-run] concat list: {len(clip_paths)} clips")
+            return
+        atomic_write_text(concat_path, content)
         return
 
+    # Probe durations so we can shorten the last clip + slot in a loop tail
+    durations: list[float] = []
+    for clip in clip_paths:
+        try:
+            r = subprocess.run(
+                ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                 "-of", "default=noprint_wrappers=1:nokey=1", str(clip)],
+                capture_output=True, text=True, timeout=15,
+            )
+            durations.append(float(r.stdout.strip()))
+        except (subprocess.SubprocessError, ValueError):
+            durations.append(0.0)
+
+    lines: list[str] = []
+    for i, (clip, dur) in enumerate(zip(clip_paths, durations)):
+        lines.append(f"file '{clip}'")
+        # All but the last clip use full duration; last clip is shortened by LOOP_TAIL_SECONDS
+        if i == len(clip_paths) - 1:
+            shortened = max(0.5, dur - LOOP_TAIL_SECONDS)
+            lines.append(f"duration {shortened:.3f}")
+        else:
+            lines.append(f"duration {dur:.3f}")
+
+    # Loop tail: 0.5s back to clip 1 so the visual ending matches the visual start
+    first_clip = clip_paths[0]
+    lines.append(f"file '{first_clip}'")
+    lines.append(f"duration {LOOP_TAIL_SECONDS:.3f}")
+    # FFmpeg concat trailing duplicate
+    lines.append(f"file '{first_clip}'")
+
+    content = "\n".join(lines) + "\n"
+    if dry_run:
+        print(f"  [dry-run] concat list: {len(clip_paths)} clips + 0.5s loop tail")
+        return
     atomic_write_text(concat_path, content)
 
 
@@ -378,17 +427,29 @@ def main() -> None:
             f"Add better keywords or enable Flux 2 Pro fallback (REPLICATE_API_TOKEN)."
         )
 
-    # Render Ken Burns clips
-    print(f"\n  Rendering Ken Burns clips…")
+    # Render Ken Burns clips — split any beat >MAX_CLIP_SECONDS into sub-clips
+    # for pattern-interrupt enforcement. Each sub-clip uses alternating zoom
+    # direction so the same source image feels visually fresh across the beat.
+    print(f"\n  Rendering Ken Burns clips (cap {MAX_CLIP_SECONDS}s per clip)…")
     clip_paths: list[Path] = []
-    for i, (img, dur) in enumerate(zip(image_paths, durations), 1):
-        out_clip = clips_dir / f"clip_{i:02d}_portrait.mp4"
-        zoom_in = (i % 2 == 1)  # alternate zoom direction
-        print(f"  clip_{i:02d} ({dur:.1f}s, zoom_{'in' if zoom_in else 'out'})… ", end="", flush=True)
-        render_ken_burns(img, out_clip, dur, zoom_in=zoom_in, dry_run=args.dry_run)
-        if not args.dry_run:
-            print("✓")
-        clip_paths.append(out_clip)
+    clip_seq = 0
+    for beat_idx, (img, dur) in enumerate(zip(image_paths, durations), 1):
+        # How many sub-clips do we need? Ceiling of dur/MAX
+        n_sub = max(1, int((dur + MAX_CLIP_SECONDS - 0.001) // MAX_CLIP_SECONDS))
+        sub_dur = dur / n_sub
+        for s in range(n_sub):
+            clip_seq += 1
+            out_clip = clips_dir / f"clip_{clip_seq:02d}_portrait.mp4"
+            # Alternate zoom direction across the full sequence (every sub-clip)
+            zoom_in = (clip_seq % 2 == 1)
+            label = (f"beat{beat_idx}" if n_sub == 1
+                     else f"beat{beat_idx}/{s+1}of{n_sub}")
+            print(f"  clip_{clip_seq:02d} ({label}, {sub_dur:.1f}s, "
+                  f"zoom_{'in' if zoom_in else 'out'})… ", end="", flush=True)
+            render_ken_burns(img, out_clip, sub_dur, zoom_in=zoom_in, dry_run=args.dry_run)
+            if not args.dry_run:
+                print("✓")
+            clip_paths.append(out_clip)
 
     # Write concat list
     concat_path = case_dir / "bg_clips_concat.txt"

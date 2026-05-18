@@ -67,13 +67,62 @@ def get_clip_duration(path: Path) -> float:
 
 
 # ---------------------------------------------------------------------------
+# Per-vertical color grading
+# ---------------------------------------------------------------------------
+#
+# Research: top channels per niche apply distinctive color grading that
+# signals genre instantly. We detect the vertical from the case_id prefix
+# and append the right colorchannelmixer + curves filter to the portrait
+# render step. Movies preserve studio grading (no adjustment).
+
+COLOR_GRADE_BY_VERTICAL: dict[str, str] = {
+    # Desaturated cool — crime/mystery noir aesthetic
+    "cases":     "colorchannelmixer=rr=0.85:gg=0.85:bb=1.05",
+    "mysteries": "colorchannelmixer=rr=0.85:gg=0.85:bb=1.05",
+    # Warm gold tint — mythology / classical
+    "mythology": "colorchannelmixer=rr=1.10:gg=1.05:bb=0.90",
+    # Clean teal/white boost — finance / tech / educational
+    "finance":   "colorchannelmixer=rr=1.00:gg=1.00:bb=1.05,curves=preset=lighter",
+    # Slight saturation boost — gaming / top X energy
+    "games":     "colorchannelmixer=rr=1.05:gg=1.05:bb=1.05",
+    "topx":      "colorchannelmixer=rr=1.05:gg=1.05:bb=1.05",
+    # Movies: preserve studio's original grading
+    "movies":    "",
+}
+
+
+def _detect_vertical(case_id: str) -> str:
+    """Map case_id prefix to vertical name for color grade lookup."""
+    if case_id.startswith("GG_"):
+        return "games"
+    if case_id.startswith("MV_"):
+        return "movies"
+    if case_id.startswith("MY_"):
+        return "mythology"
+    if case_id.startswith("UM_"):
+        return "mysteries"
+    if case_id.startswith("TX_"):
+        return "topx"
+    if case_id.startswith("FN_"):
+        return "finance"
+    # Numeric prefix = legacy cases vertical
+    return "cases"
+
+
+def _color_grade_filter(case_id: str) -> str:
+    """Return the FFmpeg filter chain for this vertical's grading. May be empty."""
+    return COLOR_GRADE_BY_VERTICAL.get(_detect_vertical(case_id), "")
+
+
+# ---------------------------------------------------------------------------
 # Portrait crop + overlay
 # ---------------------------------------------------------------------------
 
 def process_clip_to_portrait(clip_path: Path, out_path: Path,
                               game_title: str = "", platform_label: str = "",
                               show_title: bool = False, dry_run: bool = False,
-                              crop_strategy: str = DEFAULT_CROP_STRATEGY) -> None:
+                              crop_strategy: str = DEFAULT_CROP_STRATEGY,
+                              color_grade: str = "") -> None:
     """Convert source clip to 1080x1920 portrait. Strategy controls how 16:9 fits 9:16.
 
     - pillarbox_blur: full source frame centered in middle band, blurred copy fills top/bottom
@@ -81,11 +130,15 @@ def process_clip_to_portrait(clip_path: Path, out_path: Path,
     """
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
+    # Optional final color-grade tail applied to the combined frame
+    grade_tail = f",{color_grade}" if color_grade else ""
+
     if crop_strategy == "pillarbox_blur":
         # Filter graph:
         #   [0:v] splits into [bg] and [fg]
         #   [bg] scales-up to fill 1080x1920, heavy blur, light darkening
         #   [fg] scales to 1080 wide preserving aspect, overlays centered
+        #   [out] gets the per-vertical color grade tail (if any)
         filter_complex = (
             f"[0:v]split=2[bg][fg];"
             f"[bg]scale={W}:{H}:force_original_aspect_ratio=increase,"
@@ -93,7 +146,7 @@ def process_clip_to_portrait(clip_path: Path, out_path: Path,
             f"boxblur=30:8,"
             f"colorchannelmixer=rr={PILLARBOX_BG_DARKNESS}:gg={PILLARBOX_BG_DARKNESS}:bb={PILLARBOX_BG_DARKNESS}[blurbg];"
             f"[fg]scale={W}:-2:force_original_aspect_ratio=decrease[fgscaled];"
-            f"[blurbg][fgscaled]overlay=0:(H-h)/2"
+            f"[blurbg][fgscaled]overlay=0:(H-h)/2{grade_tail}"
         )
         cmd = [
             "ffmpeg", "-y",
@@ -109,6 +162,7 @@ def process_clip_to_portrait(clip_path: Path, out_path: Path,
             f"scale=-1:{H},"
             f"crop={W}:{H},"
             f"colorchannelmixer=rr={OVERLAY_DARKNESS}:gg={OVERLAY_DARKNESS}:bb={OVERLAY_DARKNESS}"
+            f"{grade_tail}"
         )
         cmd = [
             "ffmpeg", "-y",
@@ -150,8 +204,20 @@ def build_karaoke(audio_file: Path) -> str:
 # Concat list builder
 # ---------------------------------------------------------------------------
 
+LOOP_TAIL_SECONDS = 0.5  # final 0.5s echoes clip 1 — creates a seamless replay loop
+
+
 def build_concat_list(portrait_clips: list[Path], audio_duration: float) -> str:
-    """Build FFmpeg concat demuxer list, padding last clip if needed."""
+    """Build FFmpeg concat demuxer list with seamless replay loop tail.
+
+    Layout:
+      clip 1 (full) → clip 2 → ... → clip N (full) → clip 1 (0.5s) → clip 1 (trailing duplicate)
+
+    The 0.5s clip-1 tail means the final frame of the video matches the first
+    frame visually. When YouTube auto-replays the Short, the transition is
+    invisible — boosts replay rate (research: 1.5-3x replays for looping
+    Shorts).
+    """
     lines = []
     total_clip_duration = sum(get_clip_duration(p) for p in portrait_clips)
 
@@ -164,7 +230,6 @@ def build_concat_list(portrait_clips: list[Path], audio_duration: float) -> str:
             extra = audio_duration + 1.5 - total_clip_duration
             if extra > 0:
                 dur += extra
-                # Loop the last clip to fill: just repeat its entry
                 lines.append(f"duration {dur:.3f}")
                 lines.append(f"file '{clip}'")
             else:
@@ -172,8 +237,13 @@ def build_concat_list(portrait_clips: list[Path], audio_duration: float) -> str:
         else:
             lines.append(f"duration {dur:.3f}")
 
-    # FFmpeg concat needs a final file entry without duration
-    lines.append(f"file '{portrait_clips[-1]}'")
+    # Loop tail: 0.5s back to clip 1 so the visual ending matches the visual start
+    first_clip = portrait_clips[0]
+    lines.append(f"file '{first_clip}'")
+    lines.append(f"duration {LOOP_TAIL_SECONDS:.3f}")
+
+    # FFmpeg concat needs a final file entry without duration — also clip 1
+    lines.append(f"file '{first_clip}'")
     return "\n".join(lines) + "\n"
 
 
@@ -229,8 +299,11 @@ def main() -> None:
         if not p.exists():
             sys.exit(f"ERROR: Clip not found: {p}\nRe-run: python scripts/select_clips.py --game-id {game_id} --auto")
 
-    # Step 1: Process each clip to portrait
-    print(f"\n  Processing {len(clip_paths)} clips to portrait (1080×1920, crop={args.crop})…")
+    # Step 1: Process each clip to portrait (with per-vertical color grade)
+    color_grade = _color_grade_filter(game_id)
+    vertical = _detect_vertical(game_id)
+    grade_note = f", grade={vertical}" if color_grade else ", grade=none (movies preserve studio)"
+    print(f"\n  Processing {len(clip_paths)} clips to portrait (1080×1920, crop={args.crop}{grade_note})…")
     portrait_clips = []
     for i, (clip_path, entry) in enumerate(zip(clip_paths, manifest), 1):
         out_portrait = portrait_dir / f"clip_{i:02d}_portrait.mp4"
@@ -244,6 +317,7 @@ def main() -> None:
             show_title=is_first,
             dry_run=args.dry_run,
             crop_strategy=args.crop,
+            color_grade=color_grade,
         )
         if not args.dry_run:
             print("✓")
