@@ -283,7 +283,8 @@ def main() -> None:
                 top_chain = build_topx_top_title(beats_cfg, alignment, TOP_TITLE_FONT.resolve())
                 mode = "topx"
             else:
-                singular_title = cfg.get("game_title") or cfg.get("case_title") or cfg.get("title")
+                # `title` wins for compact display override; falls back to verticals' canonical fields
+                singular_title = cfg.get("title") or cfg.get("game_title") or cfg.get("case_title")
                 if singular_title:
                     audio_dur = alignment["character_end_times_seconds"][-1]
                     top_chain = build_singular_top_title(singular_title, audio_dur, TOP_TITLE_FONT.resolve())

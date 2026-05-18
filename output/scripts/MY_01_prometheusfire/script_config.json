@@ -2,6 +2,7 @@
   "game_id": "MY_01_prometheusfire",
   "audio_file": "assets/audio/narration_MY_01_prometheusfire.mp3",
   "case_title": "PROMETHEUS STOLE FIRE FROM THE GODS",
+  "title": "PROMETHEUS",
   "voice_id": "nPczCjzI2devNBz1zQrb",
   "voice_name": "Brian",
   "model_id": "eleven_multilingual_v2",

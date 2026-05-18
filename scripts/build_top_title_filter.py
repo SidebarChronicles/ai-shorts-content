@@ -45,9 +45,17 @@ TITLE_Y = "h*0.06"  # 6% from the top
 
 
 def _normalize_for_display(text: str) -> str:
-    """Strip apostrophes + curly quotes (same convention as the karaoke filter
-    to avoid the FFmpeg single-quote escape fragility)."""
-    return (
+    """Strip apostrophes + curly quotes; escape colons.
+
+    FFmpeg's drawtext filter treats `:` as the key=value separator even
+    inside single-quoted `text='...'` values (longstanding quirk). We
+    escape it with `\\:` so titles like "AVATAR: FIRE AND ASH" render
+    correctly.
+
+    Apostrophes are stripped (not escaped) because the shell + filter-graph
+    double-escape interaction is fragile across versions.
+    """
+    text = (
         text.replace("’", "")
             .replace("‘", "")
             .replace("“", "")
@@ -55,6 +63,9 @@ def _normalize_for_display(text: str) -> str:
             .replace("'", "")
             .replace('"', "")
     )
+    # Escape colons so they don't break filter-arg parsing
+    text = text.replace(":", "\\:")
+    return text
 
 
 def _drawtext(text: str, start: float, end: float, font_path: Path) -> str:
@@ -160,9 +171,11 @@ def main() -> None:
     if mode == "topx":
         chain = build_topx_chain(beats, alignment, font_path)
     else:
-        title = cfg.get("game_title") or cfg.get("case_title") or cfg.get("title")
+        # `title` wins — lets configs override a long game_title/case_title
+        # with a shorter display version that fits the 1080-wide canvas
+        title = cfg.get("title") or cfg.get("game_title") or cfg.get("case_title")
         if not title:
-            sys.exit("ERROR: singular mode requires `game_title`, `case_title`, or `title` in config")
+            sys.exit("ERROR: singular mode requires `title`, `game_title`, or `case_title` in config")
         audio_dur = alignment["character_end_times_seconds"][-1]
         chain = build_singular_chain(title, audio_dur, font_path)
 
