@@ -73,5 +73,11 @@ yolov8*.pt
 *.onnx
 assets/models/
 
+# Per-platform caption sidecars (regeneratable via scripts/build_captions.py)
+output/*_videos/*.ig_caption.txt
+output/*_videos/*.tt_caption.txt
+output/videos/*.ig_caption.txt
+output/videos/*.tt_caption.txt
+
 # macOS noise
 .DS_Store
