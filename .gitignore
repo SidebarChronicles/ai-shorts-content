@@ -82,5 +82,17 @@ output/*_videos/*.tt_caption.txt
 output/videos/*.ig_caption.txt
 output/videos/*.tt_caption.txt
 
+# /morning workflow outputs
+output/daily/
+output/scripts/*/hook_overlay.filter
+output/scripts/*/audio_mixed.alignment.json
+output/scripts/*/clips_manifest.json
+output/scripts/archive/
+output/audio/
+output/research/archive/
+output/analytics/archive/
+output/analytics/suggested_tweaks_*.md
+output/daily/archive/
+
 # macOS noise
 .DS_Store

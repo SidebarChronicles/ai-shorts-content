@@ -1,0 +1,72 @@
+---
+description: Run the full daily workflow — cleanup → analytics → tweaks → pick → render → schedule → research. Renders 4 stories, posts to TikTok now, schedules YouTube at prime slots, tops up the queue.
+argument-hint: optional --skip-render (just refresh data + pick) | --skip-research
+---
+
+You are running inside Claude Code on Justin's Mac.
+
+This is the chained daily orchestrator. It calls each step skill in order with confirmation gates at the high-risk transitions (review tweaks, confirm picks, before spending on render).
+
+The expected sequence:
+
+```bash
+cd "/Users/justinlee/Documents/Claude/Projects/Youtube Shorts Autonomous Channel"
+source .venv-upload/bin/activate 2>/dev/null || true
+TODAY=$(date -u +%F)
+set -e
+
+echo "── Step 0: daily hygiene ──"
+python scripts/morning_cleanup.py
+
+echo ""
+echo "── Step 1: pull yesterday's analytics ──"
+python scripts/analyze_performance.py --days 1 || echo "(no analytics yet — non-blocking)"
+
+echo ""
+echo "── Step 2a: surface tweaks for today ──"
+python scripts/suggest_tweaks.py
+echo ""
+echo "📋 Review the suggested_tweaks file above. Open it in your editor if needed."
+echo "   When ready, run /pick-today (or continue: it'll auto-pick using the tweaks)."
+read -p "   Press Enter to continue to /pick-today, or Ctrl+C to stop and edit: " _
+
+echo ""
+echo "── Step 2b: pick today's 4 ──"
+python scripts/pick_today.py    # interactive — will prompt 'y' to write
+
+echo ""
+echo "── Step 3: render the batch (~\$6 total spend) ──"
+read -p "   Continue to render? [y/N] " ans
+[ "$ans" = "y" ] || { echo "Stopped before render. Re-run /render-batch when ready."; exit 0; }
+python scripts/render_story.py --batch "output/daily/picks_${TODAY}.json"
+
+echo ""
+echo "── Step 4: schedule uploads ──"
+python scripts/schedule_uploads.py --batch "output/daily/picks_${TODAY}.json"
+
+echo ""
+echo "── Step 5: top up the queue ──"
+python scripts/research_reddit_stories.py --stub-top 5 --skip-mine 2>/dev/null \
+  || python scripts/research_reddit_stories.py
+
+echo ""
+echo "✓ /morning complete."
+```
+
+After it finishes, report back:
+- Cleanup summary (one line)
+- Tweaks file path + the headline recommendation
+- The 4 picked case_ids + their composite scores
+- Render results (succeeded/failed; total spend)
+- Posted TikTok URLs + scheduled YouTube publish times
+- Queue depth after research top-up
+- Anything to remember for tomorrow (e.g. "manual TikTok analytics check at noon for SY_07")
+
+**Confirmation gates:** the script pauses after `/suggest-tweaks` (so you can open + read the tweaks file) and again before render (so you can abort if budget is uncomfortable). Pass `--skip-render` to stop after Step 2b.
+
+**Failure modes:**
+- `writer hasn't filled all briefs/text` on a picked stub → that stub needs Claude to fill in beats + briefs first. Either drop it from the picks file and re-run `/render-batch`, or have Claude fill it now and re-run.
+- TikTok 401 → re-auth PostFast via `python scripts/post_via_scheduler.py --check-auth`.
+- EL budget guard tripped → either bump `ELEVENLABS_MONTHLY_BUDGET` in `.env` or wait until next month.
+
+**Recommended cadence:** once per day around 8 AM ET. TikTok posts go live immediately when this runs, so the AM run captures the morning commute scroll window.
