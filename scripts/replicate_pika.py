@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
-"""Pika 2.0 video clip wrapper for AI-generated hero shots (9:16 portrait, 5s).
+"""Pixverse v4.5 video clip wrapper for AI-generated hero shots (9:16 portrait, 5s).
 
-Used for "hero shots" in narrative shorts — the single highest-impact
-scene in each video (typically the mid_anchor beat at second-30). The
-rest of the video uses Flux stills with Ken Burns motion; hero shots
-get real video for higher visual impact.
+NOTE: file is named `replicate_pika.py` for historical reasons (the original
+plan targeted Pika 2.0). Pika isn't distributed on Replicate as of May 2026,
+so this module uses Pixverse v4.5 instead — same role, same I/O shape, similar
+quality profile. The exposed function `generate_pika_clip` stays for callers'
+sake; internally it calls Pixverse.
 
-Cost (May 2026): ~$0.10-0.50/second on Replicate depending on model
-variant. We use pika-2.0-turbo for the cost/quality balance: ~$0.10/s.
+Used for "hero shots" in narrative shorts — the single highest-impact scene
+(typically the mid_anchor beat at second-30 and payoff beat). The rest of
+the video uses Flux stills with Ken Burns motion; hero shots get real video.
 
-API: https://replicate.com/pika-labs/pika-2-0
+Cost (May 2026, Pixverse v4.5): ~$0.40 per 5-second 720p 9:16 clip.
+
+API: https://replicate.com/pixverse/pixverse-v4.5
 
 Usage (CLI):
     python scripts/replicate_pika.py --prompt "wolf running through forest, cinematic" \\
-                                      --out output/test_pika.mp4
+                                      --out output/test.mp4
 
 Usage (programmatic):
     from replicate_pika import generate_pika_clip
@@ -44,26 +48,26 @@ from _env import load_dotenv  # noqa: E402
 load_dotenv(PROJECT_ROOT / ".env")
 
 REPLICATE_API_URL = "https://api.replicate.com/v1/predictions"
-# Pika 2.0 turbo model on Replicate
-PIKA_MODEL_VERSION = "pika-labs/pika-2.0-turbo"
+# Pixverse v4.5 — fast 9:16 video gen on Replicate (262k runs as of May 2026)
+VIDEO_MODEL_SLUG = "pixverse/pixverse-v4.5"
 
 # Default generation parameters
 DEFAULT_DURATION_SECONDS = 5
 DEFAULT_ASPECT = "9:16"
-DEFAULT_RESOLUTION = "1080p"
+DEFAULT_QUALITY = "720p"   # Pixverse offers 540p/720p/1080p; 720p is the cost/quality sweet spot
 DEFAULT_FPS = 24
 
-CACHE_DIR = PROJECT_ROOT / "output" / "ai_cache" / "pika"
+CACHE_DIR = PROJECT_ROOT / "output" / "ai_cache" / "video"
 
 
 class PikaError(RuntimeError):
-    """Raised when Pika generation fails (HTTP error, timeout, no output)."""
+    """Raised when video generation fails (kept for backward compat with the original module name)."""
 
 
 def _cache_key(prompt: str, seed: int | None, seconds: int,
                reference_image_bytes: bytes | None) -> str:
     """Stable hash for prompt+config → caches the output video so repeat calls don't re-bill."""
-    raw = f"{prompt}||{seed}||{seconds}s||{PIKA_MODEL_VERSION}"
+    raw = f"{prompt}||{seed}||{seconds}s||{VIDEO_MODEL_SLUG}"
     if reference_image_bytes:
         raw += "||" + hashlib.sha256(reference_image_bytes).hexdigest()[:16]
     return hashlib.sha256(raw.encode()).hexdigest()[:24]
@@ -101,7 +105,7 @@ def generate_pika_clip(prompt: str,
     api_token = os.environ.get("REPLICATE_API_TOKEN", "").strip()
     if not api_token:
         if verbose:
-            print("  pika: REPLICATE_API_TOKEN not set — skipping AI fallback")
+            print("  video: REPLICATE_API_TOKEN not set — skipping AI fallback")
         return None
 
     ref_bytes = reference_image.read_bytes() if reference_image and reference_image.exists() else None
@@ -111,39 +115,38 @@ def generate_pika_clip(prompt: str,
         cached = _cached_path(prompt, seed, seconds, ref_bytes)
         if cached.exists() and cached.stat().st_size > 10240:
             if verbose:
-                print(f"  pika: cache hit → {cached.relative_to(PROJECT_ROOT)}")
+                print(f"  video: cache hit → {cached.relative_to(PROJECT_ROOT)}")
             out_path.parent.mkdir(parents=True, exist_ok=True)
             out_path.write_bytes(cached.read_bytes())
             return out_path
 
-    # Build the input payload
-    pika_input = {
+    # Build the input payload — Pixverse v4.5 schema
+    # (prompt, aspect_ratio, quality, duration, image, negative_prompt)
+    pixverse_input = {
         "prompt": prompt,
         "aspect_ratio": DEFAULT_ASPECT,
-        "resolution": DEFAULT_RESOLUTION,
+        "quality": DEFAULT_QUALITY,
         "duration": seconds,
-        "fps": DEFAULT_FPS,
     }
     if seed is not None:
-        pika_input["seed"] = seed
+        pixverse_input["seed"] = seed
     if reference_image:
-        pika_input["image"] = _encode_reference_image(reference_image)
+        pixverse_input["image"] = _encode_reference_image(reference_image)
 
     headers = {
         "Authorization": f"Token {api_token}",
         "Content-Type": "application/json",
-        "Prefer": f"wait={min(120, timeout_seconds)}",
+        "Prefer": f"wait={min(60, timeout_seconds)}",
     }
-    payload = {
-        "version": PIKA_MODEL_VERSION,
-        "input": pika_input,
-    }
+    # Pixverse on Replicate uses the model-name route, not raw version IDs
+    create_url = f"https://api.replicate.com/v1/models/{VIDEO_MODEL_SLUG}/predictions"
+    payload = {"input": pixverse_input}
 
     if verbose:
-        print(f"  pika: calling Replicate ({DEFAULT_RESOLUTION} {DEFAULT_ASPECT} {seconds}s)…")
+        print(f"  video: calling {VIDEO_MODEL_SLUG} ({DEFAULT_QUALITY} {DEFAULT_ASPECT} {seconds}s)…")
 
     try:
-        r = requests.post(REPLICATE_API_URL, headers=headers, json=payload,
+        r = requests.post(create_url, headers=headers, json=payload,
                           timeout=timeout_seconds)
     except requests.RequestException as e:
         raise PikaError(f"Replicate POST failed: {e}") from e
@@ -199,7 +202,7 @@ def generate_pika_clip(prompt: str,
 
     if verbose:
         size_mb = out_path.stat().st_size / (1024 * 1024)
-        print(f"  pika: ✓ {out_path.name} ({size_mb:.1f} MB)")
+        print(f"  video: ✓ {out_path.name} ({size_mb:.1f} MB)")
 
     return out_path
 

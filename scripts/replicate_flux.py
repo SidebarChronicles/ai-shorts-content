@@ -119,19 +119,19 @@ def generate_flux_image(prompt: str,
     headers = {
         "Authorization": f"Token {api_token}",
         "Content-Type": "application/json",
-        "Prefer": "wait=120",  # tell Replicate to block up to 120s for sync response
+        "Prefer": "wait=60",  # Replicate caps Prefer header at 60s; we still poll up to timeout_seconds after
     }
-    payload = {
-        "version": FLUX_MODEL_VERSION,
-        "input": flux_input,
-    }
+    # Use the model-route (latest version of this slug). Cleaner than pinning
+    # to a version id that may rotate.
+    create_url = f"https://api.replicate.com/v1/models/{FLUX_MODEL_VERSION}/predictions"
+    payload = {"input": flux_input}
 
     if verbose:
-        print(f"  flux: calling Replicate ({width}x{height}, steps={steps})…")
+        print(f"  flux: calling {FLUX_MODEL_VERSION} ({width}x{height}, steps={steps})…")
 
     # Submit prediction
     try:
-        r = requests.post(REPLICATE_API_URL, headers=headers, json=payload,
+        r = requests.post(create_url, headers=headers, json=payload,
                           timeout=timeout_seconds)
     except requests.RequestException as e:
         raise FluxError(f"Replicate POST failed: {e}") from e
