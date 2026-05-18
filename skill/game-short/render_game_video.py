@@ -33,7 +33,13 @@ from build_karaoke_filter import build_chain as build_karaoke_chain  # noqa: E40
 W, H = 1080, 1920
 
 # How dark to make the overlay (colorchannelmixer multiplier)
-OVERLAY_DARKNESS = 0.55   # 0.55 = ~45% darker (reads text well over most footage)
+OVERLAY_DARKNESS = 0.55          # for center_crop: 0.55 = ~45% darker
+PILLARBOX_BG_DARKNESS = 0.75     # for pillarbox blur background: lighter so seam isn't stark
+
+# Crop strategy for converting 16:9 source to 9:16 portrait.
+#  - "pillarbox_blur": full 16:9 frame fits centered, blurred copy fills top/bottom (no content lost — recommended)
+#  - "center_crop":    legacy behavior; scales to fill and center-crops (loses left+right ~33% each)
+DEFAULT_CROP_STRATEGY = "pillarbox_blur"
 
 
 # ---------------------------------------------------------------------------
@@ -61,37 +67,62 @@ def get_clip_duration(path: Path) -> float:
 
 def process_clip_to_portrait(clip_path: Path, out_path: Path,
                               game_title: str = "", platform_label: str = "",
-                              show_title: bool = False, dry_run: bool = False) -> None:
-    """Scale+crop clip to 1080x1920, apply dark overlay, optionally burn game title text."""
+                              show_title: bool = False, dry_run: bool = False,
+                              crop_strategy: str = DEFAULT_CROP_STRATEGY) -> None:
+    """Convert source clip to 1080x1920 portrait. Strategy controls how 16:9 fits 9:16.
+
+    - pillarbox_blur: full source frame centered in middle band, blurred copy fills top/bottom
+    - center_crop:    scale to fill height, center-crop (loses ~33% left + ~33% right of frame)
+    """
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Base vf: scale to fill height at 16:9, center-crop to portrait, then darken
-    vf = (
-        f"scale={W * 9 // 16}:{H}:force_original_aspect_ratio=increase,"
-        f"scale=-1:{H},"
-        f"crop={W}:{H},"
-        f"colorchannelmixer=rr={OVERLAY_DARKNESS}:gg={OVERLAY_DARKNESS}:bb={OVERLAY_DARKNESS}"
-    )
-
-    # Title overlay via drawtext requires ffmpeg built with --enable-libfreetype.
-    # Skipped here — game title is displayed via ASS captions in the final encode.
-
-    cmd = [
-        "ffmpeg", "-y",
-        "-i", str(clip_path),
-        "-vf", vf,
-        "-c:v", "libx264", "-preset", "fast", "-crf", "22",
-        "-an",  # no audio in portrait clips (audio comes from narration)
-        str(out_path),
-    ]
+    if crop_strategy == "pillarbox_blur":
+        # Filter graph:
+        #   [0:v] splits into [bg] and [fg]
+        #   [bg] scales-up to fill 1080x1920, heavy blur, light darkening
+        #   [fg] scales to 1080 wide preserving aspect, overlays centered
+        filter_complex = (
+            f"[0:v]split=2[bg][fg];"
+            f"[bg]scale={W}:{H}:force_original_aspect_ratio=increase,"
+            f"crop={W}:{H},"
+            f"boxblur=30:8,"
+            f"colorchannelmixer=rr={PILLARBOX_BG_DARKNESS}:gg={PILLARBOX_BG_DARKNESS}:bb={PILLARBOX_BG_DARKNESS}[blurbg];"
+            f"[fg]scale={W}:-2:force_original_aspect_ratio=decrease[fgscaled];"
+            f"[blurbg][fgscaled]overlay=0:(H-h)/2"
+        )
+        cmd = [
+            "ffmpeg", "-y",
+            "-i", str(clip_path),
+            "-filter_complex", filter_complex,
+            "-c:v", "libx264", "-preset", "fast", "-crf", "22",
+            "-an",
+            str(out_path),
+        ]
+    elif crop_strategy == "center_crop":
+        vf = (
+            f"scale={W * 9 // 16}:{H}:force_original_aspect_ratio=increase,"
+            f"scale=-1:{H},"
+            f"crop={W}:{H},"
+            f"colorchannelmixer=rr={OVERLAY_DARKNESS}:gg={OVERLAY_DARKNESS}:bb={OVERLAY_DARKNESS}"
+        )
+        cmd = [
+            "ffmpeg", "-y",
+            "-i", str(clip_path),
+            "-vf", vf,
+            "-c:v", "libx264", "-preset", "fast", "-crf", "22",
+            "-an",
+            str(out_path),
+        ]
+    else:
+        sys.exit(f"ERROR: unknown crop_strategy '{crop_strategy}' — use 'pillarbox_blur' or 'center_crop'")
 
     if dry_run:
-        print(f"  [dry-run] Would run: {' '.join(cmd[:6])}…")
+        print(f"  [dry-run] Would run: ffmpeg -i ... ({crop_strategy})")
         return
 
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
     if result.returncode != 0:
-        sys.exit(f"ERROR: Portrait crop failed for {clip_path.name}:\n{result.stderr[-500:]}")
+        sys.exit(f"ERROR: Portrait crop failed for {clip_path.name} ({crop_strategy}):\n{result.stderr[-500:]}")
 
 
 # ---------------------------------------------------------------------------
@@ -146,9 +177,12 @@ def build_concat_list(portrait_clips: list[Path], audio_duration: float) -> str:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Render portrait clips and ASS captions for a game short.")
+    parser = argparse.ArgumentParser(description="Render portrait clips and karaoke captions for a game short.")
     parser.add_argument("config", help="Path to game_config.json")
     parser.add_argument("--dry-run", action="store_true", help="Show steps without running FFmpeg")
+    parser.add_argument("--crop", choices=["pillarbox_blur", "center_crop"],
+                        default=DEFAULT_CROP_STRATEGY,
+                        help="How to fit 16:9 source into 9:16 portrait (default: pillarbox_blur — keeps full frame visible)")
     args = parser.parse_args()
 
     config_path = Path(args.config)
@@ -191,7 +225,7 @@ def main() -> None:
             sys.exit(f"ERROR: Clip not found: {p}\nRe-run: python scripts/select_clips.py --game-id {game_id} --auto")
 
     # Step 1: Process each clip to portrait
-    print(f"\n  Processing {len(clip_paths)} clips to portrait (1080×1920)…")
+    print(f"\n  Processing {len(clip_paths)} clips to portrait (1080×1920, crop={args.crop})…")
     portrait_clips = []
     for i, (clip_path, entry) in enumerate(zip(clip_paths, manifest), 1):
         out_portrait = portrait_dir / f"clip_{i:02d}_portrait.mp4"
@@ -204,6 +238,7 @@ def main() -> None:
             platform_label=platform_label,
             show_title=is_first,
             dry_run=args.dry_run,
+            crop_strategy=args.crop,
         )
         if not args.dry_run:
             print("✓")
