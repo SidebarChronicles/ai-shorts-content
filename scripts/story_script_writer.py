@@ -1,0 +1,264 @@
+#!/usr/bin/env python3
+"""Story sub-genre script templates and config scaffolding.
+
+The actual narrative writing is done by Claude during the routine fire
+(STEP 3 of daily-shorts-pipeline/SKILL.md). This module provides the
+deterministic scaffolding: hook templates, voice assignments, visual
+style hints, and the 7-beat structure each sub-genre must follow.
+
+The routine workflow per story video:
+  1. Read SY_NN_<sub>_<slug>.md from story_queue/ for premise + hook angle
+  2. Call get_template(subgenre) here for the canonical scaffold
+  3. Claude writes the 7 beat texts following the template's rules
+  4. Write output/scripts/SY_NN_*/script_config.json with the populated beats
+  5. check_script_structure.py lints the result before audio generation
+
+Usage (CLI — scaffolds a starter config to be filled in by Claude):
+    python scripts/story_script_writer.py --case SY_01_S_caveexplorer
+
+The script writes `output/scripts/<case>/script_config.json` with empty
+beat text fields that Claude fills in during the routine.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _env import load_dotenv  # noqa: E402
+from _atomic import atomic_write_json  # noqa: E402
+
+load_dotenv(PROJECT_ROOT / ".env")
+
+QUEUE_DIR = PROJECT_ROOT / "story_queue"
+SCRIPTS_DIR = PROJECT_ROOT / "output" / "scripts"
+
+# Voice IDs from VOICE_LIBRARY in make_audio_elevenlabs.py
+VOICE_IDS = {
+    "Charlie": "IKne3meq5aSn9XLyUdCD",
+    "Brian":   "nPczCjzI2devNBz1zQrb",
+    "Daniel":  "onwK4e9ZLuTAKqWW03F9",
+}
+
+
+# ---------------------------------------------------------------------------
+# Sub-genre templates
+# ---------------------------------------------------------------------------
+
+SURVIVAL_TEMPLATE = {
+    "subgenre": "survival",
+    "subgenre_letter": "S",
+    "voice_name": "Charlie",
+    "voice_id": VOICE_IDS["Charlie"],
+    "voice_speed": 0.95,
+    "model_id": "eleven_turbo_v2",
+    "color_grade_vertical": "story",
+    "hook_formula": "numbered_escalation",
+    "hook_template": "Day [N] of [scenario]. Today I [escalation in 5-7 words].",
+    "anti_patterns": [
+        "Hey guys", "What's up", "Today we're", "So I", "Imagine if",
+    ],
+    "beats": [
+        {"label": "hook", "purpose": "Hit Day N + escalation in ≤12 words", "target_seconds": 0, "max_seconds": 2.5, "visual_style": "wide establishing shot, urgency"},
+        {"label": "setup", "purpose": "Frame what's happening at this moment", "target_seconds": 3, "max_seconds": 12, "visual_style": "subject mid-action, environmental context"},
+        {"label": "build", "purpose": "Add stakes — what makes today different", "target_seconds": 15, "max_seconds": 13, "visual_style": "tension shot, dutch angle, close detail"},
+        {"label": "mid_anchor", "purpose": "Discovery, threat reveal, or escalation moment", "target_seconds": 28, "max_seconds": 5, "visual_style": "HERO SHOT — Pika clip preferred, dramatic reveal"},
+        {"label": "expand", "purpose": "What does this mean for tomorrow / survival", "target_seconds": 33, "max_seconds": 12, "visual_style": "subject reaction, planning, gear close-up"},
+        {"label": "payoff", "purpose": "Resolution beat OR cliffhanger for Day N+1", "target_seconds": 45, "max_seconds": 10, "visual_style": "wide environmental shot, change of light"},
+        {"label": "cta", "purpose": "'Day N+1 tomorrow' — explicit numbered cliffhanger", "target_seconds": 55, "max_seconds": 5, "visual_style": "fade-to-loop frame, same composition as hook"},
+    ],
+    "character_continuity_prompt": (
+        "[Same protagonist across episodes. Default description: tall man late 30s, "
+        "weathered face, dark hair, faded blue jacket, dirt-smudged. Include in every "
+        "Flux prompt to maintain visual continuity. Override per-character in the "
+        "queue entry's 'Protagonist:' field.]"
+    ),
+    "visual_palette": "muted earth tones, high contrast, slightly desaturated, single light source",
+}
+
+
+REDDIT_TEMPLATE = {
+    "subgenre": "reddit",
+    "subgenre_letter": "R",
+    "voice_name": "Brian",
+    "voice_id": VOICE_IDS["Brian"],
+    "voice_speed": 0.92,
+    "model_id": "eleven_multilingual_v2",
+    "color_grade_vertical": "story",
+    "hook_formula": "outrage_question",
+    "hook_template": "AITA for [inflammatory action]? My [relation] [outrageous thing in 5 words].",
+    "anti_patterns": [
+        "So I'm posting", "Hey Reddit", "Long time lurker", "Strap in",
+        "verbatim Reddit quote — paraphrase ALWAYS",
+    ],
+    "beats": [
+        {"label": "hook", "purpose": "AITA question + the outrage in ≤12 words", "target_seconds": 0, "max_seconds": 2.5, "visual_style": "character expression close-up, eye contact"},
+        {"label": "setup", "purpose": "Who the people are + the relationship", "target_seconds": 3, "max_seconds": 12, "visual_style": "two-shot or environmental setup"},
+        {"label": "build", "purpose": "What led up to the incident", "target_seconds": 15, "max_seconds": 13, "visual_style": "scene reconstruction, naturalistic"},
+        {"label": "mid_anchor", "purpose": "The twist or escalation that flips audience loyalty", "target_seconds": 28, "max_seconds": 5, "visual_style": "HERO SHOT — reaction face, the moment everything changes"},
+        {"label": "expand", "purpose": "The fallout / consequences", "target_seconds": 33, "max_seconds": 12, "visual_style": "aftermath shots, body language"},
+        {"label": "payoff", "purpose": "What I did about it / what the other person did", "target_seconds": 45, "max_seconds": 10, "visual_style": "resolution scene, lighting shift"},
+        {"label": "cta", "purpose": "'AITA?' direct comment-bait, no answer given", "target_seconds": 55, "max_seconds": 5, "visual_style": "freeze-frame on protagonist, looking at camera"},
+    ],
+    "character_continuity_prompt": (
+        "[Characters rotate per video; no cross-video continuity needed. "
+        "Use generic, anonymized physical descriptions in Flux prompts — "
+        "do not invoke real Reddit usernames or specific story details.]"
+    ),
+    "anti_plagiarism_rule": (
+        "Reddit posts ARE copyrighted by their authors. The script must REWRITE "
+        "the story in original prose: different word choices, restructured narrative, "
+        "anonymized names + locations, paraphrased dialogue. Use the source Reddit "
+        "post as inspiration only. Verbatim reproduction risks YouTube strike."
+    ),
+    "visual_palette": "warm domestic tones, naturalistic lighting, contemporary setting",
+}
+
+
+HORROR_TEMPLATE = {
+    "subgenre": "horror",
+    "subgenre_letter": "H",
+    "voice_name": "Daniel",
+    "voice_id": VOICE_IDS["Daniel"],
+    "voice_speed": 0.88,
+    "model_id": "eleven_multilingual_v2",
+    "color_grade_vertical": "story",
+    "hook_formula": "wrong_detail",
+    "hook_template": "[Mundane setup in 5-7 words]. [Single wrong detail in 4-5 words].",
+    "anti_patterns": [
+        "Let me tell you", "There was once", "I'll never forget", "Years ago",
+        "fan-fiction of existing IP (Slenderman, SCP, etc) — original creepypasta ONLY",
+    ],
+    "beats": [
+        {"label": "hook", "purpose": "Setup → wrong detail. The wrong detail IS the hook.", "target_seconds": 0, "max_seconds": 2.5, "visual_style": "static frame, single subject, deep shadow"},
+        {"label": "setup", "purpose": "Ground the listener in normality before the realization", "target_seconds": 3, "max_seconds": 12, "visual_style": "innocuous environment, slow push-in"},
+        {"label": "build", "purpose": "Second wrong thing, third wrong thing, escalating", "target_seconds": 15, "max_seconds": 13, "visual_style": "tighter framing, lower light, off-center subject"},
+        {"label": "mid_anchor", "purpose": "Realization — the wrongness is intentional, not coincidence", "target_seconds": 28, "max_seconds": 5, "visual_style": "HERO SHOT — first proper look at the threat, partial reveal"},
+        {"label": "expand", "purpose": "Protagonist's reaction / failed escape", "target_seconds": 33, "max_seconds": 12, "visual_style": "POV unsteady, breath sound, oppressive shadows"},
+        {"label": "payoff", "purpose": "Final confrontation or surrender", "target_seconds": 45, "max_seconds": 10, "visual_style": "single decisive composition, threat now fully visible"},
+        {"label": "cta", "purpose": "Single-line warning to viewer — 'Don't [verb] [object]'", "target_seconds": 55, "max_seconds": 5, "visual_style": "match-cut to the hook composition (loop trigger)"},
+    ],
+    "character_continuity_prompt": (
+        "[First-person POV by default. The 'protagonist' is the camera. Brief "
+        "external glimpses (hands, reflections) are allowed but no full-body shots "
+        "of the narrator. The THREAT may be partially revealed in mid_anchor and "
+        "fully shown in payoff — keep its visual design consistent within a video.]"
+    ),
+    "original_only_rule": (
+        "NO adapting existing creepypasta IP (Slenderman, SCP, Backrooms, "
+        "Mr. Wisepuff, etc). Every horror story must be Claude's original micro-"
+        "fiction. The premise can borrow tropes (haunted house, doppelganger, "
+        "deep-sea creature, etc) but the specific entity, setting, and prose "
+        "must be new."
+    ),
+    "visual_palette": "near-monochrome, blue-black shadows, single warm light source, high contrast",
+}
+
+
+TEMPLATES = {
+    "S": SURVIVAL_TEMPLATE,
+    "R": REDDIT_TEMPLATE,
+    "H": HORROR_TEMPLATE,
+    "survival": SURVIVAL_TEMPLATE,
+    "reddit": REDDIT_TEMPLATE,
+    "horror": HORROR_TEMPLATE,
+}
+
+
+def get_template(subgenre: str) -> dict:
+    """Return the template dict for a sub-genre letter or full name."""
+    t = TEMPLATES.get(subgenre)
+    if not t:
+        sys.exit(f"ERROR: unknown sub-genre '{subgenre}'. Valid: S/R/H or survival/reddit/horror")
+    return t
+
+
+def extract_subgenre_letter(case_id: str) -> str:
+    """SY_01_S_caveexplorer → 'S'"""
+    m = re.match(r"^SY_\d{2,3}_([SRH])_", case_id)
+    if not m:
+        sys.exit(f"ERROR: case_id '{case_id}' doesn't match SY_NN_<S|R|H>_<slug>")
+    return m.group(1)
+
+
+def scaffold_script_config(case_id: str, out_path: Path | None = None) -> Path:
+    """Write a starter script_config.json with empty beat texts the routine will fill in.
+
+    Pre-populates: voice, model, speed, color grade, beat labels + purpose hints.
+    Leaves: hook_text, beat texts, title, keywords (Claude fills these in).
+    """
+    letter = extract_subgenre_letter(case_id)
+    template = get_template(letter)
+
+    case_dir = SCRIPTS_DIR / case_id
+    case_dir.mkdir(parents=True, exist_ok=True)
+    if out_path is None:
+        out_path = case_dir / "script_config.json"
+
+    config = {
+        "_doc": (
+            f"AI Story script ({template['subgenre']}). "
+            f"This file scaffolds the 7-beat structure. The daily-shorts-pipeline "
+            f"routine fills in 'text', 'keywords', 'title', 'description' fields at "
+            f"production time, then runs check_script_structure.py to lint, then "
+            f"make_audio_elevenlabs.py + build_visuals_track.py."
+        ),
+        "case_id": case_id,
+        "vertical": "story",
+        "subgenre": template["subgenre"],
+        "voice_id": template["voice_id"],
+        "voice_name": template["voice_name"],
+        "voice_speed": template["voice_speed"],
+        "model_id": template["model_id"],
+        "color_grade_vertical": template["color_grade_vertical"],
+        "hook_formula": template["hook_formula"],
+        "hook_template": template["hook_template"],
+        "hook_anti_patterns": template["anti_patterns"],
+        "character_continuity_hint": template["character_continuity_prompt"],
+        "visual_palette": template["visual_palette"],
+        "title": "[FILL IN]",
+        "description_lead": "[FILL IN — 1-2 sentence story summary, no spoilers]",
+        "beats": [
+            {
+                "label": b["label"],
+                "text": "[FILL IN]",
+                "keywords": [],
+                "purpose_hint": b["purpose"],
+                "target_seconds": b["target_seconds"],
+                "max_seconds": b["max_seconds"],
+                "visual_style_hint": b["visual_style"],
+            }
+            for b in template["beats"]
+        ],
+    }
+    # Sub-genre-specific extra rules
+    if "anti_plagiarism_rule" in template:
+        config["anti_plagiarism_rule"] = template["anti_plagiarism_rule"]
+    if "original_only_rule" in template:
+        config["original_only_rule"] = template["original_only_rule"]
+
+    atomic_write_json(out_path, config, indent=2)
+    return out_path
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--case", required=True,
+                        help="SY_NN_<S|R|H>_<slug> case id from story_queue/")
+    parser.add_argument("--out", type=Path, default=None,
+                        help="Override output path (default: output/scripts/<case>/script_config.json)")
+    args = parser.parse_args()
+
+    out = scaffold_script_config(args.case, args.out)
+    print(f"  ✓ scaffold written: {out.relative_to(PROJECT_ROOT) if out.is_relative_to(PROJECT_ROOT) else out}")
+    print(f"  next: have Claude fill in title, beat texts, keywords, then run")
+    print(f"  check_script_structure.py --case {args.case} --fail-fast")
+
+
+if __name__ == "__main__":
+    main()

@@ -159,43 +159,111 @@ def download_image(url: str, dest: Path, timeout: int = 30) -> bool:
 
 def source_image_for_beat(beat_idx: int, keywords: list[str],
                           visuals_dir: Path,
-                          pexels_key: str, pixabay_key: str) -> Optional[Path]:
-    """Try each source in priority order until one returns an image."""
-    if not keywords:
+                          pexels_key: str, pixabay_key: str,
+                          ai_fallback: bool = False,
+                          ai_prompt: str | None = None,
+                          case_id: str | None = None) -> Optional[Path]:
+    """Try each source in priority order until one returns an image.
+
+    Args:
+        ai_fallback: When True, falls back to Flux 2 Pro after Pexels+Pixabay miss.
+                     Only triggered explicitly (story vertical, or other AI-enabled cases).
+        ai_prompt: Full Flux prompt to use if AI fallback fires. If None, falls back
+                   to joining keywords with "cinematic, dramatic lighting, 9:16".
+        case_id: Used for cache keying so identical prompts within a case don't re-bill.
+    """
+    if not keywords and not ai_prompt:
         print(f"  beat {beat_idx}: no keywords provided — skipping", file=sys.stderr)
         return None
 
-    query = " ".join(keywords[:4])  # cap to keep API search relevant
+    query = " ".join(keywords[:4]) if keywords else ""
     out_path = visuals_dir / f"beat_{beat_idx:02d}.jpg"
 
     # 1. Try Pexels
-    print(f"  beat {beat_idx}: pexels.com query={query!r}…", end=" ", flush=True)
-    pexels_hit = search_pexels(query, pexels_key)
-    if pexels_hit:
-        src_url = pexels_hit.get("src", {}).get("portrait") or pexels_hit.get("src", {}).get("large2x")
-        if src_url and download_image(src_url, out_path):
-            credit = pexels_hit.get("photographer", "Pexels")
-            print(f"✓ ({credit})")
-            return out_path
+    if query:
+        print(f"  beat {beat_idx}: pexels.com query={query!r}…", end=" ", flush=True)
+        pexels_hit = search_pexels(query, pexels_key)
+        if pexels_hit:
+            src_url = pexels_hit.get("src", {}).get("portrait") or pexels_hit.get("src", {}).get("large2x")
+            if src_url and download_image(src_url, out_path):
+                credit = pexels_hit.get("photographer", "Pexels")
+                print(f"✓ ({credit})")
+                return out_path
 
-    # 2. Fallback Pixabay
-    print(f"→ pixabay.com…", end=" ", flush=True)
-    pixabay_hit = search_pixabay(query, pixabay_key)
-    if pixabay_hit:
-        src_url = pixabay_hit.get("largeImageURL") or pixabay_hit.get("webformatURL")
-        if src_url and download_image(src_url, out_path):
-            credit = pixabay_hit.get("user", "Pixabay")
-            print(f"✓ ({credit})")
-            return out_path
+        # 2. Fallback Pixabay
+        print(f"→ pixabay.com…", end=" ", flush=True)
+        pixabay_hit = search_pixabay(query, pixabay_key)
+        if pixabay_hit:
+            src_url = pixabay_hit.get("largeImageURL") or pixabay_hit.get("webformatURL")
+            if src_url and download_image(src_url, out_path):
+                credit = pixabay_hit.get("user", "Pixabay")
+                print(f"✓ ({credit})")
+                return out_path
 
-    # 3. Fallback AI generation (Flux 2 Pro via Replicate) — STUB
-    # Enable by:
-    #   1. Setting REPLICATE_API_TOKEN in .env
-    #   2. Uncommenting the call below (and the call_replicate_flux helper)
-    # We intentionally leave this as a stub so the script never accidentally
-    # bills the Replicate account without explicit operator approval.
-    print("→ ✗ (no AI fallback wired yet — set REPLICATE_API_TOKEN to enable)")
+    # 3. Fallback AI generation (Flux 2 Pro via Replicate)
+    # Only fires when ai_fallback=True (story vertical opts in; others stay
+    # on free stock to avoid surprise Replicate bills).
+    if ai_fallback and os.environ.get("REPLICATE_API_TOKEN"):
+        prompt = ai_prompt or (
+            f"{query}, cinematic, dramatic lighting, 9:16 portrait, "
+            f"high quality photo realistic"
+        )
+        # PNG output (Flux default) — Ken Burns step downstream is fine with either
+        ai_out = visuals_dir / f"beat_{beat_idx:02d}.png"
+        try:
+            # Lazy import to avoid forcing the dep on legacy verticals
+            from replicate_flux import generate_flux_image, FluxError
+            print(f"→ flux 2 pro…", end=" ", flush=True)
+            # Seed = beat_idx + case_id hash → deterministic per beat per case
+            seed = (hash(case_id or "") % 1_000_000) + beat_idx if case_id else None
+            result = generate_flux_image(prompt, ai_out, seed=seed, verbose=False)
+            if result and result.exists():
+                print(f"✓ (flux)")
+                return result
+        except (ImportError, FluxError) as e:
+            print(f"\n    flux failed: {e}")
+
+    print(f"→ ✗ (no source succeeded)")
     return None
+
+
+def maybe_generate_hero_video(beat_idx: int, beat_label: str,
+                              prompt: str, visuals_dir: Path,
+                              case_id: str | None = None,
+                              seconds: int = 5) -> Optional[Path]:
+    """For 'hero shot' beats (mid_anchor, payoff), generate a Pika video clip.
+
+    Returns the path to the generated mp4, or None if Pika isn't available
+    or fails. Caller should fall back to source_image_for_beat() if this
+    returns None.
+
+    Only the story vertical's mid_anchor and payoff beats trigger this in
+    the current pipeline — see HERO_LABELS in build_track_for_case().
+    """
+    if not os.environ.get("REPLICATE_API_TOKEN"):
+        return None
+    try:
+        from replicate_pika import generate_pika_clip, PikaError
+    except ImportError:
+        return None
+
+    out_path = visuals_dir / f"beat_{beat_idx:02d}_hero.mp4"
+    try:
+        seed = (hash(case_id or "") % 1_000_000) + beat_idx if case_id else None
+        print(f"  beat {beat_idx} [{beat_label}]: pika hero clip…", end=" ", flush=True)
+        result = generate_pika_clip(prompt, out_path, seconds=seconds,
+                                    seed=seed, verbose=False)
+        if result and result.exists():
+            print(f"✓ ({seconds}s, hero)")
+            return result
+    except PikaError as e:
+        print(f"\n    pika failed: {e}")
+    return None
+
+
+# Beat labels that get Pika hero-shot treatment in AI-fallback mode.
+# Only used when ai_fallback=True (story vertical).
+HERO_LABELS = ("mid_anchor", "payoff")
 
 
 # ---------------------------------------------------------------------------
@@ -250,6 +318,46 @@ def render_ken_burns(image_path: Path, out_clip: Path, duration: float,
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
     if result.returncode != 0:
         sys.exit(f"ERROR: Ken Burns render failed for {image_path.name}:\n{result.stderr[-500:]}")
+
+
+def _normalize_pika_to_portrait(pika_path: Path, out_clip: Path, duration: float,
+                                dry_run: bool = False) -> None:
+    """Thin FFmpeg pass to align a Pika output with our portrait spec.
+
+    Pika 2.0 outputs 9:16 1080p at 24fps. Our concat list expects:
+      - 1080x1920
+      - 30fps (cfr) — matches Ken Burns clips for clean concat
+      - libx264 yuv420p, no audio
+      - duration trimmed to the requested length
+
+    Mismatched fps across concat segments has caused timestamp drift bugs
+    before (TX_01 fix); always re-encode to a uniform fps here.
+    """
+    out_clip.parent.mkdir(parents=True, exist_ok=True)
+
+    vf = (
+        f"scale={W}:{H}:force_original_aspect_ratio=increase,"
+        f"crop={W}:{H},"
+        f"fps={KB_FPS}"
+    )
+    cmd = [
+        "ffmpeg", "-y",
+        "-i", str(pika_path),
+        "-vf", vf,
+        "-t", f"{duration:.2f}",
+        "-vsync", "cfr",
+        "-c:v", "libx264", "-preset", "fast", "-crf", "22",
+        "-pix_fmt", "yuv420p",
+        "-an",
+        str(out_clip),
+    ]
+    if dry_run:
+        print(f"    [dry-run] ffmpeg pika-normalize → {out_clip.name}")
+        return
+
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+    if result.returncode != 0:
+        sys.exit(f"ERROR: Pika normalize failed for {pika_path.name}:\n{result.stderr[-500:]}")
 
 
 # ---------------------------------------------------------------------------
@@ -356,7 +464,14 @@ def main() -> None:
     parser.add_argument("--beat-duration", type=float, default=DEFAULT_BEAT_DURATION,
                         help=f"Per-beat clip duration when alignment unavailable (default {DEFAULT_BEAT_DURATION}s)")
     parser.add_argument("--dry-run", action="store_true", help="Don't download or render — just report")
+    parser.add_argument("--ai-fallback", action="store_true",
+                        help="Enable Flux 2 Pro for missing beats + Pika hero shots for mid_anchor/payoff. "
+                             "Auto-enabled for story vertical (SY_*) case IDs.")
     args = parser.parse_args()
+
+    # Story vertical (SY_*) auto-enables AI fallback so its narrative beats
+    # always have a Flux backstop and hero shots get Pika.
+    ai_fallback_enabled = args.ai_fallback or args.case.startswith("SY_")
 
     case_dir = SCRIPTS_DIR / args.case
     config_path = case_dir / "script_config.json"
@@ -405,19 +520,56 @@ def main() -> None:
         durations = [args.beat_duration] * len(beats)
         print(f"  Durations: default {args.beat_duration}s/beat ({sum(durations):.1f}s total)")
 
-    # Source images
-    print(f"\n  Sourcing images…")
+    # Source images (and Pika hero clips for story vertical mid_anchor/payoff)
+    print(f"\n  Sourcing visuals (ai_fallback={ai_fallback_enabled})…")
     image_paths: list[Optional[Path]] = []
+    hero_clips: dict[int, Path] = {}  # beat_idx → pre-rendered video clip path
     for i, beat in enumerate(beats, 1):
+        beat_label = beat.get("label", "")
+        # For story-vertical hero beats: try Pika first (real video > Ken Burns still)
+        if ai_fallback_enabled and beat_label in HERO_LABELS:
+            visual_hint = beat.get("visual_style_hint", "")
+            ai_prompt = (
+                f"{beat.get('text', '')[:120]}, {visual_hint}, "
+                f"9:16 portrait video, cinematic"
+            ).strip(", ")
+            hero_clip = maybe_generate_hero_video(
+                beat_idx=i,
+                beat_label=beat_label,
+                prompt=ai_prompt,
+                visuals_dir=visuals_dir,
+                case_id=args.case,
+                seconds=5,
+            )
+            if hero_clip:
+                hero_clips[i] = hero_clip
+                # Still source a still for the non-hero portion of the beat
+                # (if the beat is longer than 5s, sub-clips after the hero use the still)
+
+        # Build the Flux prompt for AI fallback when stock misses
+        flux_prompt = None
+        if ai_fallback_enabled:
+            visual_hint = beat.get("visual_style_hint", "")
+            palette = cfg.get("visual_palette", "")
+            char_hint = cfg.get("character_continuity_hint", "")
+            flux_prompt = (
+                f"{beat.get('text', '')[:120]}, {visual_hint}, {palette}, "
+                f"{'photorealistic' if cfg.get('subgenre') == 'reddit' else 'cinematic illustration'}, "
+                f"9:16 portrait, single subject framing"
+            ).strip(", ")
+
         path = source_image_for_beat(
             beat_idx=i,
             keywords=beat["keywords"],
             visuals_dir=visuals_dir,
             pexels_key=pexels_key,
             pixabay_key=pixabay_key,
+            ai_fallback=ai_fallback_enabled,
+            ai_prompt=flux_prompt,
+            case_id=args.case,
         )
         image_paths.append(path)
-        # Be polite to free APIs
+        # Be polite to free APIs (skip when AI was the source)
         time.sleep(0.3)
 
     missing = [i for i, p in enumerate(image_paths, 1) if p is None]
@@ -427,20 +579,65 @@ def main() -> None:
             f"Add better keywords or enable Flux 2 Pro fallback (REPLICATE_API_TOKEN)."
         )
 
+    if hero_clips:
+        print(f"  Pika hero clips: {len(hero_clips)} (beats {sorted(hero_clips.keys())})")
+
     # Render Ken Burns clips — split any beat >MAX_CLIP_SECONDS into sub-clips
     # for pattern-interrupt enforcement. Each sub-clip uses alternating zoom
     # direction so the same source image feels visually fresh across the beat.
-    print(f"\n  Rendering Ken Burns clips (cap {MAX_CLIP_SECONDS}s per clip)…")
+    # Hero beats (mid_anchor, payoff with a Pika clip) use the Pika clip
+    # directly for the first ≤5s, then optionally Ken Burns the still for any
+    # remaining duration so beats longer than 5s still flow correctly.
+    print(f"\n  Rendering visual clips (cap {MAX_CLIP_SECONDS}s per clip)…")
     clip_paths: list[Path] = []
     clip_seq = 0
     for beat_idx, (img, dur) in enumerate(zip(image_paths, durations), 1):
-        # How many sub-clips do we need? Ceiling of dur/MAX
+        hero_clip = hero_clips.get(beat_idx)
+        # If hero clip exists and beat is ≤ Pika clip duration (~5s), use Pika alone
+        if hero_clip and dur <= 5.5:
+            clip_seq += 1
+            out_clip = clips_dir / f"clip_{clip_seq:02d}_portrait.mp4"
+            # Normalize the Pika clip to our portrait spec via a thin FFmpeg pass
+            print(f"  clip_{clip_seq:02d} (beat{beat_idx} HERO PIKA {dur:.1f}s)… ",
+                  end="", flush=True)
+            _normalize_pika_to_portrait(hero_clip, out_clip, dur, dry_run=args.dry_run)
+            if not args.dry_run:
+                print("✓")
+            clip_paths.append(out_clip)
+            continue
+
+        # If hero clip exists AND beat is longer than 5s: use Pika for first 5s,
+        # Ken Burns the still for the rest (sub-divided per MAX_CLIP_SECONDS).
+        if hero_clip:
+            clip_seq += 1
+            out_clip = clips_dir / f"clip_{clip_seq:02d}_portrait.mp4"
+            print(f"  clip_{clip_seq:02d} (beat{beat_idx} HERO PIKA 5.0s)… ",
+                  end="", flush=True)
+            _normalize_pika_to_portrait(hero_clip, out_clip, 5.0, dry_run=args.dry_run)
+            if not args.dry_run:
+                print("✓")
+            clip_paths.append(out_clip)
+            remaining_dur = max(0.0, dur - 5.0)
+            n_sub = max(1, int((remaining_dur + MAX_CLIP_SECONDS - 0.001) // MAX_CLIP_SECONDS))
+            sub_dur = remaining_dur / n_sub if n_sub > 0 else 0
+            for s in range(n_sub):
+                clip_seq += 1
+                out_clip = clips_dir / f"clip_{clip_seq:02d}_portrait.mp4"
+                zoom_in = (clip_seq % 2 == 1)
+                print(f"  clip_{clip_seq:02d} (beat{beat_idx} tail {s+1}/{n_sub}, "
+                      f"{sub_dur:.1f}s)… ", end="", flush=True)
+                render_ken_burns(img, out_clip, sub_dur, zoom_in=zoom_in, dry_run=args.dry_run)
+                if not args.dry_run:
+                    print("✓")
+                clip_paths.append(out_clip)
+            continue
+
+        # Standard path: split into Ken Burns sub-clips
         n_sub = max(1, int((dur + MAX_CLIP_SECONDS - 0.001) // MAX_CLIP_SECONDS))
         sub_dur = dur / n_sub
         for s in range(n_sub):
             clip_seq += 1
             out_clip = clips_dir / f"clip_{clip_seq:02d}_portrait.mp4"
-            # Alternate zoom direction across the full sequence (every sub-clip)
             zoom_in = (clip_seq % 2 == 1)
             label = (f"beat{beat_idx}" if n_sub == 1
                      else f"beat{beat_idx}/{s+1}of{n_sub}")

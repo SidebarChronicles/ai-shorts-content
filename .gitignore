@@ -32,6 +32,11 @@ output/topx_videos/*.mp4
 output/topx_videos/*.mp4.part
 output/finance_videos/*.mp4
 output/finance_videos/*.mp4.part
+output/story_videos/*.mp4
+output/story_videos/*.mp4.part
+
+# AI generation caches (regeneratable — re-prompting hits the cache, doesn't re-bill)
+output/ai_cache/
 output/scripts/*/visuals_raw/
 assets/audio/*.aiff
 assets/audio/*.mp3

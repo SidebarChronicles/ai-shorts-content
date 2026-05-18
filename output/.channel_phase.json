@@ -6,6 +6,7 @@
   "end_date_planned": "2026-05-25",
   "day_index": 1,
   "kept_verticals": [
+    "story",
     "games",
     "movies",
     "mythology",
@@ -13,7 +14,26 @@
     "topx",
     "finance"
   ],
-  "_kept_verticals_note": "Phase 1 rotation pool. Cases excluded to conserve EL budget (already have 6 live in old format). Phase 2 narrows to top 2-3 by median avg view %.",
+  "_kept_verticals_note": "Phase 1 rotation pool. Cases excluded to conserve EL budget (already have 6 live in old format). Story vertical added 2026-05-18 — AI-generated narrative shorts (3 sub-genres rotating: numbered survival, Reddit dramatizations, horror micro-fiction). Phase 2 narrows to top 2-3 by median avg view %.",
+  "priority_verticals": [
+    "story"
+  ],
+  "priority_until_count": 12,
+  "priority_mode": "exclusive",
+  "_priority_note": "Story vertical claims BOTH slots in every fire (exclusive mode) until story has 12 cumulative QUEUED+RENDERED+DELIVERED entries. After that, balanced rotation across all 7 verticals resumes. Bootstrap math: 12 stories in ~6 fires ≈ 1.5 days, then other verticals come back online.",
+  "story_subgenre_rotation": [
+    "survival",
+    "reddit",
+    "horror"
+  ],
+  "_story_subgenre_note": "Within the story vertical, rotates through 3 sub-genres for production variation. Sub-genre encoded in queue filename: SY_NN_S_* (survival), SY_NN_R_* (Reddit), SY_NN_H_* (horror).",
+  "story_subgenre_voices": {
+    "survival": "Charlie",
+    "reddit": "Brian",
+    "horror": "Daniel"
+  },
+  "story_budget_softcap_usd": 130,
+  "_story_budget_note": "Soft cap at $130/mo for Replicate (Flux + Pika). Actual projected spend at 1-2 stories/day ≈ $42-63/mo, well under cap.",
   "hook_formula_rotation": [
     "stat-shock",
     "curiosity-gap",
