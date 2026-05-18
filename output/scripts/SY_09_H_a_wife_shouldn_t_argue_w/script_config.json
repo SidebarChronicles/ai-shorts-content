@@ -1,0 +1,495 @@
+{
+  "_doc": "AI Story script (horror). This file scaffolds the 7-beat structure. The daily-shorts-pipeline routine fills in 'text', 'keywords', 'title', 'description', 'visual_brief' and 'sound_brief' fields at production time, then runs check_script_structure.py to lint, then make_audio_elevenlabs.py + build_visuals_track.py + build_sound_design.py.",
+  "beats": [
+    {
+      "keywords": [
+        "lamp",
+        "shadow",
+        "kitchen night"
+      ],
+      "label": "hook",
+      "max_seconds": 2.5,
+      "purpose_hint": "Setup \u2192 wrong detail. The wrong detail IS the hook.",
+      "sound_brief": {
+        "_FILL_IN": false,
+        "ambient_bed": "kitchen room tone, refrigerator hum, distant clock tick, silence-dominant",
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "name": "kitchen ambient stop sudden",
+            "gain_db": -6
+          }
+        ],
+        "music_cue": "no music",
+        "music_intensity": 0.2,
+        "vocal_mood": "tight whisper, slow tempo, breath audible on the reveal",
+        "vocal_pause_after_sec": 0.6,
+        "mix_note": "ambient -22db, sfx hit drops -3db then silence reasserts",
+        "freesound_keywords": [
+          "kitchen room tone night",
+          "refrigerator hum quiet",
+          "clock tick wall"
+        ]
+      },
+      "target_seconds": 0,
+      "text": "He smiled. The lamp dimmed when I disagreed back.",
+      "visual_brief": {
+        "_FILL_IN": false,
+        "mood": "frozen dread, breath-held",
+        "subject": "kitchen lamp casting a single circle of light on a dining table, husband's silhouette half-visible at the edge",
+        "framing": "low-angle medium shot, table-level, husband off-center right",
+        "lens": "35mm, shallow DOF",
+        "lighting": "single warm lamp overhead, hard shadow underneath, everything else black",
+        "color": "near-monochrome, blue-black shadow, single warm highlight on the table",
+        "props": [
+          "dining table",
+          "lamp",
+          "two coffee cups",
+          "empty chair"
+        ],
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "cartoon",
+          "anime",
+          "smiling",
+          "ghost imagery",
+          "bright color"
+        ],
+        "stock_keywords": [
+          "dark kitchen lamp",
+          "single light table",
+          "night kitchen interior"
+        ]
+      },
+      "visual_style_hint": "static frame, single subject, deep shadow"
+    },
+    {
+      "keywords": [
+        "dining table",
+        "two place settings",
+        "domestic"
+      ],
+      "label": "setup",
+      "max_seconds": 12,
+      "purpose_hint": "Ground the listener in normality before the realization",
+      "sound_brief": {
+        "_FILL_IN": false,
+        "ambient_bed": "dining room ambience, plate clinks, faint cutlery, kitchen extractor distant",
+        "sfx": [
+          {
+            "at_sec": 1.5,
+            "name": "fork on plate single tap",
+            "gain_db": -12
+          }
+        ],
+        "music_cue": "very low drone fade in",
+        "music_intensity": 0.25,
+        "vocal_mood": "tight whisper",
+        "vocal_pause_after_sec": 0.3,
+        "mix_note": "ambient -20db, sfx subtle",
+        "freesound_keywords": [
+          "dinner table cutlery",
+          "dining room ambience",
+          "fork plate tap"
+        ]
+      },
+      "target_seconds": 3,
+      "text": "It started small. Two years ago. He asked me to pass the salt. I said in a minute. He didn't speak for the rest of dinner.",
+      "visual_brief": {
+        "_FILL_IN": false,
+        "mood": "claustrophobic, normal-turning-wrong",
+        "subject": "dining table with two place settings, salt shaker between them, untouched plates of food",
+        "framing": "wide overhead shot, top-down, symmetric",
+        "lens": "24mm wide, deep focus",
+        "lighting": "soft overhead pendant, slightly cool, no shadows",
+        "color": "muted greens and creams, low saturation",
+        "props": [
+          "salt shaker",
+          "plates",
+          "wine glasses",
+          "linen napkins"
+        ],
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "cartoon",
+          "smiling",
+          "candlelight romance"
+        ],
+        "stock_keywords": [
+          "dinner table overhead",
+          "two place settings",
+          "untouched dinner"
+        ]
+      },
+      "visual_style_hint": "innocuous environment, slow push-in"
+    },
+    {
+      "keywords": [
+        "wall clock",
+        "stopped hands",
+        "dim hallway"
+      ],
+      "label": "build",
+      "max_seconds": 13,
+      "purpose_hint": "Second wrong thing, third wrong thing, escalating",
+      "sound_brief": {
+        "_FILL_IN": false,
+        "ambient_bed": "house at night, low wind through walls, no other sound",
+        "sfx": [
+          {
+            "at_sec": 2.0,
+            "name": "clock tick single missing",
+            "gain_db": -8
+          }
+        ],
+        "music_cue": "low drone deepening, ascending",
+        "music_intensity": 0.3,
+        "vocal_mood": "tight whisper, slower",
+        "vocal_pause_after_sec": 0.4,
+        "mix_note": "ambient -18db, sfx duck VO -3db",
+        "freesound_keywords": [
+          "house wind low",
+          "clock tick missed",
+          "old house creak"
+        ]
+      },
+      "target_seconds": 15,
+      "text": "Last winter the wall clock stopped at three o'clock. He said it was fine. The clock stayed stopped for eleven months.",
+      "visual_brief": {
+        "_FILL_IN": false,
+        "mood": "dread, time-locked",
+        "subject": "vintage wall clock with hands frozen at three, mounted on cracked wallpaper",
+        "framing": "medium close-up, slightly off-axis right, clock centered",
+        "lens": "50mm, shallow DOF",
+        "lighting": "weak window light from frame left, dust visible in beam",
+        "color": "dust greys, sepia yellows, deep shadow on the wall edges",
+        "props": [
+          "wall clock",
+          "wallpaper cracks",
+          "shelf below clock"
+        ],
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "cartoon",
+          "modern digital displays"
+        ],
+        "stock_keywords": [
+          "vintage wall clock",
+          "old clock face stopped",
+          "broken clock dim room"
+        ]
+      },
+      "visual_style_hint": "tighter framing, lower light, off-center subject"
+    },
+    {
+      "keywords": [
+        "closed door bedroom",
+        "hand on knob",
+        "shadow stretching"
+      ],
+      "label": "mid_anchor",
+      "max_seconds": 5,
+      "purpose_hint": "Realization \u2014 the wrongness is intentional, not coincidence",
+      "sound_brief": {
+        "_FILL_IN": false,
+        "ambient_bed": "complete silence, single distant refrigerator hum, room tone -28db",
+        "sfx": [
+          {
+            "at_sec": 3.0,
+            "name": "doorknob hand contact gentle",
+            "gain_db": -10
+          }
+        ],
+        "music_cue": "music spike to peak then ABRUPT silence on 'no, actually, I won't'",
+        "music_intensity": 0.75,
+        "vocal_mood": "tight whisper, almost breathless, slower than baseline on the pivot",
+        "vocal_pause_after_sec": 0.8,
+        "mix_note": "music sidechain to VO, ABRUPT cut to silence on the word 'won't', let silence breathe",
+        "freesound_keywords": [
+          "empty house silence",
+          "doorknob soft",
+          "deep silence room tone"
+        ]
+      },
+      "target_seconds": 28,
+      "text": "Eleven months of nothing breaking, nothing creaking, nothing disagreeing. Then I told him no, actually, I won't.",
+      "visual_brief": {
+        "_FILL_IN": false,
+        "mood": "frozen, sub-zero dread, the moment everything pivots",
+        "subject": "closed bedroom door at end of dark hallway, a single hand on the doorknob from camera POV",
+        "framing": "POV first-person, narrow hallway compressing toward the door, low height",
+        "lens": "28mm wide, sharp deep focus, slight vignette",
+        "lighting": "single overhead bulb fifty feet behind camera, door is the brightest object",
+        "color": "deep blue-black hallway, warm bulb glow only on the door, hand silhouette dark",
+        "props": [
+          "doorknob",
+          "hallway floor",
+          "doorframe",
+          "wallpaper edge"
+        ],
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "cartoon",
+          "anime",
+          "ghost imagery",
+          "wide-eyed shock"
+        ],
+        "stock_keywords": [
+          "dark hallway door night",
+          "doorknob first person",
+          "long hallway closed door"
+        ]
+      },
+      "visual_style_hint": "HERO SHOT \u2014 first proper look at the threat, partial reveal"
+    },
+    {
+      "keywords": [
+        "dim lamp",
+        "still kitchen",
+        "shadow growing"
+      ],
+      "label": "expand",
+      "max_seconds": 12,
+      "purpose_hint": "Protagonist's reaction / failed escape",
+      "sound_brief": {
+        "_FILL_IN": false,
+        "ambient_bed": "fridge hum cuts to dead silence at 0:01, then thin distant air pressure",
+        "sfx": [
+          {
+            "at_sec": 1.0,
+            "name": "fridge hum stops mid-cycle",
+            "gain_db": -8
+          },
+          {
+            "at_sec": 4.5,
+            "name": "wood floor creak slow",
+            "gain_db": -12
+          }
+        ],
+        "music_cue": "low drone returns at lower intensity, sustained",
+        "music_intensity": 0.5,
+        "vocal_mood": "tight whisper, slower, more breath",
+        "vocal_pause_after_sec": 0.5,
+        "mix_note": "ambient hard cut on fridge stop, music creeps back in, VO dominant",
+        "freesound_keywords": [
+          "fridge hum stop",
+          "wood floor creak slow",
+          "house silence pressure"
+        ]
+      },
+      "target_seconds": 33,
+      "text": "The lamp dimmed. The fridge hum cut. Every wall held its breath. And he smiled again, slower this time.",
+      "visual_brief": {
+        "_FILL_IN": false,
+        "mood": "house-as-organism, dread compounding",
+        "subject": "kitchen lamp visibly dimming mid-frame, surrounding shadows growing inward",
+        "framing": "medium wide, eye-level, lamp centered, edges falling to black",
+        "lens": "35mm, shallow DOF on the lamp",
+        "lighting": "single lamp source actively dimming through the shot, no fill",
+        "color": "warm orange dying into blue-black at the edges",
+        "props": [
+          "kitchen lamp",
+          "countertop",
+          "fridge edge"
+        ],
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "cartoon",
+          "smiling",
+          "anime"
+        ],
+        "stock_keywords": [
+          "dim kitchen lamp",
+          "lamp going out",
+          "kitchen night dark"
+        ]
+      },
+      "visual_style_hint": "POV unsteady, breath sound, oppressive shadows"
+    },
+    {
+      "keywords": [
+        "bedroom door reflected",
+        "single warm bulb",
+        "looking back"
+      ],
+      "label": "payoff",
+      "max_seconds": 10,
+      "purpose_hint": "Final confrontation or surrender",
+      "sound_brief": {
+        "_FILL_IN": false,
+        "ambient_bed": "thin air pressure, distant low rumble, no clock no fridge",
+        "sfx": [
+          {
+            "at_sec": 3.5,
+            "name": "wood door soft latch close",
+            "gain_db": -10
+          }
+        ],
+        "music_cue": "sustained low drone, no resolution, holds",
+        "music_intensity": 0.6,
+        "vocal_mood": "tight whisper, resigned, slowest",
+        "vocal_pause_after_sec": 0.4,
+        "mix_note": "music sustained under VO, ambient very thin, sfx is the only punctuation",
+        "freesound_keywords": [
+          "low rumble distant",
+          "wood latch close",
+          "thin pressure hum"
+        ]
+      },
+      "target_seconds": 45,
+      "text": "Whatever lives in this house with us, my husband taught it the rules. I learned them too late.",
+      "visual_brief": {
+        "_FILL_IN": false,
+        "mood": "trapped, resigned, terminal",
+        "subject": "dim hallway reflection in a darkened mirror, doorknob centered, no figure visible",
+        "framing": "tight close-up of mirror surface, slight angle, doorknob reflection sharp",
+        "lens": "85mm portrait, shallow DOF",
+        "lighting": "single warm bulb behind the mirror caster, mirror itself dim",
+        "color": "deep amber on doorknob, surrounding void blue-black",
+        "props": [
+          "mirror frame",
+          "doorknob reflection",
+          "hallway wall reflection"
+        ],
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "cartoon",
+          "anime",
+          "ghost figures",
+          "bright color"
+        ],
+        "stock_keywords": [
+          "dark mirror reflection",
+          "dim hallway mirror",
+          "doorknob reflection night"
+        ]
+      },
+      "visual_style_hint": "single decisive composition, threat now fully visible"
+    },
+    {
+      "keywords": [
+        "closed door composition",
+        "lamp circle"
+      ],
+      "label": "cta",
+      "max_seconds": 5,
+      "purpose_hint": "FOLLOW-DRIVER (v2): 'Don't [verb] [object]. Follow if you want more.' Warning hook + follow ask in one line",
+      "sound_brief": {
+        "_FILL_IN": false,
+        "ambient_bed": "back to hook ambient: kitchen room tone, fridge hum returns",
+        "sfx": [],
+        "music_cue": "drone resolves to single low tone, fades to ambient",
+        "music_intensity": 0.4,
+        "vocal_mood": "confiding narrator, slightly slower",
+        "vocal_pause_after_sec": 0.0,
+        "mix_note": "match-cut ambient to hook, music tucks under, VO clean",
+        "freesound_keywords": [
+          "kitchen room tone",
+          "fridge hum quiet",
+          "night house ambient"
+        ]
+      },
+      "target_seconds": 55,
+      "text": "Don't disagree with the house. Follow if you want the rules.",
+      "visual_brief": {
+        "_FILL_IN": false,
+        "mood": "loop-back to hook, same composition different light",
+        "subject": "kitchen lamp casting circle on table, mirror match to hook beat composition",
+        "framing": "low-angle medium shot identical to hook, husband absent now",
+        "lens": "35mm, shallow DOF",
+        "lighting": "single warm lamp, slightly brighter than hook, room is empty",
+        "color": "near-monochrome with single warm circle",
+        "props": [
+          "dining table",
+          "lamp",
+          "two empty chairs"
+        ],
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "cartoon",
+          "smiling"
+        ],
+        "stock_keywords": [
+          "empty dining table lamp",
+          "single light kitchen night",
+          "two empty chairs"
+        ]
+      },
+      "visual_style_hint": "match-cut to the hook composition (loop trigger)"
+    }
+  ],
+  "case_id": "SY_09_H_a_wife_shouldn_t_argue_w",
+  "character_continuity_hint": "[First-person POV by default. The 'protagonist' is the camera. Brief external glimpses (hands, reflections) are allowed but no full-body shots of the narrator. The THREAT may be partially revealed in mid_anchor and fully shown in payoff \u2014 keep its visual design consistent within a video.]",
+  "color_grade_vertical": "story",
+  "description_lead": "A wife learns that something in her house punishes any voice that contradicts her husband's.",
+  "hook_anti_patterns": [
+    "Let me tell you",
+    "There was once",
+    "I'll never forget",
+    "Years ago",
+    "fan-fiction of existing IP (Slenderman, SCP, etc) \u2014 original creepypasta ONLY",
+    "[mundane setup \u2192 wrong detail] structure \u2014 flip to [wrong detail \u2192 setup]",
+    "starting with 'The' / 'A' / 'An' / 'In' \u2014 soft and slow for sentence 1"
+  ],
+  "hook_formula": "wrong_detail_first",
+  "hook_template": "[Wrong detail in 4-5 words]. [Mundane context after.] (Lead with the wrongness.)",
+  "model_id": "eleven_multilingual_v2",
+  "original_only_rule": "NO adapting existing creepypasta IP (Slenderman, SCP, Backrooms, Mr. Wisepuff, etc). Every horror story must be Claude's original micro-fiction. The premise can borrow tropes (haunted house, doppelganger, deep-sea creature, etc) but the specific entity, setting, and prose must be new.",
+  "sound_brief_defaults": {
+    "ambient_bed": "room tone, low hum, silence-dominant, refrigerator pulse -28db (let silence speak)",
+    "mix_note": "ambient very low so silence reads as silence, hero-beat music spikes to 0.7 then drops to 0 on reveal, SFX hit on the wrong-detail mention",
+    "music_intensity": 0.25,
+    "vocal_mood": "tight whisper, slow tempo, breath audible on the reveal"
+  },
+  "subgenre": "horror",
+  "title": "Don't Disagree With the House",
+  "vertical": "story",
+  "visual_brief_defaults": {
+    "color": "near-monochrome, blue-black shadows, single warm highlight, high contrast",
+    "exclude": [
+      "people",
+      "creatures",
+      "faces",
+      "characters",
+      "anime",
+      "cartoon",
+      "logos",
+      "text overlays",
+      "watermarks",
+      "yellow mascot",
+      "fantasy creature",
+      "bright sunlight",
+      "color saturation",
+      "smiling subjects",
+      "wide-eyed shock clich\u00e9"
+    ],
+    "lighting": "single warm light source against deep shadow, dark frame negative space",
+    "mood": "dread, claustrophobic, silence-dominant"
+  },
+  "visual_palette": "near-monochrome, blue-black shadows, single warm light source, high contrast",
+  "voice_id": "onwK4e9ZLuTAKqWW03F9",
+  "voice_name": "Daniel",
+  "voice_speed": 0.88,
+  "spoken_text": "He smiled. The lamp dimmed when I disagreed back.\n\nIt started small. Two years ago. He asked me to pass the salt. I said in a minute. He didn't speak for the rest of dinner.\n\nLast winter the wall clock stopped at three o'clock. He said it was fine. The clock stayed stopped for eleven months.\n\nEleven months of nothing breaking, nothing creaking, nothing disagreeing. Then I told him no, actually, I won't.\n\nThe lamp dimmed. The fridge hum cut. Every wall held its breath. And he smiled again, slower this time.\n\nWhatever lives in this house with us, my husband taught it the rules. I learned them too late.\n\nDon't disagree with the house. Follow if you want the rules."
+}

@@ -50,6 +50,14 @@ VOICE_IDS = {
 # Sub-genre templates
 # ---------------------------------------------------------------------------
 
+# Default exclude list seeded into every visual_brief to suppress the Pokemon-bug
+# class of hallucinations (yellow creatures, cartoon faces, etc.) even when the
+# writer forgets to add anything sub-genre-specific.
+BASELINE_VISUAL_EXCLUDE = [
+    "people", "creatures", "faces", "characters", "anime", "cartoon",
+    "logos", "text overlays", "watermarks", "yellow mascot", "fantasy creature",
+]
+
 SURVIVAL_TEMPLATE = {
     "subgenre": "survival",
     "subgenre_letter": "S",
@@ -62,6 +70,18 @@ SURVIVAL_TEMPLATE = {
     "hook_template": "[Threat/violation in 4-5 words]. [Context after.] (TikTok-first: lead with the shock.)",
     "hook_example_good": "Footprints. Inside my cabin. While I slept.",
     "hook_example_bad":  "Day 1 of being snowed in. I'm not alone out here. ← buries the violation",
+    "visual_brief_defaults": {
+        "mood": "tense, isolated, weathered",
+        "lighting": "harsh natural daylight or single firelight, hard shadows",
+        "color": "muted earth tones, desaturated, cold highlights",
+        "exclude": BASELINE_VISUAL_EXCLUDE,
+    },
+    "sound_brief_defaults": {
+        "ambient_bed": "wind through trees or open space, distant water drip, cold air room tone -22db",
+        "music_intensity": 0.3,
+        "vocal_mood": "controlled tension, measured pace, breath audible on reveals",
+        "mix_note": "ambient -18db under VO, SFX hits duck VO -3db, hero-beat music sidechained to VO",
+    },
     "anti_patterns": [
         "Hey guys", "What's up", "Today we're", "So I", "Imagine if",
         "Day N of [scenario]. Today I [escalation] ← deprecated May 18 2026 (front-loads setup, not violation)",
@@ -100,6 +120,18 @@ REDDIT_TEMPLATE = {
     "hook_template": "My [relation] [outrageous action in 5 words]. AITA? (Lead with violation; AITA comes last.)",
     "hook_example_good": "My neighbor destroyed my daughter's garden. So I fenced him out. AITA?",
     "hook_example_bad":  "AITA for putting up a fence after my neighbor mowed my lawn? ← question-first, viewer waits",
+    "visual_brief_defaults": {
+        "mood": "confiding, slightly indignant, naturalistic",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": BASELINE_VISUAL_EXCLUDE + ["fantasy", "horror", "supernatural", "celebrities"],
+    },
+    "sound_brief_defaults": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "music_intensity": 0.2,
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+    },
     "anti_patterns": [
         "So I'm posting", "Hey Reddit", "Long time lurker", "Strap in",
         "verbatim Reddit quote — paraphrase ALWAYS",
@@ -142,6 +174,18 @@ HORROR_TEMPLATE = {
     "hook_template": "[Wrong detail in 4-5 words]. [Mundane context after.] (Lead with the wrongness.)",
     "hook_example_good": "The lock is on the wrong side. From the basement, you can't get out.",
     "hook_example_bad":  "The basement door has a lock. The lock is on the wrong side. ← buries the wrongness",
+    "visual_brief_defaults": {
+        "mood": "dread, claustrophobic, silence-dominant",
+        "lighting": "single warm light source against deep shadow, dark frame negative space",
+        "color": "near-monochrome, blue-black shadows, single warm highlight, high contrast",
+        "exclude": BASELINE_VISUAL_EXCLUDE + ["bright sunlight", "color saturation", "smiling subjects", "wide-eyed shock cliché"],
+    },
+    "sound_brief_defaults": {
+        "ambient_bed": "room tone, low hum, silence-dominant, refrigerator pulse -28db (let silence speak)",
+        "music_intensity": 0.25,
+        "vocal_mood": "tight whisper, slow tempo, breath audible on the reveal",
+        "mix_note": "ambient very low so silence reads as silence, hero-beat music spikes to 0.7 then drops to 0 on reveal, SFX hit on the wrong-detail mention",
+    },
     "anti_patterns": [
         "Let me tell you", "There was once", "I'll never forget", "Years ago",
         "fan-fiction of existing IP (Slenderman, SCP, etc) — original creepypasta ONLY",
@@ -214,13 +258,17 @@ def scaffold_script_config(case_id: str, out_path: Path | None = None) -> Path:
     if out_path is None:
         out_path = case_dir / "script_config.json"
 
+    vb_defaults = template.get("visual_brief_defaults", {})
+    sb_defaults = template.get("sound_brief_defaults", {})
+
     config = {
         "_doc": (
             f"AI Story script ({template['subgenre']}). "
             f"This file scaffolds the 7-beat structure. The daily-shorts-pipeline "
-            f"routine fills in 'text', 'keywords', 'title', 'description' fields at "
-            f"production time, then runs check_script_structure.py to lint, then "
-            f"make_audio_elevenlabs.py + build_visuals_track.py."
+            f"routine fills in 'text', 'keywords', 'title', 'description', "
+            f"'visual_brief' and 'sound_brief' fields at production time, then runs "
+            f"check_script_structure.py to lint, then make_audio_elevenlabs.py + "
+            f"build_visuals_track.py + build_sound_design.py."
         ),
         "case_id": case_id,
         "vertical": "story",
@@ -235,6 +283,8 @@ def scaffold_script_config(case_id: str, out_path: Path | None = None) -> Path:
         "hook_anti_patterns": template["anti_patterns"],
         "character_continuity_hint": template["character_continuity_prompt"],
         "visual_palette": template["visual_palette"],
+        "visual_brief_defaults": vb_defaults,
+        "sound_brief_defaults": sb_defaults,
         "title": "[FILL IN]",
         "description_lead": "[FILL IN — 1-2 sentence story summary, no spoilers]",
         "beats": [
@@ -246,6 +296,29 @@ def scaffold_script_config(case_id: str, out_path: Path | None = None) -> Path:
                 "target_seconds": b["target_seconds"],
                 "max_seconds": b["max_seconds"],
                 "visual_style_hint": b["visual_style"],
+                "visual_brief": {
+                    "_FILL_IN": True,
+                    "mood": vb_defaults.get("mood", "[fill in]"),
+                    "subject": "[fill in — concrete noun phrase, what the camera shows]",
+                    "framing": "[fill in — e.g. medium close-up, eye-level, centered]",
+                    "lens": "[fill in — e.g. 35mm, shallow DOF]",
+                    "lighting": vb_defaults.get("lighting", "[fill in]"),
+                    "color": vb_defaults.get("color", "[fill in]"),
+                    "props": [],
+                    "exclude": list(vb_defaults.get("exclude", BASELINE_VISUAL_EXCLUDE)),
+                    "stock_keywords": [],
+                },
+                "sound_brief": {
+                    "_FILL_IN": True,
+                    "ambient_bed": sb_defaults.get("ambient_bed", "[fill in]"),
+                    "sfx": [],
+                    "music_cue": "[fill in — natural-language description; empty string = no music for this beat]",
+                    "music_intensity": sb_defaults.get("music_intensity", 0.3),
+                    "vocal_mood": sb_defaults.get("vocal_mood", "[fill in]"),
+                    "vocal_pause_after_sec": 0.3,
+                    "mix_note": sb_defaults.get("mix_note", ""),
+                    "freesound_keywords": [],
+                },
             }
             for b in template["beats"]
         ],

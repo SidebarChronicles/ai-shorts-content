@@ -76,6 +76,92 @@ ANCHOR_MARKERS = (
     r"\bexcept\b",
 )
 
+# Visual + sound brief validation requirements (only checked when briefs present)
+VISUAL_BRIEF_REQUIRED = ("mood", "subject", "framing", "lighting", "color", "stock_keywords")
+SOUND_BRIEF_REQUIRED = ("ambient_bed", "music_intensity", "vocal_mood")
+
+
+def _is_filled(value) -> bool:
+    """Return False if the value is a placeholder/empty."""
+    if value is None:
+        return False
+    if isinstance(value, str):
+        s = value.strip()
+        return bool(s) and not s.startswith("[fill in") and not s.startswith("[FILL IN")
+    if isinstance(value, list):
+        return len(value) > 0
+    return True
+
+
+def lint_visual_brief(brief: dict, beat_idx: int) -> tuple[list[str], list[str]]:
+    """Return (errors, warnings) for a visual_brief dict."""
+    errors: list[str] = []
+    warnings: list[str] = []
+    if brief.get("_FILL_IN"):
+        errors.append(f"beat[{beat_idx}].visual_brief still has _FILL_IN=true — writer never populated it")
+        return errors, warnings
+    for field in VISUAL_BRIEF_REQUIRED:
+        if not _is_filled(brief.get(field)):
+            errors.append(f"beat[{beat_idx}].visual_brief.{field} is missing or placeholder")
+    excl = brief.get("exclude")
+    if excl is not None and not isinstance(excl, list):
+        errors.append(f"beat[{beat_idx}].visual_brief.exclude must be a list, got {type(excl).__name__}")
+    sk = brief.get("stock_keywords")
+    if isinstance(sk, list):
+        if not (2 <= len(sk) <= 6):
+            warnings.append(f"beat[{beat_idx}].visual_brief.stock_keywords has {len(sk)} items "
+                            f"(want 2-6 for tone-matched stock fallback)")
+        for kw in sk:
+            if isinstance(kw, str) and len(kw.split()) > 4:
+                warnings.append(f"beat[{beat_idx}].visual_brief.stock_keyword \"{kw}\" "
+                                f"is >4 words — stock APIs return better for short phrases")
+    return errors, warnings
+
+
+def lint_sound_brief(brief: dict, beat_idx: int, beat_target_sec: float | None) -> tuple[list[str], list[str]]:
+    """Return (errors, warnings) for a sound_brief dict."""
+    errors: list[str] = []
+    warnings: list[str] = []
+    if brief.get("_FILL_IN"):
+        errors.append(f"beat[{beat_idx}].sound_brief still has _FILL_IN=true — writer never populated it")
+        return errors, warnings
+    for field in SOUND_BRIEF_REQUIRED:
+        val = brief.get(field)
+        if field == "music_intensity":
+            if val is None:
+                errors.append(f"beat[{beat_idx}].sound_brief.music_intensity is missing")
+            elif not isinstance(val, (int, float)) or not (0.0 <= val <= 1.0):
+                errors.append(f"beat[{beat_idx}].sound_brief.music_intensity must be float in [0.0, 1.0], "
+                              f"got {val!r}")
+        else:
+            if not _is_filled(val):
+                errors.append(f"beat[{beat_idx}].sound_brief.{field} is missing or placeholder")
+    sfx = brief.get("sfx") or []
+    if not isinstance(sfx, list):
+        errors.append(f"beat[{beat_idx}].sound_brief.sfx must be a list")
+    else:
+        for j, hit in enumerate(sfx):
+            if not isinstance(hit, dict):
+                errors.append(f"beat[{beat_idx}].sound_brief.sfx[{j}] must be a dict")
+                continue
+            at_sec = hit.get("at_sec")
+            if not isinstance(at_sec, (int, float)) or at_sec < 0:
+                errors.append(f"beat[{beat_idx}].sound_brief.sfx[{j}].at_sec must be float >=0, got {at_sec!r}")
+            elif beat_target_sec and at_sec > beat_target_sec:
+                warnings.append(f"beat[{beat_idx}].sound_brief.sfx[{j}].at_sec={at_sec} "
+                                f"exceeds beat target_seconds={beat_target_sec}")
+            if not _is_filled(hit.get("name")):
+                errors.append(f"beat[{beat_idx}].sound_brief.sfx[{j}].name is missing")
+            gain = hit.get("gain_db")
+            if gain is not None and (not isinstance(gain, (int, float)) or not (-30 <= gain <= 0)):
+                errors.append(f"beat[{beat_idx}].sound_brief.sfx[{j}].gain_db must be float in [-30, 0], "
+                              f"got {gain!r}")
+    fk = brief.get("freesound_keywords")
+    if isinstance(fk, list) and not (2 <= len(fk) <= 6):
+        warnings.append(f"beat[{beat_idx}].sound_brief.freesound_keywords has {len(fk)} items "
+                        f"(want 2-6 for ambient/SFX lookup)")
+    return errors, warnings
+
 
 def _load_alignment(case_id: str):
     p = AUDIO_DIR / f"narration_{case_id}.alignment.json"
@@ -202,6 +288,24 @@ def lint_case(case_id: str, *, strict: bool = False) -> tuple[bool, list[str], l
 
     else:
         warnings.append("no alignment.json yet — duration checks skipped (run make_audio_elevenlabs first)")
+
+    # -- Visual + sound brief validation (only when present; back-compat for legacy configs) --
+    for i, beat in enumerate(beats):
+        vb = beat.get("visual_brief")
+        if isinstance(vb, dict):
+            vb_errors, vb_warnings = lint_visual_brief(vb, i)
+            errors.extend(vb_errors)
+            warnings.extend(vb_warnings)
+        sb = beat.get("sound_brief")
+        if isinstance(sb, dict):
+            target = beat.get("target_seconds")
+            try:
+                target_f = float(target) if target is not None else None
+            except (TypeError, ValueError):
+                target_f = None
+            sb_errors, sb_warnings = lint_sound_brief(sb, i, target_f)
+            errors.extend(sb_errors)
+            warnings.extend(sb_warnings)
 
     return (len(errors) == 0), errors, warnings
 

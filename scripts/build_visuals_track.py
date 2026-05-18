@@ -545,9 +545,18 @@ def main() -> None:
     if not beats:
         sys.exit(f"ERROR: No beats in config — add a beats[] array with per-beat keywords")
 
-    # Each beat needs a `keywords` field (list of search terms). Use the text
-    # itself as a fallback (first 4 words) so we never hard-fail on missing keys.
+    # Each beat needs a `keywords` field (list of search terms). Prefer the
+    # visual_brief.stock_keywords when the writer filled one in — those are
+    # tone-matched (e.g. "derelict cabin interior" beats "cabin"). Otherwise
+    # fall back to per-beat keywords field, then to the first 4 words of the
+    # narration text (legacy behavior).
     for i, beat in enumerate(beats):
+        vb = beat.get("visual_brief")
+        if isinstance(vb, dict) and not vb.get("_FILL_IN"):
+            sk = vb.get("stock_keywords") or []
+            if sk:
+                beat["keywords"] = list(sk)
+                continue
         if not beat.get("keywords"):
             text = beat.get("text", "")
             beat["keywords"] = text.split()[:4]
@@ -598,14 +607,37 @@ def main() -> None:
             visual_hint = beat.get("visual_style_hint", "")
             primary_kw = (beat.get("keywords") or ["atmospheric scene"])[0]
             visual_palette = cfg.get("visual_palette", "")
-            ai_prompt = (
-                f"{primary_kw}, extreme close-up, photorealistic documentary shot, "
-                f"no people, no creatures, no characters, no faces, "
-                f"real-world objects only, natural environment, "
-                f"{visual_palette}, "
-                f"9:16 portrait video, cinematic lighting, "
-                f"no fictional elements, no fantasy"
-            ).strip(", ").replace("  ", " ")
+            # Storyboard-first: when a visual_brief exists, build the prompt from the
+            # brief's concrete subject + framing + exclude list. This is the load-bearing
+            # fix for the "Pokemon bug" — concrete noun phrases displace creature priors
+            # in Pixverse's latent space, and the exclude list is honored as a negative
+            # prompt. Keyword-only neutering is kept as fallback for legacy SY_01-SY_06.
+            vb = beat.get("visual_brief") if isinstance(beat.get("visual_brief"), dict) else {}
+            if vb and not vb.get("_FILL_IN") and vb.get("subject"):
+                exclude_list = list(vb.get("exclude", []))
+                # Always reinforce the creature/face exclude even if the brief forgot
+                for hard_excl in ("people", "creatures", "faces", "characters"):
+                    if hard_excl not in exclude_list:
+                        exclude_list.append(hard_excl)
+                ai_prompt = (
+                    f"{vb['subject']}, "
+                    f"{vb.get('framing', 'medium shot, eye-level')}, "
+                    f"{vb.get('lighting', '')}, "
+                    f"{vb.get('mood', '')}, "
+                    f"photorealistic documentary motion, "
+                    f"NEGATIVE: {', '.join(exclude_list)}. "
+                    f"{visual_palette}, 9:16 portrait video, cinematic"
+                ).strip(", ").replace("  ", " ")
+            else:
+                # Legacy keyword-only prompt — kept as fallback for SY_01-SY_06.
+                ai_prompt = (
+                    f"{primary_kw}, extreme close-up, photorealistic documentary shot, "
+                    f"no people, no creatures, no characters, no faces, "
+                    f"real-world objects only, natural environment, "
+                    f"{visual_palette}, "
+                    f"9:16 portrait video, cinematic lighting, "
+                    f"no fictional elements, no fantasy"
+                ).strip(", ").replace("  ", " ")
             hero_clip = maybe_generate_hero_video(
                 beat_idx=i,
                 beat_label=beat_label,
@@ -625,11 +657,31 @@ def main() -> None:
             visual_hint = beat.get("visual_style_hint", "")
             palette = cfg.get("visual_palette", "")
             char_hint = cfg.get("character_continuity_hint", "")
-            flux_prompt = (
-                f"{beat.get('text', '')[:120]}, {visual_hint}, {palette}, "
-                f"{'photorealistic' if cfg.get('subgenre') == 'reddit' else 'cinematic illustration'}, "
-                f"9:16 portrait, single subject framing"
-            ).strip(", ")
+            # Storyboard-first: when a visual_brief is filled in, use it as the
+            # prompt source. Concrete subject + framing + lens + lighting + mood
+            # gives Flux far more direction than truncated narration text.
+            vb = beat.get("visual_brief") if isinstance(beat.get("visual_brief"), dict) else {}
+            if vb and not vb.get("_FILL_IN") and vb.get("subject"):
+                exclude_list = list(vb.get("exclude", []))
+                props = vb.get("props") or []
+                props_clause = f"props: {', '.join(props)}. " if props else ""
+                style = "photorealistic" if cfg.get('subgenre') == 'reddit' else "cinematic illustration"
+                flux_prompt = (
+                    f"{vb['subject']}, "
+                    f"{vb.get('framing', '')}, {vb.get('lens', '')}, "
+                    f"{vb.get('lighting', '')}, {vb.get('color', palette)}, "
+                    f"{vb.get('mood', '')}. "
+                    f"{props_clause}"
+                    f"NEGATIVE: {', '.join(exclude_list)}. "
+                    f"{style}, 9:16 portrait, single subject framing"
+                ).strip(", ").replace("  ", " ")
+            else:
+                # Legacy truncated-text prompt — fallback for SY_01-SY_06.
+                flux_prompt = (
+                    f"{beat.get('text', '')[:120]}, {visual_hint}, {palette}, "
+                    f"{'photorealistic' if cfg.get('subgenre') == 'reddit' else 'cinematic illustration'}, "
+                    f"9:16 portrait, single subject framing"
+                ).strip(", ")
 
         path = source_image_for_beat(
             beat_idx=i,

@@ -59,6 +59,41 @@ DEFAULT_VOICE_SPEED = 0.92  # ~145 WPM on most voices
 # Turbo v2 on Starter tier as of mid-2026 — ~$0.30 per 1k chars
 COST_PER_CHAR = 0.30 / 1000
 
+# Vocal-mood → voice_settings mapping. Consumed when per-beat sound_brief.vocal_mood
+# is present. Starting values from ElevenLabs docs + ear-tuning on SY_05 baseline.
+# Tweak by ear after the first SY render under the new system. One-line edit.
+VOCAL_MOOD_MAP = {
+    "whisper-adjacent":        {"stability": 0.65, "style": 0.7,  "speed_mult": 0.92},
+    "tight whisper":           {"stability": 0.75, "style": 0.85, "speed_mult": 0.88},
+    "whisper":                 {"stability": 0.75, "style": 0.85, "speed_mult": 0.88},
+    "controlled tension":      {"stability": 0.55, "style": 0.45, "speed_mult": 1.00},
+    "tense":                   {"stability": 0.55, "style": 0.50, "speed_mult": 0.98},
+    "confiding narrator":      {"stability": 0.50, "style": 0.30, "speed_mult": 1.05},
+    "confiding":               {"stability": 0.50, "style": 0.30, "speed_mult": 1.05},
+    "slight indignation":      {"stability": 0.45, "style": 0.55, "speed_mult": 1.02},
+    "urgent":                  {"stability": 0.40, "style": 0.60, "speed_mult": 1.05},
+    "shocked":                 {"stability": 0.45, "style": 0.70, "speed_mult": 0.95},
+    "default":                 {"stability": 0.50, "style": 0.50, "speed_mult": 1.00},
+}
+
+
+def map_vocal_mood(mood: str) -> dict:
+    """Return voice_settings overrides for a given vocal_mood string.
+
+    Matches the first VOCAL_MOOD_MAP key found in the mood string (case-insensitive).
+    Falls back to 'default' if nothing matches. Mood strings are natural-language
+    so the writer can write 'tight whisper, breath audible' and we'll find 'tight whisper'.
+    """
+    if not mood:
+        return VOCAL_MOOD_MAP["default"]
+    m = mood.lower()
+    for key, settings in VOCAL_MOOD_MAP.items():
+        if key == "default":
+            continue
+        if key in m:
+            return settings
+    return VOCAL_MOOD_MAP["default"]
+
 # Voice library reference — voice picks per vertical (used by orchestrators
 # to populate game_config.json with the appropriate voice_id).
 #
@@ -268,6 +303,124 @@ def synthesize(
         os.replace(part_mp3, out_mp3)
 
 
+def synthesize_per_beat(
+    beats: list[dict],
+    out_mp3: Path,
+    out_alignment: Path | None,
+    voice_id: str,
+    model_id: str,
+    api_key: str,
+    use_alignment: bool,
+    base_voice_speed: float,
+) -> None:
+    """Render each beat as its own ElevenLabs call with mood-mapped voice_settings,
+    insert silent pads of `vocal_pause_after_sec` between beats, and concat the
+    whole thing into a single MP3. Re-builds a unified alignment.json by offsetting
+    each beat's per-character timestamps.
+
+    Uses ffmpeg for silent-pad generation and final concat. Falls back to a single
+    full-text synthesis if any beat lacks a sound_brief.
+    """
+    if not all(isinstance(b.get("sound_brief"), dict) and b["sound_brief"].get("vocal_mood")
+               for b in beats):
+        # Some beat lacks the mood field — fall back to single synthesis path.
+        full_text = "\n\n".join(b.get("text", "").strip() for b in beats if b.get("text"))
+        synthesize(full_text, out_mp3, out_alignment, voice_id, model_id, api_key,
+                   use_alignment, voice_speed=base_voice_speed)
+        return
+
+    import subprocess
+    import tempfile
+
+    tmp_dir = Path(tempfile.mkdtemp(prefix="el_perbeat_"))
+    beat_mp3s: list[Path] = []
+    combined_alignment_chars: list[str] = []
+    combined_start_times: list[float] = []
+    combined_end_times: list[float] = []
+    time_offset = 0.0
+
+    for i, beat in enumerate(beats):
+        text = (beat.get("text") or "").strip()
+        if not text:
+            continue
+        sb = beat.get("sound_brief", {})
+        mood_settings = map_vocal_mood(sb.get("vocal_mood", ""))
+        # Compose voice_settings from baseline + mood mapping
+        beat_speed = max(0.7, min(1.2, base_voice_speed * mood_settings["speed_mult"]))
+        body = {
+            "text": text,
+            "model_id": model_id,
+            "voice_settings": {
+                "stability": mood_settings["stability"],
+                "similarity_boost": 0.75,
+                "style": mood_settings["style"],
+                "speed": beat_speed,
+            },
+        }
+        headers = {"xi-api-key": api_key, "Content-Type": "application/json"}
+        url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/with-timestamps"
+        print(f"    beat[{i}] mood='{sb.get('vocal_mood','?')[:30]}' "
+              f"(stab={mood_settings['stability']}, style={mood_settings['style']}, "
+              f"speed={beat_speed:.2f})")
+        resp = requests.post(url, headers=headers, json=body, timeout=120)
+        resp.raise_for_status()
+        payload = resp.json()
+
+        beat_mp3 = tmp_dir / f"beat_{i:02d}.mp3"
+        beat_mp3.write_bytes(base64.b64decode(payload["audio_base64"]))
+        beat_mp3s.append(beat_mp3)
+
+        # Offset this beat's alignment by time_offset
+        align = payload.get("alignment", {})
+        chars = align.get("characters", [])
+        starts = align.get("character_start_times_seconds", [])
+        ends = align.get("character_end_times_seconds", [])
+        combined_alignment_chars.extend(chars)
+        combined_start_times.extend([float(s) + time_offset for s in starts])
+        combined_end_times.extend([float(e) + time_offset for e in ends])
+        beat_duration = float(ends[-1]) if ends else 0.0
+
+        # Silent pad after this beat
+        pause = float(sb.get("vocal_pause_after_sec", 0.3))
+        if pause > 0.0 and i < len(beats) - 1:
+            pad_mp3 = tmp_dir / f"pad_{i:02d}.mp3"
+            subprocess.run(
+                ["ffmpeg", "-y", "-f", "lavfi", "-i",
+                 f"anullsrc=channel_layout=stereo:sample_rate=44100",
+                 "-t", f"{pause}", "-c:a", "libmp3lame", "-q:a", "2", str(pad_mp3)],
+                check=True, capture_output=True,
+            )
+            beat_mp3s.append(pad_mp3)
+            # Don't add the silent pad to combined_alignment_chars (it's silence)
+            time_offset += beat_duration + pause
+        else:
+            time_offset += beat_duration
+
+    # Concat all beat MP3s into final out_mp3 via ffmpeg concat demuxer
+    list_file = tmp_dir / "concat.txt"
+    list_file.write_text("\n".join(f"file '{p.resolve()}'" for p in beat_mp3s))
+    part_mp3 = out_mp3.with_suffix(out_mp3.suffix + ".part")
+    subprocess.run(
+        ["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(list_file),
+         "-c:a", "libmp3lame", "-q:a", "2", str(part_mp3)],
+        check=True, capture_output=True,
+    )
+    os.replace(part_mp3, out_mp3)
+
+    if out_alignment and use_alignment and combined_alignment_chars:
+        unified = {
+            "characters": combined_alignment_chars,
+            "character_start_times_seconds": combined_start_times,
+            "character_end_times_seconds": combined_end_times,
+        }
+        atomic_write_json(out_alignment, unified, sort_keys=False)
+        print(f"  Alignment: {out_alignment.relative_to(PROJECT_ROOT)} (stitched across {len(beats)} beats)")
+
+    # Cleanup temp dir
+    import shutil
+    shutil.rmtree(tmp_dir, ignore_errors=True)
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -398,9 +551,36 @@ def main() -> None:
     if use_alignment:
         out_alignment = out_mp3.with_suffix(".alignment.json")
 
-    print(f"\n  Synthesizing…")
-    synthesize(text, out_mp3, out_alignment, voice_id, model_id, api_key, use_alignment,
-               voice_speed=voice_speed)
+    # Auto-detect per-beat mood mode: only when --case was given AND any beat
+    # has sound_brief.vocal_mood. Falls back to single-call mode otherwise.
+    use_per_beat_mood = False
+    cfg_beats: list[dict] = []
+    if args.case:
+        for filename in ("script_config.json",):
+            config_path = SCRIPTS_DIR / args.case / filename
+            if not config_path.exists():
+                continue
+            try:
+                cfg = json.loads(config_path.read_text())
+                cfg_beats = cfg.get("beats", []) or []
+                if any(
+                    isinstance(b.get("sound_brief"), dict)
+                    and b["sound_brief"].get("vocal_mood")
+                    and not b["sound_brief"].get("_FILL_IN")
+                    for b in cfg_beats
+                ):
+                    use_per_beat_mood = True
+                break
+            except (json.JSONDecodeError, OSError):
+                pass
+
+    print(f"\n  Synthesizing{' (per-beat mood mode)' if use_per_beat_mood else ''}…")
+    if use_per_beat_mood:
+        synthesize_per_beat(cfg_beats, out_mp3, out_alignment, voice_id, model_id, api_key,
+                            use_alignment, base_voice_speed=voice_speed)
+    else:
+        synthesize(text, out_mp3, out_alignment, voice_id, model_id, api_key, use_alignment,
+                   voice_speed=voice_speed)
 
     record_usage(chars)
 

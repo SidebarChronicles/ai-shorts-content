@@ -14,7 +14,9 @@ Research (May 2026) shows AI-narrative Shorts retain at **65-75% APV** versus 50
 
 ### Numbered survival/POV (SY_NN_S_*)
 
-**Hook formula:** `"Day [N] of [scenario]. Today I [escalation]."`
+**Hook formula (current, TikTok-first violation-first):** `[Threat/violation in 4-5 words]. [Context after.]`
+Good: `"Footprints. Inside my cabin. While I slept."`
+Bad (deprecated May 18 2026 — buries the violation): `"Day 1 of being snowed in. I'm not alone out here."`
 
 | Element | Choice |
 |---|---|
@@ -30,7 +32,9 @@ Research (May 2026) shows AI-narrative Shorts retain at **65-75% APV** versus 50
 
 ### Reddit dramatization (SY_NN_R_*)
 
-**Hook formula:** `"AITA for [inflammatory action]? My [relation] [outrageous thing]."`
+**Hook formula (current, violation-first then AITA):** `"My [relation] [outrageous action in 5 words]. AITA?"`
+Good: `"My neighbor destroyed my daughter's garden. So I fenced him out. AITA?"`
+Bad (deprecated — question-first buries the violation): `"AITA for putting up a fence after my neighbor mowed my lawn?"`
 
 | Element | Choice |
 |---|---|
@@ -54,7 +58,9 @@ Use Reddit threads as **inspiration**, not script. The "Premise" field in the qu
 
 ### Horror micro-fiction (SY_NN_H_*)
 
-**Hook formula:** `"[Mundane setup in 5-7 words]. [Single wrong detail in 4-5 words]."`
+**Hook formula (current, wrong-detail-first):** `"[Wrong detail in 4-5 words]. [Mundane context after.]"`
+Good: `"The lock is on the wrong side. From the basement, you can't get out."`
+Bad (deprecated — buries the wrongness): `"The basement door has a lock. The lock is on the wrong side."`
 
 | Element | Choice |
 |---|---|
@@ -90,6 +96,73 @@ Every horror story must be **Claude's original micro-fiction**. The premise can 
 | 7. cta | 55-60s | Sub-genre-specific close. |
 
 The two **HERO SHOT** beats (mid_anchor + payoff) trigger Pika 2.0 video generation in `build_visuals_track.py`. All other beats use Flux 2 Pro stills + Ken Burns motion.
+
+---
+
+## Visual brief (per beat — added May 2026)
+
+Every beat in a new SY script carries a structured `visual_brief` that the rendering pipeline consumes directly. The brief replaced the earlier "truncate first 4 words of beat text and hope" approach. The full schema and field guide live in [`scripts/story_writer_prompt.md`](../scripts/story_writer_prompt.md); the highlights:
+
+```json
+"visual_brief": {
+  "mood":            "dread, claustrophobic",
+  "subject":         "weathered wooden door, deadbolt facing camera",
+  "framing":         "medium close-up, eye-level, centered",
+  "lens":            "35mm, shallow DOF",
+  "lighting":        "single warm bulb overhead, hard shadow underneath",
+  "color":           "near-monochrome, blue-black shadows",
+  "props":           ["deadbolt", "wood grain"],
+  "exclude":         ["people", "creatures", "faces", "cartoon"],
+  "stock_keywords":  ["wooden door", "deadbolt closeup", "basement door"]
+}
+```
+
+**Why `exclude` matters (the Pokemon bug fix):** the original Pika hero generation hallucinated yellow cartoon creatures on SY_01 because narrative beat text leaked words like "they" and "watching" into the prompt. The current implementation strips narrative text from Pika prompts and *always* attaches the brief's `exclude` list as a negative prompt, plus auto-appends `["people","creatures","faces","characters"]` even if the writer forgot. Combined with concrete `subject` framing (which displaces creature priors in latent space), this drops hallucinations toward zero. The keyword-only fallback at `build_visuals_track.py:599` is kept for legacy SY_01-SY_06 only.
+
+**Stock-API derivation:** `stock_keywords` is the *only* field that hits Pexels/Pixabay. Separating "human search terms" from "AI visual brief" means stock fallbacks get tone-matched results ("derelict cabin interior") instead of generic ones ("cabin").
+
+---
+
+## Sound brief (per beat — added May 2026)
+
+The story pipeline used to render TTS over silent clips. Now every beat carries a `sound_brief` that drives ambient bed + SFX hits + music cue + per-beat vocal mood. New scripts pipeline:
+
+```
+beat.text          → make_audio_elevenlabs.py        (per-beat TTS, mood-mapped voice_settings)
+beat.visual_brief  → build_visuals_track.py          (Flux/Pika/stock)
+beat.sound_brief   → build_sound_design.py           (ambient + SFX + music layers)
+                  → final mux (VO + sound_design + visuals)
+```
+
+```json
+"sound_brief": {
+  "ambient_bed":           "low wind through pine, distant snowmelt drip",
+  "sfx": [
+    {"at_sec": 0.0,  "name": "door creak slow",      "gain_db": -8},
+    {"at_sec": 2.5,  "name": "match strike + flame", "gain_db": -10}
+  ],
+  "music_cue":             "low drone, ascending tension over 3s",
+  "music_intensity":       0.35,
+  "vocal_mood":            "tight whisper, slow tempo, breath audible",
+  "vocal_pause_after_sec": 0.4,
+  "mix_note":              "ambient -18db under VO, sfx ducks VO -4db on hits",
+  "freesound_keywords":    ["pine wind", "snow drip", "door creak"]
+}
+```
+
+**Why sound design matters:**
+- **Silence is a tool, especially in horror.** The mid_anchor reveal beat should drop `music_intensity` to 0.0 for half a second; the absence-of-music IS the impact.
+- **Sidechain ducking keeps narration clear.** Ambient sits -18db under the VO; SFX hits duck the VO -3db so they read; music sidechains to the VO envelope so it gets out of the way during words.
+- **Per-beat vocal_mood reshapes TTS.** ElevenLabs `stability`/`style`/`speed` go from default (0.5/0.5/1.0) to "tight whisper" (0.75/0.85/0.88) per beat. The mapping is in `scripts/make_audio_elevenlabs.py:VOCAL_MOOD_MAP` — one-line tweak for tuning after the first SY render.
+
+**Recommended intensity profile per sub-genre:** see [`scripts/story_writer_prompt.md`](../scripts/story_writer_prompt.md) — short version: Horror is silence-dominant with a single music spike on mid_anchor; Survival builds steadily; Reddit stays near-naked with one swell on the verdict reveal.
+
+**Sourcing chain (mirrors visuals):**
+1. **Freesound API** (free, CC0/CC-BY) — needs `FREESOUND_API_TOKEN` in `.env`
+2. **Pixabay sound effects** (no auth) — fallback (limited; Pixabay's public SFX search is sparse)
+3. **Silence** — final fallback, never blocks the render
+
+For hero-beat music: small CC0 library at `assets/music/` (manually seeded — see `assets/music/README.md`). Optional `ENABLE_ELEVEN_MUSIC=1` flips on the paid ElevenLabs Music API as backup.
 
 ---
 
