@@ -1,0 +1,509 @@
+{
+  "_doc": "AI Story script (reddit). This file scaffolds the 7-beat structure. The /morning workflow fills in 'text', 'keywords', 'title', 'description', 'visual_brief' and 'sound_brief' fields at production time, then runs check_script_structure.py to lint, then make_audio_elevenlabs.py + build_visuals_track.py + build_sound_design.py.",
+  "anti_plagiarism_rule": "Reddit posts ARE copyrighted by their authors. The script must REWRITE the story in original prose: different word choices, restructured narrative, anonymized names + locations, paraphrased dialogue. Use the source Reddit post as inspiration only. Verbatim reproduction risks YouTube strike.",
+  "beats": [
+    {
+      "keywords": [
+        "DIL",
+        "painting",
+        "home",
+        "placement",
+        "conflict"
+      ],
+      "label": "hook",
+      "max_seconds": 2.5,
+      "purpose_hint": "AITA question + the outrage in \u226412 words",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "house ambience",
+          "quiet interior"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 0,
+      "text": "My DIL's painting is in our home. Just not the lounge.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium wide, eye-level, straight-on",
+        "lens": "35mm, moderate DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [],
+        "stock_keywords": [
+          "bare wall living room",
+          "empty wall outline",
+          "freshly painted wall"
+        ],
+        "subject": "bare white living room wall with a faint rectangular outline where a painting was recently removed"
+      },
+      "visual_style_hint": "character expression close-up, eye contact"
+    },
+    {
+      "keywords": [
+        "new home",
+        "DIL",
+        "housewarming gift",
+        "painting",
+        "first home"
+      ],
+      "label": "setup",
+      "max_seconds": 12,
+      "purpose_hint": "Who the people are + the relationship",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "moving boxes",
+          "house ambience"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 3,
+      "text": "We just moved into our first owned home after thirty years of renting. My son's wife, who paints as a hobby, surprised us at the housewarming with a large canvas she'd made just for us.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium wide, slight low angle, centered",
+        "lens": "35mm, moderate DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "cardboard box",
+          "newspaper wrapping",
+          "hallway wall"
+        ],
+        "stock_keywords": [
+          "housewarming gift wrapped",
+          "moving day hallway",
+          "first home"
+        ],
+        "subject": "cardboard box with newspaper-wrapped artwork leaning against a freshly painted hallway wall, moving day"
+      },
+      "visual_style_hint": "two-shot or environmental setup"
+    },
+    {
+      "keywords": [
+        "surrealist",
+        "large painting",
+        "clash",
+        "decor",
+        "uneasy"
+      ],
+      "label": "build",
+      "max_seconds": 13,
+      "purpose_hint": "What led up to the incident",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "quiet room",
+          "interior space"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 15,
+      "text": "She'd put real effort into it \u2014 maybe four feet across, surrealist imagery, stretched doorframes, distorted interiors. My husband stayed polite. I thanked her genuinely. But privately, we both agreed it clashed with everything in the lounge and honestly made us uneasy.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium shot, slightly low angle, centered",
+        "lens": "24mm, moderate DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "canvas",
+          "abstract shapes",
+          "wall"
+        ],
+        "stock_keywords": [
+          "abstract surrealist painting",
+          "large canvas art",
+          "distorted interior painting"
+        ],
+        "subject": "large canvas leaning against a wall showing abstract distorted interior shapes, no recognizable faces, dramatic shadows"
+      },
+      "visual_style_hint": "scene reconstruction, naturalistic"
+    },
+    {
+      "keywords": [
+        "guest room",
+        "Sunday dinner",
+        "found out",
+        "twist",
+        "secret"
+      ],
+      "label": "mid_anchor",
+      "max_seconds": 5,
+      "purpose_hint": "The twist or escalation that flips audience loyalty",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "door creak",
+          "quiet hallway"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "quiet tension string note, low held chord",
+        "music_intensity": 0.2,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -14.0,
+            "name": "door creak soft"
+          }
+        ],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 28,
+      "text": "But instead of saying that, we just hung it in the guest room \u2014 and she found out at Sunday dinner.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium shot from hallway, eye-level, door centered",
+        "lens": "35mm, shallow DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "door",
+          "canvas frame"
+        ],
+        "stock_keywords": [
+          "guest bedroom door ajar",
+          "hallway view",
+          "painting on wall inside"
+        ],
+        "subject": "guest bedroom door slightly ajar, large canvas frame visible on far wall inside, hallway light framing the gap"
+      },
+      "visual_style_hint": "HERO SHOT \u2014 reaction face, the moment everything changes"
+    },
+    {
+      "keywords": [
+        "dinner",
+        "left early",
+        "texted",
+        "minimized",
+        "son"
+      ],
+      "label": "expand",
+      "max_seconds": 12,
+      "purpose_hint": "The fallout / consequences",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "indoor quiet",
+          "cutlery clink"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 33,
+      "text": "She went quiet when she realized it had moved. My husband explained our decorating choices as gently as he could. She left before dessert. That night my son texted us: his wife felt her effort had been minimized.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium wide, eye-level, centered on table",
+        "lens": "35mm, moderate DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "dinner plates",
+          "empty chairs",
+          "table setting"
+        ],
+        "stock_keywords": [
+          "dinner table empty chairs",
+          "family dinner aftermath",
+          "quiet dining room"
+        ],
+        "subject": "dining table set for four with two chairs empty at one end, half-eaten dinner plates, soft overhead light"
+      },
+      "visual_style_hint": "aftermath shots, body language"
+    },
+    {
+      "keywords": [
+        "our home",
+        "boundaries",
+        "decor choice",
+        "still hanging",
+        "decision"
+      ],
+      "label": "payoff",
+      "max_seconds": 10,
+      "purpose_hint": "What I did about it / what the other person did",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "house quiet",
+          "room tone"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 45,
+      "text": "This is our home. The painting is still on a wall \u2014 just not the living room. I'm not going to put something that makes us uncomfortable front and center in our own space.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium wide, eye-level, straight-on wall",
+        "lens": "35mm, natural DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "framed artwork",
+          "sofa edge",
+          "window light"
+        ],
+        "stock_keywords": [
+          "living room wall art neutral",
+          "intentional decor",
+          "bright interior"
+        ],
+        "subject": "bright sunlit living room with carefully chosen neutral artwork on main wall, tidy and intentional arrangement"
+      },
+      "visual_style_hint": "resolution scene, lighting shift"
+    },
+    {
+      "keywords": [
+        "AITA",
+        "verdict",
+        "follow",
+        "CTA",
+        "comment"
+      ],
+      "label": "cta",
+      "max_seconds": 5,
+      "purpose_hint": "FOLLOW-DRIVER (v2): 'AITA? Comment your verdict. Follow for daily AITAs.' Drives follows + comments (algorithm + monetization)",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "soft chime",
+          "phone tap"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "brief cheerful 2-second sting, warm resolution",
+        "music_intensity": 0.2,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "notification chime"
+          }
+        ],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 55,
+      "text": "AITA? Drop your verdict in the comments. Follow for a new story every day.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium close-up, slightly overhead, centered",
+        "lens": "50mm, shallow DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "smartphone",
+          "couch armrest"
+        ],
+        "stock_keywords": [
+          "phone comments section",
+          "social media engagement",
+          "reading comments"
+        ],
+        "subject": "smartphone held in hands above a couch armrest, comments section open, soft ambient light"
+      },
+      "visual_style_hint": "freeze-frame on protagonist, looking at camera"
+    }
+  ],
+  "case_id": "SY_14_R_aita_not_putting_up_my_d",
+  "character_continuity_hint": "[Characters rotate per video; no cross-video continuity needed. Use generic, anonymized physical descriptions in Flux prompts \u2014 do not invoke real Reddit usernames or specific story details.]",
+  "clips_manifest": "output/scripts/SY_14_R_aita_not_putting_up_my_d/clips_manifest.json",
+  "color_grade_vertical": "story",
+  "description_lead": "After moving into their first home, a couple quietly moves their daughter-in-law's housewarming painting from the living room to the guest room \u2014 and triggers a family conflict when she discovers it.",
+  "hook_anti_patterns": [
+    "So I'm posting",
+    "Hey Reddit",
+    "Long time lurker",
+    "Strap in",
+    "verbatim Reddit quote \u2014 paraphrase ALWAYS",
+    "AITA-as-first-sentence \u2014 flip to violation-first, question last",
+    "starting with 'The' / 'A' / 'An' / 'In' \u2014 too soft for sentence 1"
+  ],
+  "hook_formula": "violation_then_question",
+  "hook_template": "My [relation] [outrageous action in 5 words]. AITA? (Lead with violation; AITA comes last.)",
+  "model_id": "eleven_multilingual_v2",
+  "sound_brief_defaults": {
+    "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+    "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+    "music_intensity": 0.2,
+    "vocal_mood": "confiding narrator, slight indignation, conversational pace"
+  },
+  "spoken_text": "My DIL's painting is in our home. Just not the lounge. We just moved into our first owned home after thirty years of renting. My son's wife, who paints as a hobby, surprised us at the housewarming with a large canvas she'd made just for us. She'd put real effort into it \u2014 maybe four feet across, surrealist imagery, stretched doorframes, distorted interiors. My husband stayed polite. I thanked her genuinely. But privately, we both agreed it clashed with everything in the lounge and honestly made us uneasy. But instead of saying that, we just hung it in the guest room \u2014 and she found out at Sunday dinner. She went quiet when she realized it had moved. My husband explained our decorating choices as gently as he could. She left before dessert. That night my son texted us: his wife felt her effort had been minimized. This is our home. The painting is still on a wall \u2014 just not the living room. I'm not going to put something that makes us uncomfortable front and center in our own space. AITA? Drop your verdict in the comments. Follow for a new story every day.",
+  "subgenre": "reddit",
+  "title": "AITA Not Putting Up My DIL's Painting",
+  "vertical": "story",
+  "visual_brief_defaults": {
+    "color": "warm domestic tones, contemporary, mid-saturation",
+    "exclude": [
+      "people",
+      "creatures",
+      "faces",
+      "characters",
+      "anime",
+      "cartoon",
+      "logos",
+      "text overlays",
+      "watermarks",
+      "yellow mascot",
+      "fantasy creature",
+      "fantasy",
+      "horror",
+      "supernatural",
+      "celebrities"
+    ],
+    "lighting": "warm interior practicals, soft window light, naturalistic",
+    "mood": "confiding, slightly indignant, naturalistic"
+  },
+  "visual_palette": "warm domestic tones, naturalistic lighting, contemporary setting",
+  "voice_id": "nPczCjzI2devNBz1zQrb",
+  "voice_name": "Brian",
+  "voice_speed": 0.92,
+  "game_id": "SY_14_R_aita_not_putting_up_my_d",
+  "game_title": "AITA Not Putting Up My DIL's Painting",
+  "audio_file": "assets/audio/narration_SY_14_R_aita_not_putting_up_my_d.mp3"
+}

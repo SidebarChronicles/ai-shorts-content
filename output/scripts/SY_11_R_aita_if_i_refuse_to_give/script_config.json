@@ -1,0 +1,515 @@
+{
+  "_doc": "AI Story script (reddit). This file scaffolds the 7-beat structure. The /morning workflow fills in 'text', 'keywords', 'title', 'description', 'visual_brief' and 'sound_brief' fields at production time, then runs check_script_structure.py to lint, then make_audio_elevenlabs.py + build_visuals_track.py + build_sound_design.py.",
+  "anti_plagiarism_rule": "Reddit posts ARE copyrighted by their authors. The script must REWRITE the story in original prose: different word choices, restructured narrative, anonymized names + locations, paraphrased dialogue. Use the source Reddit post as inspiration only. Verbatim reproduction risks YouTube strike.",
+  "beats": [
+    {
+      "keywords": [
+        "money",
+        "mom",
+        "transfer",
+        "monthly",
+        "pressure"
+      ],
+      "label": "hook",
+      "max_seconds": 2.5,
+      "purpose_hint": "AITA question + the outrage in \u226412 words",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "phone tap",
+          "indoor quiet"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 0,
+      "text": "My mom expects five hundred dollars from me. Every month.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium close-up, eye-level, centered",
+        "lens": "50mm, shallow DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "smartphone",
+          "transfer app"
+        ],
+        "stock_keywords": [
+          "bank transfer app",
+          "phone payment",
+          "money transfer"
+        ],
+        "subject": "bank transfer screen on a smartphone, amount field showing $500, cursor blinking"
+      },
+      "visual_style_hint": "character expression close-up, eye contact"
+    },
+    {
+      "keywords": [
+        "new job",
+        "salary",
+        "pride",
+        "mom",
+        "request"
+      ],
+      "label": "setup",
+      "max_seconds": 12,
+      "purpose_hint": "Who the people are + the relationship",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "keyboard tap",
+          "quiet office"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 3,
+      "text": "Eight months ago I landed a job paying nearly double my previous salary. I was proud. My mom was proud too \u2014 but for different reasons. Within a week she asked for a monthly transfer to help her out.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium wide, slightly overhead, naturalistic",
+        "lens": "35mm, moderate DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "laptop",
+          "desk lamp",
+          "notepad"
+        ],
+        "stock_keywords": [
+          "job offer letter",
+          "desk",
+          "new job"
+        ],
+        "subject": "desk with a laptop open to a job offer letter on screen, single lamp, tidy surface"
+      },
+      "visual_style_hint": "two-shot or environmental setup"
+    },
+    {
+      "keywords": [
+        "lifestyle",
+        "spending",
+        "not struggling",
+        "furniture",
+        "awareness"
+      ],
+      "label": "build",
+      "max_seconds": 13,
+      "purpose_hint": "What led up to the incident",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "interior ambience",
+          "soft room tone"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 15,
+      "text": "The first few months I sent it without complaint. But over time I noticed: her bills were always paid, she was taking weekend trips, and she'd bought new living room furniture. She wasn't struggling. She was adding to her lifestyle with my paycheck.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium wide, eye-level, straight on",
+        "lens": "35mm, moderate DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "sofa",
+          "store tag",
+          "lamp"
+        ],
+        "stock_keywords": [
+          "new furniture living room",
+          "store tag on couch",
+          "home decor"
+        ],
+        "subject": "neatly decorated living room with new sofa still bearing a store tag, warm lamp light"
+      },
+      "visual_style_hint": "scene reconstruction, naturalistic"
+    },
+    {
+      "keywords": [
+        "income",
+        "revelation",
+        "$4200",
+        "mom earns",
+        "twist"
+      ],
+      "label": "mid_anchor",
+      "max_seconds": 5,
+      "purpose_hint": "The twist or escalation that flips audience loyalty",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "paper rustle",
+          "kitchen quiet"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "soft low piano note, single beat of tension",
+        "music_intensity": 0.2,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "paper rustle"
+          }
+        ],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 28,
+      "text": "Actually, my mom earns four thousand two hundred dollars a month on her own. She just prefers mine on top.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "top-down close-up, centered",
+        "lens": "50mm, sharp focus",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "bank statement",
+          "pen"
+        ],
+        "stock_keywords": [
+          "bank statement",
+          "monthly income",
+          "financial document"
+        ],
+        "subject": "printed bank statement on a kitchen table, monthly income figures visible, pen resting beside it"
+      },
+      "visual_style_hint": "HERO SHOT \u2014 reaction face, the moment everything changes"
+    },
+    {
+      "keywords": [
+        "guilt",
+        "betrayal",
+        "family pressure",
+        "hoarding",
+        "sibling text"
+      ],
+      "label": "expand",
+      "max_seconds": 12,
+      "purpose_hint": "The fallout / consequences",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "notification sound",
+          "indoor ambience"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "phone buzz"
+          }
+        ],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 33,
+      "text": "When I said I wanted to pause, she called it betrayal. Said she raised me alone and this was what she deserved. Her sister called. My sibling texted me a long message about hoarding money while family struggles.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium close-up, slightly overhead, centered",
+        "lens": "50mm, shallow DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "smartphone",
+          "coffee cup"
+        ],
+        "stock_keywords": [
+          "long text message",
+          "phone table",
+          "incoming message"
+        ],
+        "subject": "smartphone face-up on a table, screen lit with a long incoming message, coffee cup beside it"
+      },
+      "visual_style_hint": "aftermath shots, body language"
+    },
+    {
+      "keywords": [
+        "stopped",
+        "bills paid",
+        "decision",
+        "resolution",
+        "no struggle"
+      ],
+      "label": "payoff",
+      "max_seconds": 10,
+      "purpose_hint": "What I did about it / what the other person did",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "quiet room",
+          "paper"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 45,
+      "text": "I stopped the transfer last month. By the third of the month, every one of her bills was paid \u2014 on her income alone. Nothing was actually struggling except her feelings about it.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium close-up, eye-level, straight",
+        "lens": "50mm, moderate DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "wall calendar",
+          "red circle"
+        ],
+        "stock_keywords": [
+          "calendar wall",
+          "date circle",
+          "monthly reminder"
+        ],
+        "subject": "calendar page pinned to wall with a red circle around the 3rd, nothing else marked"
+      },
+      "visual_style_hint": "resolution scene, lighting shift"
+    },
+    {
+      "keywords": [
+        "AITA",
+        "verdict",
+        "follow",
+        "CTA",
+        "comment"
+      ],
+      "label": "cta",
+      "max_seconds": 5,
+      "purpose_hint": "FOLLOW-DRIVER (v2): 'AITA? Comment your verdict. Follow for daily AITAs.' Drives follows + comments (algorithm + monetization)",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "chime soft",
+          "phone tap"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "brief warm upbeat 2-second sting",
+        "music_intensity": 0.2,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "notification chime"
+          }
+        ],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 55,
+      "text": "AITA for stopping? Drop your verdict below. Follow for daily AITAs.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium close-up, slightly overhead, centered",
+        "lens": "50mm, shallow DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "smartphone"
+        ],
+        "stock_keywords": [
+          "comments section phone",
+          "social media engagement",
+          "replies"
+        ],
+        "subject": "close-up of a phone screen showing a comments section with multiple replies"
+      },
+      "visual_style_hint": "freeze-frame on protagonist, looking at camera"
+    }
+  ],
+  "case_id": "SY_11_R_aita_if_i_refuse_to_give",
+  "character_continuity_hint": "[Characters rotate per video; no cross-video continuity needed. Use generic, anonymized physical descriptions in Flux prompts \u2014 do not invoke real Reddit usernames or specific story details.]",
+  "clips_manifest": "output/scripts/SY_11_R_aita_if_i_refuse_to_give/clips_manifest.json",
+  "color_grade_vertical": "story",
+  "description_lead": "After landing a higher-paying job, a narrator's mother starts expecting a monthly $500 transfer \u2014 despite having her own steady income and spending the money on luxuries.",
+  "hook_anti_patterns": [
+    "So I'm posting",
+    "Hey Reddit",
+    "Long time lurker",
+    "Strap in",
+    "verbatim Reddit quote \u2014 paraphrase ALWAYS",
+    "AITA-as-first-sentence \u2014 flip to violation-first, question last",
+    "starting with 'The' / 'A' / 'An' / 'In' \u2014 too soft for sentence 1"
+  ],
+  "hook_formula": "violation_then_question",
+  "hook_template": "My [relation] [outrageous action in 5 words]. AITA? (Lead with violation; AITA comes last.)",
+  "model_id": "eleven_multilingual_v2",
+  "sound_brief_defaults": {
+    "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+    "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+    "music_intensity": 0.2,
+    "vocal_mood": "confiding narrator, slight indignation, conversational pace"
+  },
+  "spoken_text": "My mom expects five hundred dollars from me. Every month. Eight months ago I landed a job paying nearly double my previous salary. I was proud. My mom was proud too \u2014 but for different reasons. Within a week she asked for a monthly transfer to help her out. The first few months I sent it without complaint. But over time I noticed: her bills were always paid, she was taking weekend trips, and she'd bought new living room furniture. She wasn't struggling. She was adding to her lifestyle with my paycheck. Actually, my mom earns four thousand two hundred dollars a month on her own. She just prefers mine on top. When I said I wanted to pause, she called it betrayal. Said she raised me alone and this was what she deserved. Her sister called. My sibling texted me a long message about hoarding money while family struggles. I stopped the transfer last month. By the third of the month, every one of her bills was paid \u2014 on her income alone. Nothing was actually struggling except her feelings about it. AITA for stopping? Drop your verdict below. Follow for daily AITAs.",
+  "subgenre": "reddit",
+  "title": "AITA Refusing to Give My Mom Monthly Money",
+  "vertical": "story",
+  "visual_brief_defaults": {
+    "color": "warm domestic tones, contemporary, mid-saturation",
+    "exclude": [
+      "people",
+      "creatures",
+      "faces",
+      "characters",
+      "anime",
+      "cartoon",
+      "logos",
+      "text overlays",
+      "watermarks",
+      "yellow mascot",
+      "fantasy creature",
+      "fantasy",
+      "horror",
+      "supernatural",
+      "celebrities"
+    ],
+    "lighting": "warm interior practicals, soft window light, naturalistic",
+    "mood": "confiding, slightly indignant, naturalistic"
+  },
+  "visual_palette": "warm domestic tones, naturalistic lighting, contemporary setting",
+  "voice_id": "nPczCjzI2devNBz1zQrb",
+  "voice_name": "Brian",
+  "voice_speed": 0.92,
+  "game_id": "SY_11_R_aita_if_i_refuse_to_give",
+  "game_title": "AITA Refusing to Give My Mom Monthly Money",
+  "audio_file": "assets/audio/narration_SY_11_R_aita_if_i_refuse_to_give.mp3"
+}

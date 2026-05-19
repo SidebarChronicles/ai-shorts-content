@@ -1,0 +1,516 @@
+{
+  "_doc": "AI Story script (reddit). This file scaffolds the 7-beat structure. The /morning workflow fills in 'text', 'keywords', 'title', 'description', 'visual_brief' and 'sound_brief' fields at production time, then runs check_script_structure.py to lint, then make_audio_elevenlabs.py + build_visuals_track.py + build_sound_design.py.",
+  "anti_plagiarism_rule": "Reddit posts ARE copyrighted by their authors. The script must REWRITE the story in original prose: different word choices, restructured narrative, anonymized names + locations, paraphrased dialogue. Use the source Reddit post as inspiration only. Verbatim reproduction risks YouTube strike.",
+  "beats": [
+    {
+      "keywords": [
+        "AITA",
+        "sister",
+        "kids",
+        "family",
+        "child-free"
+      ],
+      "label": "hook",
+      "max_seconds": 2.5,
+      "purpose_hint": "AITA question + the outrage in \u226412 words",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "indoor ambience",
+          "fridge hum"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 0,
+      "text": "My sister left her kids with me.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "top-down flat lay, centered",
+        "lens": "50mm, sharp focus",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "crayon drawings",
+          "coffee mug",
+          "phone"
+        ],
+        "stock_keywords": [
+          "cluttered table",
+          "children drawings",
+          "messy home"
+        ],
+        "subject": "cluttered coffee table with scattered children's crayon drawings and a phone face-down"
+      },
+      "visual_style_hint": "character expression close-up, eye contact"
+    },
+    {
+      "keywords": [
+        "apartment",
+        "alone",
+        "child-free",
+        "sister",
+        "family dynamic"
+      ],
+      "label": "setup",
+      "max_seconds": 12,
+      "purpose_hint": "Who the people are + the relationship",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "apartment ambience",
+          "distant traffic"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 3,
+      "text": "I'm thirty-four, live alone in a one-bedroom, and have been child-free by choice for a decade. My sister is ten years older, has four kids ranging from three to eleven, and has always been complicated.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "wide angle, eye-level looking down hall",
+        "lens": "24mm, moderate DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "coat hook",
+          "shoe rack"
+        ],
+        "stock_keywords": [
+          "small apartment hallway",
+          "minimal decor",
+          "single living"
+        ],
+        "subject": "narrow apartment hallway, single coat hook, compact shoe rack"
+      },
+      "visual_style_hint": "two-shot or environmental setup"
+    },
+    {
+      "keywords": [
+        "eviction",
+        "sister",
+        "parents",
+        "pressure",
+        "burden"
+      ],
+      "label": "build",
+      "max_seconds": 13,
+      "purpose_hint": "What led up to the incident",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "cardboard rustling",
+          "quiet room"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 15,
+      "text": "Last spring, her landlord evicted her after months of unpaid rent. She moved in with our parents temporarily. Then she called me and said our parents were too old to handle the kids long-term \u2014 and since I didn't have my own family, I should take all four.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium wide, slightly low angle, centered",
+        "lens": "35mm, moderate DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "boxes",
+          "packing tape",
+          "bare wall"
+        ],
+        "stock_keywords": [
+          "moving boxes",
+          "eviction",
+          "packing"
+        ],
+        "subject": "cardboard moving boxes stacked against a bare wall, tape peeled and flapping"
+      },
+      "visual_style_hint": "scene reconstruction, naturalistic"
+    },
+    {
+      "keywords": [
+        "housing",
+        "turned down",
+        "subsidy",
+        "twist",
+        "hidden info"
+      ],
+      "label": "mid_anchor",
+      "max_seconds": 5,
+      "purpose_hint": "The twist or escalation that flips audience loyalty",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "paper crinkle",
+          "quiet interior"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "subtle low piano tension note, single sustained chord",
+        "music_intensity": 0.2,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -14.0,
+            "name": "paper crumple"
+          }
+        ],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 28,
+      "text": "But here's what she didn't mention: she'd already turned down a subsidized housing placement three weeks earlier.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium close-up, slightly overhead, centered",
+        "lens": "50mm, shallow DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "envelope",
+          "notice letter"
+        ],
+        "stock_keywords": [
+          "housing notice",
+          "official letter",
+          "crumpled paper"
+        ],
+        "subject": "crumpled envelope on a kitchen counter, red 'NOTICE' stamp visible on letterhead inside"
+      },
+      "visual_style_hint": "HERO SHOT \u2014 reaction face, the moment everything changes"
+    },
+    {
+      "keywords": [
+        "family pressure",
+        "guilt",
+        "missed calls",
+        "hypocrisy",
+        "no room"
+      ],
+      "label": "expand",
+      "max_seconds": 12,
+      "purpose_hint": "The fallout / consequences",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "phone notification",
+          "bedroom ambience"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "phone buzz"
+          }
+        ],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 33,
+      "text": "When I said no, my sister cried and said I was abandoning my nieces and nephews. My mom called twice. My aunt texted. Within forty-eight hours everyone had an opinion \u2014 and not one of them offered their own spare room.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium close-up, eye-level, slightly tilted",
+        "lens": "50mm, shallow DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "phone",
+          "bedside table"
+        ],
+        "stock_keywords": [
+          "missed calls phone",
+          "family pressure",
+          "notifications"
+        ],
+        "subject": "phone screen with multiple missed call notifications, screen glowing on a dark bedside table"
+      },
+      "visual_style_hint": "aftermath shots, body language"
+    },
+    {
+      "keywords": [
+        "decision",
+        "boundaries",
+        "no contact",
+        "housing authority",
+        "resolution"
+      ],
+      "label": "payoff",
+      "max_seconds": 10,
+      "purpose_hint": "What I did about it / what the other person did",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "quiet room",
+          "window ambience"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "",
+        "music_intensity": 0.2,
+        "sfx": [],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 45,
+      "text": "I told my sister I loved her kids but I couldn't raise them. I suggested she contact the housing authority about that placement again. She hung up. We haven't spoken since.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium wide, eye-level, centered",
+        "lens": "35mm, natural DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "kitchen table",
+          "chair",
+          "window blinds"
+        ],
+        "stock_keywords": [
+          "empty kitchen table",
+          "quiet home",
+          "afternoon light"
+        ],
+        "subject": "empty kitchen table with a single chair pushed in, afternoon light through window blinds casting stripes"
+      },
+      "visual_style_hint": "resolution scene, lighting shift"
+    },
+    {
+      "keywords": [
+        "AITA",
+        "verdict",
+        "comment",
+        "follow",
+        "CTA"
+      ],
+      "label": "cta",
+      "max_seconds": 5,
+      "purpose_hint": "FOLLOW-DRIVER (v2): 'AITA? Comment your verdict. Follow for daily AITAs.' Drives follows + comments (algorithm + monetization)",
+      "sound_brief": {
+        "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+        "freesound_keywords": [
+          "phone tap",
+          "soft chime"
+        ],
+        "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+        "music_cue": "brief warm upbeat sting, 2s, cheerful resolution",
+        "music_intensity": 0.2,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -10.0,
+            "name": "notification chime"
+          }
+        ],
+        "vocal_mood": "confiding narrator, slight indignation, conversational pace",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 55,
+      "text": "So, am I the problem here? Drop your verdict below. Follow for a new AITA every day.",
+      "visual_brief": {
+        "color": "warm domestic tones, contemporary, mid-saturation",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature",
+          "fantasy",
+          "horror",
+          "supernatural",
+          "celebrities"
+        ],
+        "framing": "medium close-up, slightly overhead, centered",
+        "lens": "50mm, shallow DOF",
+        "lighting": "warm interior practicals, soft window light, naturalistic",
+        "mood": "confiding, slightly indignant, naturalistic",
+        "props": [
+          "smartphone"
+        ],
+        "stock_keywords": [
+          "phone comments",
+          "social media scroll",
+          "engagement"
+        ],
+        "subject": "close-up of a smartphone held in two hands, comment section open on a social media app"
+      },
+      "visual_style_hint": "freeze-frame on protagonist, looking at camera"
+    }
+  ],
+  "case_id": "SY_08_R_aita_for_not_wanting_to_",
+  "character_continuity_hint": "[Characters rotate per video; no cross-video continuity needed. Use generic, anonymized physical descriptions in Flux prompts \u2014 do not invoke real Reddit usernames or specific story details.]",
+  "clips_manifest": "output/scripts/SY_08_R_aita_for_not_wanting_to_/clips_manifest.json",
+  "color_grade_vertical": "story",
+  "description_lead": "A child-free woman living alone is pressured by her entire family to permanently take in her sister's four kids after an eviction \u2014 but no one mentions the housing offer the sister turned down.",
+  "hook_anti_patterns": [
+    "So I'm posting",
+    "Hey Reddit",
+    "Long time lurker",
+    "Strap in",
+    "verbatim Reddit quote \u2014 paraphrase ALWAYS",
+    "AITA-as-first-sentence \u2014 flip to violation-first, question last",
+    "starting with 'The' / 'A' / 'An' / 'In' \u2014 too soft for sentence 1"
+  ],
+  "hook_formula": "violation_then_question",
+  "hook_template": "My [relation] [outrageous action in 5 words]. AITA? (Lead with violation; AITA comes last.)",
+  "model_id": "eleven_multilingual_v2",
+  "sound_brief_defaults": {
+    "ambient_bed": "household ambience, distant traffic, fridge hum, low room tone -24db",
+    "mix_note": "ambient -22db under VO, no SFX unless emotional pivot, music swells on the verdict reveal only",
+    "music_intensity": 0.2,
+    "vocal_mood": "confiding narrator, slight indignation, conversational pace"
+  },
+  "spoken_text": "My sister left her kids with me. I'm thirty-four, live alone in a one-bedroom, and have been child-free by choice for a decade. My sister is ten years older, has four kids ranging from three to eleven, and has always been complicated. Last spring, her landlord evicted her after months of unpaid rent. She moved in with our parents temporarily. Then she called me and said our parents were too old to handle the kids long-term \u2014 and since I didn't have my own family, I should take all four. But here's what she didn't mention: she'd already turned down a subsidized housing placement three weeks earlier. When I said no, my sister cried and said I was abandoning my nieces and nephews. My mom called twice. My aunt texted. Within forty-eight hours everyone had an opinion \u2014 and not one of them offered their own spare room. I told my sister I loved her kids but I couldn't raise them. I suggested she contact the housing authority about that placement again. She hung up. We haven't spoken since. So, am I the problem here? Drop your verdict below. Follow for a new AITA every day.",
+  "subgenre": "reddit",
+  "title": "AITA Not Taking In My Sister's 4 Kids",
+  "vertical": "story",
+  "visual_brief_defaults": {
+    "color": "warm domestic tones, contemporary, mid-saturation",
+    "exclude": [
+      "people",
+      "creatures",
+      "faces",
+      "characters",
+      "anime",
+      "cartoon",
+      "logos",
+      "text overlays",
+      "watermarks",
+      "yellow mascot",
+      "fantasy creature",
+      "fantasy",
+      "horror",
+      "supernatural",
+      "celebrities"
+    ],
+    "lighting": "warm interior practicals, soft window light, naturalistic",
+    "mood": "confiding, slightly indignant, naturalistic"
+  },
+  "visual_palette": "warm domestic tones, naturalistic lighting, contemporary setting",
+  "voice_id": "nPczCjzI2devNBz1zQrb",
+  "voice_name": "Brian",
+  "voice_speed": 0.92,
+  "game_id": "SY_08_R_aita_for_not_wanting_to_",
+  "game_title": "AITA Not Taking In My Sister's 4 Kids",
+  "audio_file": "assets/audio/narration_SY_08_R_aita_for_not_wanting_to_.mp3"
+}

@@ -1,0 +1,89 @@
+{
+  "generated_at": "2026-05-19T13:48:23.140453+00:00",
+  "window": {
+    "start": "2026-05-18",
+    "end": "2026-05-19"
+  },
+  "ypp": {
+    "subscribers": 0,
+    "shorts_views_90d": 0,
+    "watch_hours_90d": 0,
+    "thresholds": {
+      "early": {
+        "subs": 500,
+        "shorts_views_90d": 3000000,
+        "watch_hours": 3000
+      },
+      "full": {
+        "subs": 1000,
+        "shorts_views_90d": 10000000,
+        "watch_hours": 4000
+      }
+    }
+  },
+  "channel_rollup": {
+    "_no_data": true
+  },
+  "videos": {
+    "01_gothferrari": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T08:07:06.310626+00:00",
+      "video_id": "rmdhJCLBGvY",
+      "watch_url": "https://www.youtube.com/watch?v=rmdhJCLBGvY"
+    },
+    "02_ransomware_negotiator": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "manual",
+      "uploaded_at": "2026-05-17T21:00:00+00:00",
+      "video_id": "PtcQH4FJ5uE",
+      "watch_url": "https://www.youtube.com/watch?v=PtcQH4FJ5uE"
+    },
+    "03_fugitive_crypto_scam": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "manual",
+      "uploaded_at": "2026-05-17T21:00:00+00:00",
+      "video_id": "MRdgHP5DJ4c",
+      "watch_url": "https://www.youtube.com/watch?v=MRdgHP5DJ4c"
+    },
+    "04_cargo_heist": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T08:07:08.720845+00:00",
+      "video_id": "DT21viwuTD8",
+      "watch_url": "https://www.youtube.com/watch?v=DT21viwuTD8"
+    },
+    "05_nfl_medicare_fraud": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T08:07:10.931425+00:00",
+      "video_id": "TkQ9c4SYVjk",
+      "watch_url": "https://www.youtube.com/watch?v=TkQ9c4SYVjk"
+    },
+    "06_genetic_testing_fraud": {
+      "metrics": {
+        "_no_data": true
+      },
+      "retention_curve": [],
+      "scheduled_publish": "immediate",
+      "uploaded_at": "2026-05-18T08:07:13.069328+00:00",
+      "video_id": "45bYn__K-i4",
+      "watch_url": "https://www.youtube.com/watch?v=45bYn__K-i4"
+    }
+  }
+}

@@ -1,0 +1,552 @@
+{
+  "_doc": "AI Story script (survival). This file scaffolds the 7-beat structure. The /morning workflow fills in 'text', 'keywords', 'title', 'description', 'visual_brief' and 'sound_brief' fields at production time, then runs check_script_structure.py to lint, then make_audio_elevenlabs.py + build_visuals_track.py + build_sound_design.py.",
+  "beats": [
+    {
+      "keywords": [
+        "parking garage",
+        "followed",
+        "barked",
+        "threat",
+        "survival"
+      ],
+      "label": "hook",
+      "max_seconds": 2.5,
+      "purpose_hint": "Hit Day N + escalation in \u226412 words",
+      "sound_brief": {
+        "ambient_bed": "wind through trees or open space, distant water drip, cold air room tone -22db",
+        "freesound_keywords": [
+          "parking garage ambience",
+          "concrete echo",
+          "footsteps"
+        ],
+        "mix_note": "ambient -18db under VO, SFX hits duck VO -3db, hero-beat music sidechained to VO",
+        "music_cue": "",
+        "music_intensity": 0.3,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "distant parking garage echo"
+          },
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "footstep on concrete"
+          }
+        ],
+        "vocal_mood": "controlled tension, measured pace, breath audible on reveals",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 0,
+      "text": "He followed me to my car. So I barked.",
+      "visual_brief": {
+        "color": "muted earth tones, desaturated, cold highlights",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature"
+        ],
+        "framing": "wide angle, low angle looking up stairs, centered",
+        "lens": "24mm, deep focus",
+        "lighting": "harsh natural daylight or single firelight, hard shadows",
+        "mood": "tense, isolated, weathered",
+        "props": [
+          "concrete stairs",
+          "fluorescent light fixture"
+        ],
+        "stock_keywords": [
+          "parking garage stairwell",
+          "concrete stairs fluorescent",
+          "empty garage"
+        ],
+        "subject": "empty concrete parking garage stairwell, harsh fluorescent overhead light casting long shadows on rough walls"
+      },
+      "visual_style_hint": "wide establishing shot, urgency"
+    },
+    {
+      "keywords": [
+        "late night",
+        "empty garage",
+        "isolation",
+        "noticed",
+        "tension begins"
+      ],
+      "label": "setup",
+      "max_seconds": 12,
+      "purpose_hint": "Frame what's happening at this moment",
+      "sound_brief": {
+        "ambient_bed": "wind through trees or open space, distant water drip, cold air room tone -22db",
+        "freesound_keywords": [
+          "parking garage hum",
+          "fluorescent buzz",
+          "empty corridor"
+        ],
+        "mix_note": "ambient -18db under VO, SFX hits duck VO -3db, hero-beat music sidechained to VO",
+        "music_cue": "",
+        "music_intensity": 0.3,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "fluorescent hum"
+          },
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "distant drip"
+          }
+        ],
+        "vocal_mood": "controlled tension, measured pace, breath audible on reveals",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 3,
+      "text": "It was past eleven when I left the store. The parking structure was mostly empty \u2014 just the fluorescent hum and the sound of my own footsteps echoing up through the levels. I don't usually notice things. But I noticed him.",
+      "visual_brief": {
+        "color": "muted earth tones, desaturated, cold highlights",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature"
+        ],
+        "framing": "wide establishing shot, eye-level, straight down the aisle",
+        "lens": "24mm, deep focus",
+        "lighting": "harsh natural daylight or single firelight, hard shadows",
+        "mood": "tense, isolated, weathered",
+        "props": [
+          "painted parking lines",
+          "fluorescent lights",
+          "concrete pillars"
+        ],
+        "stock_keywords": [
+          "empty parking garage night",
+          "fluorescent parking structure",
+          "vacant lot night"
+        ],
+        "subject": "empty parking structure level at night, rows of vacant painted parking spaces under yellow-white fluorescent glow, no cars"
+      },
+      "visual_style_hint": "subject mid-action, environmental context"
+    },
+    {
+      "keywords": [
+        "matched pace",
+        "following",
+        "stairs",
+        "keys",
+        "escalation"
+      ],
+      "label": "build",
+      "max_seconds": 13,
+      "purpose_hint": "Add stakes \u2014 what makes today different",
+      "sound_brief": {
+        "ambient_bed": "wind through trees or open space, distant water drip, cold air room tone -22db",
+        "freesound_keywords": [
+          "stairwell echo",
+          "door clang",
+          "concrete footsteps"
+        ],
+        "mix_note": "ambient -18db under VO, SFX hits duck VO -3db, hero-beat music sidechained to VO",
+        "music_cue": "low pulsing ambient drone, barely audible, building slowly",
+        "music_intensity": 0.3,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "footstep echo"
+          },
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "door clang distant"
+          }
+        ],
+        "vocal_mood": "controlled tension, measured pace, breath audible on reveals",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 15,
+      "text": "He came in just after me and matched my pace exactly. When I slowed, he slowed. When I took the stairs instead of the elevator, he followed. By the time I reached Level Three, my keys were already between my fingers.",
+      "visual_brief": {
+        "color": "muted earth tones, desaturated, cold highlights",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature"
+        ],
+        "framing": "medium shot, low angle, slightly tilted for unease",
+        "lens": "35mm, moderate DOF",
+        "lighting": "harsh natural daylight or single firelight, hard shadows",
+        "mood": "tense, isolated, weathered",
+        "props": [
+          "yellow handrail",
+          "bare bulb",
+          "concrete floor"
+        ],
+        "stock_keywords": [
+          "stairwell concrete",
+          "yellow railing worn",
+          "staircase bare bulb"
+        ],
+        "subject": "concrete stairwell landing with worn yellow painted handrail, single bare bulb above, rough aggregate floor texture"
+      },
+      "visual_style_hint": "tension shot, dutch angle, close detail"
+    },
+    {
+      "keywords": [
+        "stopped",
+        "turned",
+        "barked",
+        "twist",
+        "counter-instinct"
+      ],
+      "label": "mid_anchor",
+      "max_seconds": 5,
+      "purpose_hint": "Discovery, threat reveal, or escalation moment",
+      "sound_brief": {
+        "ambient_bed": "wind through trees or open space, distant water drip, cold air room tone -22db",
+        "freesound_keywords": [
+          "bass hit single",
+          "tension stab",
+          "silence drop"
+        ],
+        "mix_note": "ambient -18db under VO, SFX hits duck VO -3db, hero-beat music sidechained to VO",
+        "music_cue": "sudden silence \u2014 all drone drops, single low thud sound design hit",
+        "music_intensity": 0.3,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "sudden silence"
+          },
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "single bass thud"
+          }
+        ],
+        "vocal_mood": "controlled tension, measured pace, breath audible on reveals",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 28,
+      "text": "But instead of running, I stopped. Turned around. And started barking. Full volume. Five full seconds.",
+      "visual_brief": {
+        "color": "muted earth tones, desaturated, cold highlights",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature"
+        ],
+        "framing": "wide shot from low angle, centered on painted 'P3' pillar marking",
+        "lens": "24mm, deep focus",
+        "lighting": "harsh natural daylight or single firelight, hard shadows",
+        "mood": "tense, isolated, weathered",
+        "props": [
+          "level 3 sign",
+          "concrete pillar",
+          "overhead light"
+        ],
+        "stock_keywords": [
+          "parking level sign",
+          "P3 pillar",
+          "parking garage marking"
+        ],
+        "subject": "wide concrete aisle in parking garage, Level 3 sign on pillar visible, harsh overhead light pool on empty floor"
+      },
+      "visual_style_hint": "HERO SHOT \u2014 Pika clip preferred, dramatic reveal"
+    },
+    {
+      "keywords": [
+        "froze",
+        "confused",
+        "backed away",
+        "elevator",
+        "silence"
+      ],
+      "label": "expand",
+      "max_seconds": 12,
+      "purpose_hint": "What does this mean for tomorrow / survival",
+      "sound_brief": {
+        "ambient_bed": "wind through trees or open space, distant water drip, cold air room tone -22db",
+        "freesound_keywords": [
+          "elevator ding",
+          "hallway hum",
+          "parking garage"
+        ],
+        "mix_note": "ambient -18db under VO, SFX hits duck VO -3db, hero-beat music sidechained to VO",
+        "music_cue": "",
+        "music_intensity": 0.3,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "elevator door chime distant"
+          },
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "fluorescent hum returning"
+          }
+        ],
+        "vocal_mood": "controlled tension, measured pace, breath audible on reveals",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 33,
+      "text": "He froze. Then he looked around \u2014 like he expected a dog to appear from somewhere. Then he backed toward the elevator without a single word. Just that strange silence you get when something doesn't go the way someone planned.",
+      "visual_brief": {
+        "color": "muted earth tones, desaturated, cold highlights",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature"
+        ],
+        "framing": "medium shot, eye-level, straight-on elevator doors",
+        "lens": "35mm, shallow DOF",
+        "lighting": "harsh natural daylight or single firelight, hard shadows",
+        "mood": "tense, isolated, weathered",
+        "props": [
+          "elevator doors",
+          "amber call button"
+        ],
+        "stock_keywords": [
+          "elevator parking garage",
+          "call button amber",
+          "concrete elevator"
+        ],
+        "subject": "elevator doors in parking structure, closed, call button glowing amber, concrete wall to either side"
+      },
+      "visual_style_hint": "subject reaction, planning, gear close-up"
+    },
+    {
+      "keywords": [
+        "drove home",
+        "shaking",
+        "intact",
+        "barking worked",
+        "reflection"
+      ],
+      "label": "payoff",
+      "max_seconds": 10,
+      "purpose_hint": "Resolution beat OR cliffhanger for Day N+1",
+      "sound_brief": {
+        "ambient_bed": "wind through trees or open space, distant water drip, cold air room tone -22db",
+        "freesound_keywords": [
+          "driving interior night",
+          "rain windshield",
+          "car hum"
+        ],
+        "mix_note": "ambient -18db under VO, SFX hits duck VO -3db, hero-beat music sidechained to VO",
+        "music_cue": "slow ambient resolve \u2014 single held note fading to silence",
+        "music_intensity": 0.3,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "car engine hum"
+          },
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "rain on glass"
+          },
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "city street sounds"
+          }
+        ],
+        "vocal_mood": "controlled tension, measured pace, breath audible on reveals",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 45,
+      "text": "I drove home shaking but intact. I've thought about that moment a hundred times since. I don't know if he meant harm. But the barking stopped the approach \u2014 and sometimes that's enough.",
+      "visual_brief": {
+        "color": "muted earth tones, desaturated, cold highlights",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature"
+        ],
+        "framing": "medium close-up from passenger seat angle, windshield centered",
+        "lens": "50mm, shallow DOF, slight motion blur on lights",
+        "lighting": "harsh natural daylight or single firelight, hard shadows",
+        "mood": "tense, isolated, weathered",
+        "props": [
+          "dashboard",
+          "rearview mirror",
+          "rain drops on glass"
+        ],
+        "stock_keywords": [
+          "driving at night city lights",
+          "car interior windshield night",
+          "rearview mirror dashboard"
+        ],
+        "subject": "car interior dashboard at night, city lights blurring past the rain-spotted windshield, rearview mirror empty"
+      },
+      "visual_style_hint": "wide environmental shot, change of light"
+    },
+    {
+      "keywords": [
+        "keys",
+        "safety",
+        "follow",
+        "awareness",
+        "CTA"
+      ],
+      "label": "cta",
+      "max_seconds": 5,
+      "purpose_hint": "FOLLOW-DRIVER (v2): 'Day N+1 drops tomorrow \u2014 follow so you don't miss it.' Drives follower growth (Creator Rewards + YPP unlock)",
+      "sound_brief": {
+        "ambient_bed": "wind through trees or open space, distant water drip, cold air room tone -22db",
+        "freesound_keywords": [
+          "key jingle",
+          "metal keys"
+        ],
+        "mix_note": "ambient -18db under VO, SFX hits duck VO -3db, hero-beat music sidechained to VO",
+        "music_cue": "brief tense resolve sting, 2s, then silence",
+        "music_intensity": 0.3,
+        "sfx": [
+          {
+            "at_sec": 0.0,
+            "gain_db": -12.0,
+            "name": "key jingle"
+          }
+        ],
+        "vocal_mood": "controlled tension, measured pace, breath audible on reveals",
+        "vocal_pause_after_sec": 0.3
+      },
+      "target_seconds": 55,
+      "text": "Follow if you carry your keys like that. Stay aware out there.",
+      "visual_brief": {
+        "color": "muted earth tones, desaturated, cold highlights",
+        "exclude": [
+          "people",
+          "creatures",
+          "faces",
+          "characters",
+          "anime",
+          "cartoon",
+          "logos",
+          "text overlays",
+          "watermarks",
+          "yellow mascot",
+          "fantasy creature"
+        ],
+        "framing": "medium close-up, eye-level, centered, sharp",
+        "lens": "50mm, sharp focus",
+        "lighting": "harsh natural daylight or single firelight, hard shadows",
+        "mood": "tense, isolated, weathered",
+        "props": [
+          "keys",
+          "fist"
+        ],
+        "stock_keywords": [
+          "keys between fingers safety",
+          "key fist self defense",
+          "keys held hand"
+        ],
+        "subject": "bunch of keys held in a fist, key tips protruding between fingers, shot on neutral background"
+      },
+      "visual_style_hint": "fade-to-loop frame, same composition as hook"
+    }
+  ],
+  "case_id": "SY_07_S_he_followed_me_to_my_car",
+  "character_continuity_hint": "[Same protagonist across episodes. Default description: tall man late 30s, weathered face, dark hair, faded blue jacket, dirt-smudged. Include in every Flux prompt to maintain visual continuity. Override per-character in the queue entry's 'Protagonist:' field.]",
+  "clips_manifest": "output/scripts/SY_07_S_he_followed_me_to_my_car/clips_manifest.json",
+  "color_grade_vertical": "story",
+  "description_lead": "A late-night parking garage. A stranger matching every step. One very strange decision that ended the threat before it started.",
+  "hook_anti_patterns": [
+    "Hey guys",
+    "What's up",
+    "Today we're",
+    "So I",
+    "Imagine if",
+    "Day N of [scenario]. Today I [escalation] \u2190 deprecated May 18 2026 (front-loads setup, not violation)",
+    "starting with 'The' / 'A' / 'An' / 'In'",
+    "setting-first openers ('In a remote cabin...', 'On Day 1...') \u2014 lead with action or subject",
+    "build-up structure [setup\u2192reveal] \u2014 flip it to [reveal\u2192setup]"
+  ],
+  "hook_formula": "violation_first",
+  "hook_template": "[Threat/violation in 4-5 words]. [Context after.] (TikTok-first: lead with the shock.)",
+  "model_id": "eleven_turbo_v2",
+  "sound_brief_defaults": {
+    "ambient_bed": "wind through trees or open space, distant water drip, cold air room tone -22db",
+    "mix_note": "ambient -18db under VO, SFX hits duck VO -3db, hero-beat music sidechained to VO",
+    "music_intensity": 0.3,
+    "vocal_mood": "controlled tension, measured pace, breath audible on reveals"
+  },
+  "spoken_text": "He followed me to my car. So I barked. It was past eleven when I left the store. The parking structure was mostly empty \u2014 just the fluorescent hum and the sound of my own footsteps echoing up through the levels. I don't usually notice things. But I noticed him. He came in just after me and matched my pace exactly. When I slowed, he slowed. When I took the stairs instead of the elevator, he followed. By the time I reached Level Three, my keys were already between my fingers. But instead of running, I stopped. Turned around. And started barking. Full volume. Five full seconds. He froze. Then he looked around \u2014 like he expected a dog to appear from somewhere. Then he backed toward the elevator without a single word. Just that strange silence you get when something doesn't go the way someone planned. I drove home shaking but intact. I've thought about that moment a hundred times since. I don't know if he meant harm. But the barking stopped the approach \u2014 and sometimes that's enough. Follow if you carry your keys like that. Stay aware out there.",
+  "subgenre": "survival",
+  "title": "He Followed Me Through the Garage \u2014 So I Barked",
+  "vertical": "story",
+  "visual_brief_defaults": {
+    "color": "muted earth tones, desaturated, cold highlights",
+    "exclude": [
+      "people",
+      "creatures",
+      "faces",
+      "characters",
+      "anime",
+      "cartoon",
+      "logos",
+      "text overlays",
+      "watermarks",
+      "yellow mascot",
+      "fantasy creature"
+    ],
+    "lighting": "harsh natural daylight or single firelight, hard shadows",
+    "mood": "tense, isolated, weathered"
+  },
+  "visual_palette": "muted earth tones, high contrast, slightly desaturated, single light source",
+  "voice_id": "IKne3meq5aSn9XLyUdCD",
+  "voice_name": "Charlie",
+  "voice_speed": 0.95,
+  "game_id": "SY_07_S_he_followed_me_to_my_car",
+  "game_title": "He Followed Me Through the Garage \u2014 So I Barked",
+  "audio_file": "assets/audio/narration_SY_07_S_he_followed_me_to_my_car.mp3"
+}
