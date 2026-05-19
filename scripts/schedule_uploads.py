@@ -53,14 +53,17 @@ ET = ZoneInfo("America/New_York")
 STORY_VIDEOS_DIR = PROJECT_ROOT / "output" / "story_videos"
 
 
-def next_prime_slots(num_needed: int) -> list[datetime]:
+def next_prime_slots(num_needed: int, _now: datetime | None = None) -> list[datetime]:
     """Return the next N prime slots starting from the next available one.
 
     Walks forward from now: today's remaining slots first, then tomorrow's,
     etc. Ensures each slot is ≥24h ahead of `now` (YouTube requires that
     for scheduled publishing).
+
+    `_now` is an injection seam for deterministic testing; production callers
+    leave it None so we sample `datetime.now(ET)` at call time.
     """
-    now = datetime.now(ET)
+    now = _now if _now is not None else datetime.now(ET)
     min_publish = now + timedelta(hours=24)
     slots: list[datetime] = []
     day_offset = 0

@@ -18,19 +18,19 @@ export default function App() {
       .catch((e) => setErr(String(e)));
   }, []);
 
-  if (err) return <div className="shell"><div className="error">Failed to load manifest: {err}<br/>Run <code>npm run sync</code> first.</div></div>;
-  if (!manifest) return <div className="shell"><div className="loading">Loading…</div></div>;
+  if (err) return <main className="shell"><div className="error">Failed to load manifest: {err}<br/>Run <code>npm run sync</code> first.</div></main>;
+  if (!manifest) return <main className="shell"><div className="loading">Loading…</div></main>;
 
   const generatedAt = new Date(manifest.generated_at).toLocaleString();
 
   return (
-    <div className="shell">
+    <main className="shell">
       <header className="header">
         <h1>AI Shorts — Channel Dashboard</h1>
         <span className="gen">Data synced: {generatedAt}</span>
       </header>
 
-      <nav className="tabs">
+      <nav className="tabs" aria-label="Dashboard sections">
         <button className={tab === "status" ? "active" : ""} onClick={() => setTab("status")}>
           Status
         </button>
@@ -45,6 +45,6 @@ export default function App() {
       {tab === "status" && <StatusPanel manifest={manifest} />}
       {tab === "analytics" && <AnalyticsPanel manifest={manifest} />}
       {tab === "costs" && <CostsPanel manifest={manifest} />}
-    </div>
+    </main>
   );
 }

@@ -43,21 +43,36 @@ export default function StatusPanel(_: Props) {
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
-    Promise.all([
+    // Promise.allSettled so one missing JSON (typically channel_phase.json,
+    // which has no empty fallback in loadData.ts) doesn't blank the entire panel.
+    // Each loader's failure is logged individually and the rest of the data
+    // still renders.
+    Promise.allSettled([
       loadChannelPhase(),
       loadQueueDepth(),
       loadCrossPostStatus(),
       loadElevenlabsUsage(),
       loadReplicateUsage(),
-    ])
-      .then(([p, q, c, e, r]) => {
-        setPhase(p);
-        setQueue(q);
-        setCross(c);
-        setEl(e);
-        setRep(r);
-      })
-      .catch((e) => setErr(String(e)));
+    ]).then(([pRes, qRes, cRes, eRes, rRes]) => {
+      if (pRes.status === "fulfilled") setPhase(pRes.value);
+      else {
+        // eslint-disable-next-line no-console
+        console.warn("[dashboard] channel_phase.json failed to load:", pRes.reason);
+        setErr(String(pRes.reason));  // phase is required — surface the failure
+      }
+      if (qRes.status === "fulfilled") setQueue(qRes.value);
+      // eslint-disable-next-line no-console
+      else console.warn("[dashboard] queue_depth.json failed to load:", qRes.reason);
+      if (cRes.status === "fulfilled") setCross(cRes.value);
+      // eslint-disable-next-line no-console
+      else console.warn("[dashboard] cross_post_status.json failed to load:", cRes.reason);
+      if (eRes.status === "fulfilled") setEl(eRes.value);
+      // eslint-disable-next-line no-console
+      else console.warn("[dashboard] elevenlabs_usage.json failed to load:", eRes.reason);
+      if (rRes.status === "fulfilled") setRep(rRes.value);
+      // eslint-disable-next-line no-console
+      else console.warn("[dashboard] replicate_usage.json failed to load:", rRes.reason);
+    });
   }, []);
 
   if (err) return <div className="error">{err}</div>;

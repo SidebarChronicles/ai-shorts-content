@@ -31,51 +31,15 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _env import load_dotenv  # noqa: E402
 from _atomic import atomic_write_json  # noqa: E402
+from _queue_scan import scan_queue  # noqa: E402  — shared scanner; see scripts/_queue_scan.py
 
 load_dotenv(PROJECT_ROOT / ".env")
 
-QUEUE_DIR = PROJECT_ROOT / "story_queue"
 DAILY_DIR = PROJECT_ROOT / "output" / "daily"
 ANALYTICS_DIR = PROJECT_ROOT / "output" / "analytics"
 
 DEFAULT_COUNT = 4
 SUBGENRE_CAP = 3  # max picks from a single sub-genre per day
-
-
-# ---------------------------------------------------------------------------
-# Queue scanner
-# ---------------------------------------------------------------------------
-
-STATUS_RE = re.compile(r"\*\*Status:\*\*\s*([A-Z_]+)")
-SUBGENRE_RE = re.compile(r"\*\*Subgenre:\*\*\s*(\w+)")
-SCORE_RE = re.compile(r"\*\*Mined score\*\*:\s*([\d.]+)")
-VOICE_RE = re.compile(r"\*\*Voice:\*\*\s*([A-Za-z]+)")
-GENDER_RE = re.compile(r"\*\*Narrator gender:\*\*\s*([MF])", re.IGNORECASE)
-
-
-def scan_queue() -> list[dict]:
-    """Return a list of all queue stub metadata dicts."""
-    items: list[dict] = []
-    if not QUEUE_DIR.exists():
-        return items
-    for p in sorted(QUEUE_DIR.glob("SY_*.md")):
-        if p.name.startswith("SY_TEMPLATE"):
-            continue
-        text = p.read_text()
-        sm = STATUS_RE.search(text)
-        gm = SUBGENRE_RE.search(text)
-        sc = SCORE_RE.search(text)
-        vm = VOICE_RE.search(text)
-        gn = GENDER_RE.search(text)
-        items.append({
-            "case_id": p.stem,
-            "status": sm.group(1) if sm else "UNKNOWN",
-            "subgenre": gm.group(1) if gm else "unknown",
-            "mined_score": float(sc.group(1)) if sc else 0.0,
-            "voice": vm.group(1) if vm else None,
-            "gender": gn.group(1).upper() if gn else None,
-        })
-    return items
 
 
 # ---------------------------------------------------------------------------

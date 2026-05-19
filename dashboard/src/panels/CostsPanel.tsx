@@ -63,7 +63,9 @@ export default function CostsPanel({ manifest }: Props) {
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
-    Promise.all([
+    // Promise.allSettled so one missing JSON (typically channel_phase.json,
+    // which has no empty fallback in loadData.ts) doesn't blank the entire panel.
+    Promise.allSettled([
       loadChannelPhase(),
       loadElevenlabsUsage(),
       loadReplicateUsage(),
@@ -71,15 +73,26 @@ export default function CostsPanel({ manifest }: Props) {
       manifest.analytics_reports[0]
         ? loadAnalyticsReport(manifest.analytics_reports[0])
         : Promise.resolve(null as AnalyticsReport | null),
-    ])
-      .then(([p, e, r, posts, rpt]) => {
-        setPhase(p);
-        setEl(e);
-        setRep(r);
-        setPosted(posts);
-        setReport(rpt);
-      })
-      .catch((e) => setErr(String(e)));
+    ]).then(([pRes, eRes, rRes, postsRes, rptRes]) => {
+      if (pRes.status === "fulfilled") setPhase(pRes.value);
+      else {
+        // eslint-disable-next-line no-console
+        console.warn("[dashboard] channel_phase.json failed to load:", pRes.reason);
+        setErr(String(pRes.reason));  // phase is required — surface the failure
+      }
+      if (eRes.status === "fulfilled") setEl(eRes.value);
+      // eslint-disable-next-line no-console
+      else console.warn("[dashboard] elevenlabs_usage.json failed to load:", eRes.reason);
+      if (rRes.status === "fulfilled") setRep(rRes.value);
+      // eslint-disable-next-line no-console
+      else console.warn("[dashboard] replicate_usage.json failed to load:", rRes.reason);
+      if (postsRes.status === "fulfilled") setPosted(postsRes.value);
+      // eslint-disable-next-line no-console
+      else console.warn("[dashboard] posted ledgers failed to load:", postsRes.reason);
+      if (rptRes.status === "fulfilled") setReport(rptRes.value);
+      // eslint-disable-next-line no-console
+      else console.warn("[dashboard] analytics report failed to load:", rptRes.reason);
+    });
   }, [manifest]);
 
   const months = useMemo(() => {

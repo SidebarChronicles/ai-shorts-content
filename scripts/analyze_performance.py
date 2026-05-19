@@ -89,7 +89,12 @@ def load_posted(path: Path = POSTED_PATH) -> dict:
             f"[FATAL] No posted videos found at {path}.\n"
             "        Upload at least one video first (or backfill manually-uploaded videos)."
         )
-    return json.loads(path.read_text())
+    try:
+        return json.loads(path.read_text())
+    except json.JSONDecodeError as e:
+        # Mirror upload_to_youtube.py's behavior: bail with a clear actionable
+        # message rather than crashing analytics with an opaque traceback.
+        sys.exit(f"[FATAL] {path} is corrupt JSON ({e}). Repair or restore from a backup.")
 
 
 # ---------------------------------------------------------------------------
@@ -141,7 +146,10 @@ def query_retention_curve(yta, video_id: str, start_date: str, end_date: str) ->
             dimensions="elapsedVideoTimeRatio",
             filters=f"video=={video_id};audienceType==ORGANIC",
         ).execute()
-    except HttpError:
+    except HttpError as e:
+        # Empty result with no warning made API/quota failures look like real
+        # "no retention data yet" — log so the operator can distinguish them.
+        print(f"  [warn] retention curve fetch failed for {video_id}: {e}", file=sys.stderr)
         return []
     return [(r[0], r[1]) for r in resp.get("rows", [])]
 

@@ -31,11 +31,11 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Optional
 
 import requests
 
@@ -368,7 +368,13 @@ def render_ken_burns(image_path: Path, out_clip: Path, duration: float,
 
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
     if result.returncode != 0:
-        sys.exit(f"ERROR: Ken Burns render failed for {image_path.name}:\n{result.stderr[-500:]}")
+        # Raise instead of sys.exit so a batch caller (render_story.py) can catch
+        # the failure and abort cleanly rather than terminating the whole process.
+        raise subprocess.CalledProcessError(
+            result.returncode, cmd,
+            output=result.stdout,
+            stderr=f"Ken Burns render failed for {image_path.name}:\n{result.stderr[-500:]}",
+        )
 
 
 def _normalize_pika_to_portrait(pika_path: Path, out_clip: Path, duration: float,
@@ -408,14 +414,18 @@ def _normalize_pika_to_portrait(pika_path: Path, out_clip: Path, duration: float
 
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
     if result.returncode != 0:
-        sys.exit(f"ERROR: Pika normalize failed for {pika_path.name}:\n{result.stderr[-500:]}")
+        raise subprocess.CalledProcessError(
+            result.returncode, cmd,
+            output=result.stdout,
+            stderr=f"Pika normalize failed for {pika_path.name}:\n{result.stderr[-500:]}",
+        )
 
 
 # ---------------------------------------------------------------------------
 # Audio-driven beat duration
 # ---------------------------------------------------------------------------
 
-def beat_durations_from_alignment(case_id: str, beats: list[dict]) -> Optional[list[float]]:
+def beat_durations_from_alignment(case_id: str, beats: list[dict]) -> list[float] | None:
     """If alignment.json exists, allocate audio time per beat by character count.
 
     Returns a list of per-beat durations summing to the audio duration, or None
@@ -468,7 +478,9 @@ def write_concat_list(clip_paths: list[Path], concat_path: Path,
         atomic_write_text(concat_path, content)
         return
 
-    # Probe durations so we can shorten the last clip + slot in a loop tail
+    # Probe durations so we can shorten the last clip + slot in a loop tail.
+    # A 0-duration entry in the concat list corrupts the output — log and raise
+    # so the caller can re-render rather than ship a broken short.
     durations: list[float] = []
     for clip in clip_paths:
         try:
@@ -477,9 +489,17 @@ def write_concat_list(clip_paths: list[Path], concat_path: Path,
                  "-of", "default=noprint_wrappers=1:nokey=1", str(clip)],
                 capture_output=True, text=True, timeout=15,
             )
-            durations.append(float(r.stdout.strip()))
-        except (subprocess.SubprocessError, ValueError):
-            durations.append(0.0)
+            d = float(r.stdout.strip())
+        except (subprocess.SubprocessError, ValueError) as e:
+            print(f"  [warn] ffprobe failed for {clip.name}: {e}", file=sys.stderr)
+            raise RuntimeError(
+                f"ffprobe could not read duration for {clip} — concat list would be corrupt"
+            ) from e
+        if d <= 0.0:
+            raise RuntimeError(
+                f"clip {clip} probed as 0.0s — would produce a silent/broken concat segment"
+            )
+        durations.append(d)
 
     lines: list[str] = []
     for i, (clip, dur) in enumerate(zip(clip_paths, durations)):
@@ -529,6 +549,11 @@ def main() -> None:
     ai_first_enabled = args.ai_first or is_story
     ai_fallback_enabled = args.ai_fallback or is_story or ai_first_enabled
 
+    # Validate args.case so a path-traversal value like "../../etc/passwd" can't
+    # be interpolated into SCRIPTS_DIR / args.case below. Cron context only — local
+    # CLI users — but the pattern matters and matches render_game_video.py:352.
+    if not re.match(r"^[A-Za-z0-9_\-]+$", args.case):
+        sys.exit(f"ERROR: Unsafe case id '{args.case}' — must match [A-Za-z0-9_-]+")
     case_dir = SCRIPTS_DIR / args.case
     config_path = case_dir / "script_config.json"
     # Backward-compat alias
@@ -657,6 +682,14 @@ def main() -> None:
             visual_hint = beat.get("visual_style_hint", "")
             palette = cfg.get("visual_palette", "")
             char_hint = cfg.get("character_continuity_hint", "")
+            # SECURITY: the legacy path below interpolates beat.get('text', '')[:120]
+            # (raw Reddit/Steam content) into the Flux prompt. This is a content-steering
+            # surface — a malicious source could try to bias the AI image away from the
+            # storyboard. SY_01–SY_06 still hit this fallback. New cases should always
+            # have a filled visual_brief.subject (used by the storyboard-first branch
+            # below) so they never reach the legacy text-based prompt. TODO: migrate
+            # the remaining legacy cases and remove the text-based fallback entirely.
+            #
             # Storyboard-first: when a visual_brief is filled in, use it as the
             # prompt source. Concrete subject + framing + lens + lighting + mood
             # gives Flux far more direction than truncated narration text.
