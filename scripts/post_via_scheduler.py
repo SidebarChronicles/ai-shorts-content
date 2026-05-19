@@ -458,10 +458,13 @@ def main() -> int:
                 print(f"  ⚠  POSTFAST_{plat_key.upper()}_CHANNEL_ID={envval} doesn't match any connected {label} id ({ids}).")
         return 0
 
-    # Load + refresh tracker (no-op for already-tracked cases)
+    # Load + refresh tracker (no-op for already-tracked cases).
+    # `refresh_from_posted_ledgers` may also back-fill `tiktok_gate` on existing
+    # entries (see cross_post_status.py:160-165), so save unconditionally — we
+    # were silently dropping those mutations when the new-case count was 0.
     state = load_status()
-    if refresh_from_posted_ledgers(state):
-        save_status(state)
+    refresh_from_posted_ledgers(state)
+    save_status(state)
 
     requested = PLATFORM_CLI_MAP[args.platforms]
     cases = select_cases(state, args.case, requested)

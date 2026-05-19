@@ -16,7 +16,9 @@ TODAY=$(date -u +%F)
 set -e
 
 echo "── Step 0: daily hygiene ──"
-python scripts/morning_cleanup.py
+# --apply: actually archive stale outputs + prune .part files. Without it,
+# morning_cleanup runs in dry-run mode and Step 0 is a no-op.
+python scripts/morning_cleanup.py --apply
 
 echo ""
 echo "── Step 1: pull yesterday's analytics (YT + TT in parallel) ──"

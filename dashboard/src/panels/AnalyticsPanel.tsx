@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -83,6 +83,13 @@ export default function AnalyticsPanel({ manifest }: Props) {
     }
   }
 
+  function onSortKey(e: React.KeyboardEvent<HTMLTableCellElement>, k: SortKey) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggleSort(k);
+    }
+  }
+
   return (
     <>
       <div className="card" style={{ marginBottom: 16 }}>
@@ -136,8 +143,8 @@ export default function AnalyticsPanel({ manifest }: Props) {
             <Legend wrapperStyle={{ fontSize: 12 }} />
             <Bar yAxisId="left" dataKey="views" fill="#7aa2f7" name="Views" />
             <Bar yAxisId="right" dataKey="retention" fill="#5eead4" name="Avg view %">
-              {chartData.map((_, i) => (
-                <Cell key={i} fill="#5eead4" />
+              {chartData.map((d, i) => (
+                <Cell key={d.id ?? i} fill="#5eead4" />
               ))}
             </Bar>
           </BarChart>
@@ -149,12 +156,12 @@ export default function AnalyticsPanel({ manifest }: Props) {
         <table>
           <thead>
             <tr>
-              <th>ID</th>
-              <th onClick={() => toggleSort("uploaded_at")}>Uploaded {sortArrow(sortKey, "uploaded_at", sortDesc)}</th>
-              <th onClick={() => toggleSort("views")}>Views {sortArrow(sortKey, "views", sortDesc)}</th>
-              <th onClick={() => toggleSort("averageViewPercentage")}>Avg view % {sortArrow(sortKey, "averageViewPercentage", sortDesc)}</th>
-              <th onClick={() => toggleSort("subscribersGained")}>Subs Δ {sortArrow(sortKey, "subscribersGained", sortDesc)}</th>
-              <th>Watch</th>
+              <th scope="col">ID</th>
+              <th scope="col" role="button" tabIndex={0} aria-sort={ariaSort(sortKey, "uploaded_at", sortDesc)} onClick={() => toggleSort("uploaded_at")} onKeyDown={(e) => onSortKey(e, "uploaded_at")}>Uploaded {sortArrow(sortKey, "uploaded_at", sortDesc)}</th>
+              <th scope="col" role="button" tabIndex={0} aria-sort={ariaSort(sortKey, "views", sortDesc)} onClick={() => toggleSort("views")} onKeyDown={(e) => onSortKey(e, "views")}>Views {sortArrow(sortKey, "views", sortDesc)}</th>
+              <th scope="col" role="button" tabIndex={0} aria-sort={ariaSort(sortKey, "averageViewPercentage", sortDesc)} onClick={() => toggleSort("averageViewPercentage")} onKeyDown={(e) => onSortKey(e, "averageViewPercentage")}>Avg view % {sortArrow(sortKey, "averageViewPercentage", sortDesc)}</th>
+              <th scope="col" role="button" tabIndex={0} aria-sort={ariaSort(sortKey, "subscribersGained", sortDesc)} onClick={() => toggleSort("subscribersGained")} onKeyDown={(e) => onSortKey(e, "subscribersGained")}>Subs Δ {sortArrow(sortKey, "subscribersGained", sortDesc)}</th>
+              <th scope="col">Watch</th>
             </tr>
           </thead>
           <tbody>
@@ -250,4 +257,9 @@ function getSortVal(v: VideoAnalytics, k: SortKey): number {
 function sortArrow(active: SortKey, k: SortKey, desc: boolean): string {
   if (active !== k) return "";
   return desc ? " ↓" : " ↑";
+}
+
+function ariaSort(active: SortKey, k: SortKey, desc: boolean): "ascending" | "descending" | "none" {
+  if (active !== k) return "none";
+  return desc ? "descending" : "ascending";
 }

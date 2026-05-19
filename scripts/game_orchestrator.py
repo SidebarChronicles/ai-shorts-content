@@ -505,6 +505,14 @@ def run_pipeline(game_id: str, dry_run: bool, skip_upload: bool = False) -> bool
         mark_queue_status(game_id, "BLOCKED")
         return False
 
+    # ACTIVE-orphan recovery: if a prior run was SIGKILLed between marking
+    # ACTIVE and the finally-block that resets to QUEUED, the entry would be
+    # permanently stuck. Log and proceed (the finally block will still reset
+    # to QUEUED on failure, so this is safe to re-try).
+    current_status = load_queue_status(game_id)
+    if current_status == "ACTIVE":
+        log(f"  ⚠  {game_id} is already ACTIVE — likely a prior SIGKILL. Resuming.")
+
     mark_queue_status(game_id, "ACTIVE")
 
     steps = [

@@ -50,7 +50,9 @@ export interface VideoAnalytics {
   metrics: VideoMetrics;
   retention_curve: Array<{ elapsed_video_time_ratio: number; audience_watch_ratio: number }>;
   scheduled_publish: string;
-  uploaded_at: string;
+  // Nullable: pipeline may omit when a video is scheduled but not yet published.
+  // AnalyticsPanel + getSortVal already guard with `v.uploaded_at ?`; aligning the type.
+  uploaded_at: string | null;
   video_id: string;
   watch_url: string;
 }

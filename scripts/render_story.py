@@ -47,6 +47,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _env import load_dotenv  # noqa: E402
+from _atomic import atomic_write_text  # noqa: E402
 
 load_dotenv(PROJECT_ROOT / ".env")
 
@@ -183,6 +184,8 @@ def step_5_sound_design(case_id: str, p: dict[str, Path], *, dry_run: bool, forc
         print(f"  → build_sound_design [skip — sound_design.wav exists]")
         return
     # sound_design is graceful — failure falls through to narration-only audio at mix time.
+    # If it "succeeded" but produced an empty or zero-byte file, treat as failure and remove
+    # the file so step 10 falls back cleanly instead of muxing silence into the final video.
     try:
         run_step(
             "build_sound_design (Freesound ambient + SFX)",
@@ -191,7 +194,12 @@ def step_5_sound_design(case_id: str, p: dict[str, Path], *, dry_run: bool, forc
             dry_run,
         )
     except subprocess.CalledProcessError:
-        print(f"      ⚠  sound_design failed — render will continue with narration-only audio")
+        print(f"      ⚠  sound_design failed — render will continue with narration-only audio",
+              file=sys.stderr)
+    if not dry_run and p["sound_design"].exists() and p["sound_design"].stat().st_size == 0:
+        print(f"      ⚠  sound_design.wav is zero-byte — removing so audio mix falls back to narration-only",
+              file=sys.stderr)
+        p["sound_design"].unlink()
 
 
 def step_6_copy_alignment(case_id: str, p: dict[str, Path], *, dry_run: bool, force: bool) -> None:
@@ -218,15 +226,28 @@ def step_7_renderer_aliases(case_id: str, p: dict[str, Path], *, dry_run: bool, 
     cfg.setdefault("game_title", cfg.get("title", "") or cfg["case_id"])
     cfg.setdefault("audio_file", f"output/scripts/{cfg['case_id']}/audio_mixed.mp3")
     cfg.setdefault("clips_manifest", f"output/scripts/{cfg['case_id']}/clips_manifest.json")
-    p["config"].write_text(json.dumps(cfg, indent=2))
+    # Atomic write — a crash here would otherwise corrupt the only copy of script_config.json
+    # and force manual reconstruction.
+    atomic_write_text(p["config"], json.dumps(cfg, indent=2))
 
 
 def step_8_filters(case_id: str, p: dict[str, Path], *, dry_run: bool, force: bool) -> None:
     if not force and p["karaoke_filter"].exists() and p["top_title_filter"].exists():
         print(f"  → build_*_filter [skip — both filters exist]")
         return
+    # When resuming with --from-step 8, step 6 (alignment copy) may not have run this session.
+    # Auto-copy the alignment sidecar into the case dir so karaoke isn't silently skipped.
+    if (
+        not dry_run
+        and p["alignment"].exists()
+        and not p["audio_mixed_alignment"].exists()
+    ):
+        p["case_dir"].mkdir(parents=True, exist_ok=True)
+        shutil.copy2(p["alignment"], p["audio_mixed_alignment"])
+        print(f"      (auto-copied alignment for karaoke — step 6 was skipped on this run)")
     if not p["alignment"].exists():
-        print(f"      ⚠  no alignment — skipping karaoke build (top_title still attempts)")
+        print(f"      ⚠  no alignment — skipping karaoke build (top_title still attempts)",
+              file=sys.stderr)
     else:
         run_step(
             "build_karaoke_filter",
@@ -298,6 +319,18 @@ def step_11_final_encode(case_id: str, p: dict[str, Path], *, dry_run: bool, for
         print(f"      [dry-run] ffmpeg concat + filters + audio_mixed → final mp4")
         return
 
+    # Pre-flight: bail loudly instead of letting ffmpeg fail opaquely on missing prereqs.
+    if not p["concat_list"].exists():
+        raise StepValidationError(
+            f"concat_list missing at {p['concat_list']} — re-run from step 4 "
+            f"(build_visuals_track) before resuming step 11."
+        )
+    if not p["audio_mixed"].exists():
+        raise StepValidationError(
+            f"audio_mixed.mp3 missing at {p['audio_mixed']} — re-run from step 9 "
+            f"(render_video) or step 10 (audio_mix_override) before resuming step 11."
+        )
+
     # Assemble vf chain from whichever filter files actually exist + non-empty
     vf_parts: list[str] = []
     for filt in (p["karaoke_filter"], p["top_title_filter"], p["hook_overlay_filter"]):
@@ -360,8 +393,10 @@ def budget_guard_ok(num_cases: int) -> tuple[bool, str]:
         return True, "no usage file yet — assuming first run"
     try:
         usage = json.loads(usage_file.read_text())
-    except (json.JSONDecodeError, OSError):
-        return True, "usage file unparseable — proceeding"
+    except (json.JSONDecodeError, OSError) as e:
+        # A corrupt usage file should NOT be treated as "zero spend". Refuse to proceed
+        # so the operator can repair (or delete) the file before we burn EL credits.
+        return False, f"usage file corrupt ({e}) — repair or delete {usage_file} before re-running"
     month_key = date.today().strftime("%Y-%m")
     current_usd = usage.get(month_key, {}).get("usd", 0.0)
     budget = float(os.environ.get("ELEVENLABS_MONTHLY_BUDGET", "22.0"))
@@ -435,8 +470,16 @@ def main() -> int:
         print("ERROR: no cases to render", file=sys.stderr)
         return 2
 
-    # Budget guard (skipped on --dry-run or --skip-budget-check)
-    if not args.dry_run and not args.skip_budget_check and args.from_step <= 3 and args.only_step != 11:
+    # Budget guard (skipped on --dry-run or --skip-budget-check).
+    # Run the guard whenever step 3 (audio) is in-scope. A resume with --from-step > 3
+    # may still re-trigger ElevenLabs charges if step 3's narration check fails
+    # (e.g. partial file from a prior crash), so the guard must run unless step 3 is
+    # explicitly skipped or we're running only-step 11 (re-encode, no API spend).
+    will_run_audio_step = (
+        (args.from_step <= 3 and args.only_step is None)
+        or args.only_step == 3
+    )
+    if not args.dry_run and not args.skip_budget_check and will_run_audio_step:
         ok, reason = budget_guard_ok(len(cases))
         print(f"── budget guard: {reason}")
         if not ok:

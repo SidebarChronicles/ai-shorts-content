@@ -55,8 +55,45 @@ COLOR_MAP = {"red": ACCENT_RED, "yellow": ACCENT_YELLOW, "white": WHITE, "grey":
 # Base canvas / chrome
 # -----------------------------------------------------------------------------
 
+def _resolve_font_path() -> str | None:
+    """Resolve a usable bold font path, falling back through:
+       1) FONT_PATH (Linux Google Fonts install — common on CI/cron hosts)
+       2) assets/fonts/*Bold*.ttf (project-bundled fallback)
+       3) None (caller switches to ImageFont.load_default())
+    """
+    if Path(FONT_PATH).exists():
+        return FONT_PATH
+    bundled = PROJECT_ROOT / "assets" / "fonts"
+    if bundled.exists():
+        for candidate in sorted(bundled.glob("*Bold*.ttf")):
+            return str(candidate)
+        for candidate in sorted(bundled.glob("*.ttf")):
+            return str(candidate)
+    return None
+
+
+_RESOLVED_FONT_PATH: str | None = None
+
+
 def font(size: int) -> ImageFont.FreeTypeFont:
-    return ImageFont.truetype(FONT_PATH, size)
+    global _RESOLVED_FONT_PATH
+    if _RESOLVED_FONT_PATH is None:
+        _RESOLVED_FONT_PATH = _resolve_font_path()
+        if _RESOLVED_FONT_PATH is None:
+            print(
+                f"  [warn] no usable font found at {FONT_PATH} or {PROJECT_ROOT}/assets/fonts/ — "
+                f"falling back to PIL default font (renders will look unstyled)",
+                file=sys.stderr,
+            )
+        elif _RESOLVED_FONT_PATH != FONT_PATH:
+            print(
+                f"  [info] using fallback font: {_RESOLVED_FONT_PATH}",
+                file=sys.stderr,
+            )
+    if _RESOLVED_FONT_PATH is None:
+        # PIL's load_default returns a bitmap font with a fixed size; size arg ignored.
+        return ImageFont.load_default()
+    return ImageFont.truetype(_RESOLVED_FONT_PATH, size)
 
 
 _BASE_CACHE: Image.Image | None = None

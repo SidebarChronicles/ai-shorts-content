@@ -27,7 +27,10 @@ import base64
 import json
 import os
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 from datetime import date
 from pathlib import Path
 
@@ -133,9 +136,17 @@ class BudgetExceeded(Exception):
 # ---------------------------------------------------------------------------
 
 def load_usage() -> dict:
-    if USAGE_FILE.exists():
+    if not USAGE_FILE.exists():
+        return {}
+    try:
         return json.loads(USAGE_FILE.read_text())
-    return {}
+    except (json.JSONDecodeError, OSError) as e:
+        # A half-written usage file (disk-full mid-write before _atomic.py was adopted
+        # everywhere) would otherwise block the entire monthly TTS pipeline. Treat as
+        # empty so the budget guards still apply via the projected calculation.
+        print(f"  [warn] {USAGE_FILE} unreadable ({e}) — treating as empty for this run",
+              file=sys.stderr)
+        return {}
 
 
 def save_usage(data: dict) -> None:
@@ -166,7 +177,9 @@ def check_char_softcap(chars_needed: int, override: bool = False) -> None:
         return  # no phase config = no soft-cap (legacy behavior)
     try:
         phase = json.loads(phase_file.read_text())
-    except (json.JSONDecodeError, OSError):
+    except (json.JSONDecodeError, OSError) as e:
+        print(f"  [warn] {phase_file} unreadable ({e}) — soft-cap not enforced this run",
+              file=sys.stderr)
         return
     softcap = phase.get("el_budget_softcap_chars", 25000)
     month_key = date.today().strftime("%Y-%m")
@@ -339,9 +352,6 @@ def synthesize_per_beat(
                    use_alignment, voice_speed=base_voice_speed)
         return
 
-    import subprocess
-    import tempfile
-
     tmp_dir = Path(tempfile.mkdtemp(prefix="el_perbeat_"))
     beat_mp3s: list[Path] = []
     combined_alignment_chars: list[str] = []
@@ -430,7 +440,6 @@ def synthesize_per_beat(
         print(f"  Alignment: {out_alignment.relative_to(PROJECT_ROOT)} (stitched across {len(beats)} beats)")
 
     # Cleanup temp dir
-    import shutil
     shutil.rmtree(tmp_dir, ignore_errors=True)
 
 
@@ -603,21 +612,36 @@ def main() -> None:
     print(f"  ✓ Audio:   {out_mp3.relative_to(PROJECT_ROOT)}")
     print(f"  ✓ Budget:  ${updated['usd']:.4f} / ${budget:.2f} used this month")
 
-    # Quick duration check via ffprobe if available
+    # Duration sanity check via ffprobe — narrow exceptions so a zero-byte or truncated
+    # MP3 raises loudly instead of shipping as a "successful" narration.
     try:
-        import subprocess
         result = subprocess.run(
             ["ffprobe", "-v", "error", "-show_entries", "format=duration",
              "-of", "default=noprint_wrappers=1:nokey=1", str(out_mp3)],
             capture_output=True, text=True, timeout=10
         )
-        if result.returncode == 0:
+    except (FileNotFoundError, subprocess.SubprocessError, OSError) as e:
+        # ffprobe truly unavailable — degrade to a size check so we still catch zero-byte.
+        print(f"  [warn] ffprobe unavailable ({e}) — falling back to file-size check",
+              file=sys.stderr)
+        if out_mp3.stat().st_size == 0:
+            raise RuntimeError(f"narration MP3 is zero bytes at {out_mp3}")
+    else:
+        if result.returncode != 0:
+            raise RuntimeError(
+                f"ffprobe could not read {out_mp3} (rc={result.returncode}): "
+                f"{result.stderr.strip()[-200:]}"
+            )
+        try:
             duration = float(result.stdout.strip())
-            print(f"  ✓ Duration: {duration:.1f}s")
-            if duration < 40 or duration > 65:
-                print(f"  ⚠  Duration outside 40–65s target — review the script length.")
-    except Exception:
-        pass  # ffprobe not available or failed — not critical
+        except ValueError as e:
+            raise RuntimeError(f"ffprobe returned non-numeric duration for {out_mp3}: {e}")
+        if duration == 0.0:
+            raise RuntimeError(f"narration MP3 has zero duration at {out_mp3}")
+        print(f"  ✓ Duration: {duration:.1f}s")
+        if duration < 40 or duration > 65:
+            print(f"  ⚠  Duration outside 40–65s target — review the script length.",
+                  file=sys.stderr)
 
 
 if __name__ == "__main__":

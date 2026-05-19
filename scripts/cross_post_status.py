@@ -83,8 +83,14 @@ def load_status() -> dict[str, dict]:
         return {}
     try:
         return json.loads(STATUS_FILE.read_text())
-    except json.JSONDecodeError:
-        return {}
+    except json.JSONDecodeError as e:
+        # A corrupt status file silently returning {} would erase all cross-post history
+        # on the next save_status. Bail loudly so the operator can repair (or delete)
+        # before any further writes.
+        sys.exit(
+            f"[FATAL] {STATUS_FILE} is corrupt JSON ({e}). "
+            f"Repair or delete the file before re-running cross_post_status."
+        )
 
 
 def save_status(data: dict[str, dict]) -> None:

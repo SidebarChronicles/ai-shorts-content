@@ -37,6 +37,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _env import load_dotenv  # noqa: E402
 from _atomic import atomic_write_text  # noqa: E402
+from _queue_scan import load_queue_meta  # noqa: E402  # shared scanner; see scripts/_queue_scan.py
 
 load_dotenv(PROJECT_ROOT / ".env")
 
@@ -135,27 +136,7 @@ def load_case_config(case_id: str) -> dict | None:
         return None
 
 
-def load_queue_meta() -> dict[str, dict]:
-    """Return {sy_id: {voice, gender, subgenre}} for every queue stub."""
-    out: dict[str, dict] = {}
-    if not QUEUE_DIR.exists():
-        return out
-    voice_re = re.compile(r"\*\*Voice:\*\*\s*([A-Za-z]+)")
-    gender_re = re.compile(r"\*\*Narrator gender:\*\*\s*([MF])", re.IGNORECASE)
-    sub_re = re.compile(r"\*\*Subgenre:\*\*\s*(\w+)")
-    for p in QUEUE_DIR.glob("SY_*.md"):
-        if p.name.startswith("SY_TEMPLATE"):
-            continue
-        text = p.read_text()
-        vm = voice_re.search(text)
-        gm = gender_re.search(text)
-        sm = sub_re.search(text)
-        out[p.stem] = {
-            "voice": vm.group(1) if vm else None,
-            "gender": gm.group(1).upper() if gm else None,
-            "subgenre": sm.group(1) if sm else None,
-        }
-    return out
+# load_queue_meta lives in scripts/_queue_scan.py - imported above.
 
 
 # ---------------------------------------------------------------------------

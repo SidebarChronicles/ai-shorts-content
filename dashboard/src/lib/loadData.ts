@@ -14,7 +14,13 @@ const dataUrl = (path: string) => `${import.meta.env.BASE_URL}data/${path}`;
 async function fetchJson<T>(path: string, fallback: T | null = null): Promise<T> {
   const res = await fetch(dataUrl(path));
   if (!res.ok) {
-    if (fallback !== null) return fallback;
+    if (fallback !== null) {
+      // Surface missing/broken data feeds in the browser console so "everything zero"
+      // can be distinguished from "JSON missing from the Pages deploy".
+      // eslint-disable-next-line no-console
+      console.warn(`[dashboard] ${path} not found (${res.status}); using empty fallback.`);
+      return fallback;
+    }
     throw new Error(`Failed to load ${path}: ${res.status}`);
   }
   return res.json() as Promise<T>;

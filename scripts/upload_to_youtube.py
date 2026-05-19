@@ -383,9 +383,22 @@ def main() -> None:
                         help="Override --require-gate; force upload even if gate is not open.")
     args = parser.parse_args()
 
-    # Resolve videos directory and posted tracking file
+    # Resolve videos directory and posted tracking file.
+    # Reject absolute paths outside PROJECT_ROOT — keeps the containment invariant
+    # consistent across the pipeline and avoids accidental writes to /tmp etc.
     if args.videos_dir:
-        videos_dir = PROJECT_ROOT / args.videos_dir if not Path(args.videos_dir).is_absolute() else Path(args.videos_dir)
+        candidate = Path(args.videos_dir)
+        if candidate.is_absolute():
+            try:
+                candidate.resolve().relative_to(PROJECT_ROOT.resolve())
+            except ValueError:
+                sys.exit(
+                    f"ERROR: --videos-dir {candidate} resolves outside PROJECT_ROOT "
+                    f"({PROJECT_ROOT}). Pass a project-relative path."
+                )
+            videos_dir = candidate
+        else:
+            videos_dir = PROJECT_ROOT / args.videos_dir
     else:
         videos_dir = PROJECT_ROOT / "output" / "videos"
 
