@@ -106,9 +106,14 @@ def extract_hook_text(config_path: Path, override: str | None = None) -> str:
 
 
 def _escape_for_drawtext(text: str) -> str:
-    """FFmpeg drawtext needs single quotes escaped + colons backslash-escaped."""
+    """Escape text for ffmpeg drawtext text= (no outer quotes).
+
+    Backslash → \\, apostrophe → \', colon → \:.
+    Written without surrounding single quotes so an apostrophe never
+    prematurely closes a quoted value.
+    """
     text = text.replace("\\", "\\\\")
-    text = text.replace("'", r"\\'")
+    text = text.replace("'", r"\'")
     text = text.replace(":", r"\:")
     return text
 
@@ -130,7 +135,7 @@ def build_hook_overlay_filter(text: str, font: Path = DEFAULT_FONT) -> str:
     drawtext = (
         f"drawtext="
         f"fontfile='{font}':"
-        f"text='{escaped}':"
+        f"text={escaped}:"
         f"fontsize={HOOK_FONT_SIZE}:"
         f"fontcolor={HOOK_FONT_COLOR}:"
         f"bordercolor={HOOK_BORDER_COLOR}:"
